@@ -8,9 +8,9 @@ const LandingPage = () => {
 
   return (
     <>
-    <div id="Hero" className="w-auto h-auto grid grid-cols-2">
+    <div id="Hero" className="w-auto h-auto">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeJQeJyzgAzTEVqXiGe90RGBFhfp_4RcJJMQ&s" className="w-full h-full object-cover" />
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeJQeJyzgAzTEVqXiGe90RGBFhfp_4RcJJMQ&s" alt="Placeholder 2" className="w-full h-full object-cover" />
+      
     </div>
 
     <div

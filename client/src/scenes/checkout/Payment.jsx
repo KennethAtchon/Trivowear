@@ -1,39 +1,40 @@
+import React from "react";
+import { Box, Typography, TextField } from "@mui/material";
+
 const Payment = ({ values, touched, errors, handleBlur, handleChange }) => {
   return (
-    <div className="m-30px 0">
+    <Box m={3}>
       {/* CONTACT INFO */}
-      <div>
-        <h2 className="mb-15px text-xl">Contact Info</h2>
-        <input
-          type="text"
-          className={`w-full px-3 py-2 border rounded ${
-            touched.email && errors.email ? 'border-red-500' : 'border-gray-300'
-          }`}
-          placeholder="Email"
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.email}
+      <Box mb={3}>
+        <Typography variant="h6" mb={2}>
+          Contact Info
+        </Typography>
+        <TextField
+          fullWidth
+          variant="outlined"
+          label="Email"
           name="email"
-        />
-        {touched.email && errors.email && (
-          <p className="text-red-500 text-sm">{errors.email}</p>
-        )}
-        <input
-          type="text"
-          className={`w-full px-3 py-2 mt-3 border rounded ${
-            touched.phoneNumber && errors.phoneNumber ? 'border-red-500' : 'border-gray-300'
-          }`}
-          placeholder="Phone Number"
+          value={values.email}
           onBlur={handleBlur}
           onChange={handleChange}
-          value={values.phoneNumber}
-          name="phoneNumber"
+          error={touched.email && Boolean(errors.email)}
+          helperText={touched.email && errors.email}
+          margin="normal"
         />
-        {touched.phoneNumber && errors.phoneNumber && (
-          <p className="text-red-500 text-sm">{errors.phoneNumber}</p>
-        )}
-      </div>
-    </div>
+        <TextField
+          fullWidth
+          variant="outlined"
+          label="Phone Number"
+          name="phoneNumber"
+          value={values.phoneNumber}
+          onBlur={handleBlur}
+          onChange={handleChange}
+          error={touched.phoneNumber && Boolean(errors.phoneNumber)}
+          helperText={touched.phoneNumber && errors.phoneNumber}
+          margin="normal"
+        />
+      </Box>
+    </Box>
   );
 };
 

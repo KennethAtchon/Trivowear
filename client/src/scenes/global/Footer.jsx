@@ -5,7 +5,7 @@ function Footer() {
     <div className="mt-20 px-6 py-12 bg-gray-100">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
         <div className="col-span-1 sm:col-span-2 md:col-span-1">
-          <h4 className="text-xl font-bold mb-6 text-primary-500">ECOMMER</h4>
+          <h4 className="text-xl font-bold mb-6 text-primary-500">BROOVIE</h4>
           <p className="text-gray-700">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim

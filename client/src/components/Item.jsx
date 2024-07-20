@@ -27,7 +27,7 @@ const Item = ({ item, width, isRelated = false }) => {
   };
 
   return (
-    <div className={`${width}`}>
+    <div className={`${width} `}>
       <div
         className="relative"
         onMouseOver={() => setIsHovered(true)}
@@ -38,7 +38,7 @@ const Item = ({ item, width, isRelated = false }) => {
             <img
               key={0}
               alt={name}
-              className="w-full h-full object-fit"
+              className="w-full h-full object-cover"
               src={`${constants.backendUrl}${images.data[0].attributes.formats.thumbnail.url}`}
               onClick={() => navigate(`/item/${item.id}`)}
             />

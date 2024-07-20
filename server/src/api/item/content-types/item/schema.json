@@ -57,6 +57,12 @@
         "LandingPage1",
         "LandingPage2"
       ]
+    },
+    "preciseDescription": {
+      "type": "json"
+    },
+    "optionsProduct": {
+      "type": "json"
     }
   }
 }

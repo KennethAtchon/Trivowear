@@ -6,14 +6,14 @@ const Subscribe = () => {
 
   return (
     <div className="w-4/5 mx-auto my-20 text-center">
-      <button className="text-4xl">
-        <MdMarkEmailRead />
-      </button>
       <h3 className="text-3xl font-semibold mt-4">Subscribe To Our Newsletter</h3>
       <p className="mt-2">
         and receive $20 coupon for your first order when you checkout
       </p>
       <div className="flex items-center w-3/4 mx-auto mt-6 p-2 bg-gray-200">
+      <button className="text-4xl">
+        <MdMarkEmailRead />
+      </button>
         <input
           className="flex-grow p-2 bg-transparent border-none focus:outline-none"
           type="email"

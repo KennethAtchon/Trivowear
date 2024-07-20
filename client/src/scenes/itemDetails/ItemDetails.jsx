@@ -7,6 +7,7 @@ import { addToCart, increaseCount } from "../../state";
 import Item from "../../components/Item";
 import constants from "../../constants.json";
 import Accordion from './Accordion';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const ItemDetails = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,20 @@ const ItemDetails = () => {
   const cartItems = useSelector((state) => state.cart.cart);
   const scrollContainerRef = useRef(null);
   const [isOverflowing, setIsOverflowing] = useState(false);
+
+  const scrollContainerMediumRef = useRef(null);
+  const [isOverflowingMedium, setIsOverflowingMedium] = useState(false);
+
+  const [selectedOptions, setSelectedOptions] = useState({});
+
+  const handleOptionChange = (optionName, optionValue) => {
+    setSelectedOptions({
+      ...selectedOptions,
+      [optionName]: optionValue
+    });
+  };
+
+
 
   const scrollUp = () => {
     if (scrollContainerRef.current) {
@@ -39,6 +54,25 @@ const ItemDetails = () => {
     }
   };
 
+  const scrollLeft = () => {
+    if (scrollContainerMediumRef.current) {
+      scrollContainerMediumRef.current.scrollBy({
+        left: -100, // adjust the scroll amount as needed
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerMediumRef.current) {
+      scrollContainerMediumRef.current.scrollBy({
+        left: 100, // adjust the scroll amount as needed
+        behavior: 'smooth',
+      });
+    }
+  };
+
+
 
   const toggleShowMore = () => {
     setShowMore(!showMore);
@@ -52,11 +86,13 @@ const ItemDetails = () => {
         method: "GET",
       }
     );
+    //console.log(item)
     const itemJson = await item.json();
     setItem(itemJson.data);
     
   }
   console.log(item)
+
   async function getItems() {
     const items = await fetch(
       `${constants.backendUrl}/api/items?populate=images`,
@@ -68,23 +104,6 @@ const ItemDetails = () => {
     setItems(itemsJson.data);
   }
 
-  useEffect(() => {
-    getItem();
-    getItems();
-  }, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    const checkOverflow = () => {
-      const container = scrollContainerRef.current;
-      if (container) {
-        setIsOverflowing(container.scrollHeight > container.clientHeight);
-      }
-    };
-
-    checkOverflow();
-    window.addEventListener('resize', checkOverflow);
-    return () => window.removeEventListener('resize', checkOverflow);
-  }, [item]);
 
   const handleAddToCart = () => {
     // Check if item already exists in cart
@@ -118,36 +137,73 @@ const ItemDetails = () => {
     setCurrentImageIndex(index);
   };
 
-  return (
-    <div className="mx-auto my-20 mx-10  px-8">
-      <div className="flex flex-wrap gap-6 h-[750px]">
 
-    <div className="w-28 h-[750px] p-3 flex flex-col">
-    {isOverflowing && (
-        <button onClick={scrollUp} className="mb-2 border bg-white">
-          <FaArrowUp size={20} className="item-center w-full" />
-        </button>
-      )}
-      <div ref={scrollContainerRef} className=" w-full flex-grow overflow-y-hidden">
-        {item?.attributes?.images?.data.map((image, index) => (
-          <img
-            key={index}
-            alt={item?.name}
-            className="object-fit h-24 w-full border-2 mt-2 cursor-pointer"
-            src={`${constants.backendUrl}${image?.attributes?.formats?.thumbnail?.url}`}
-            onClick={() => handleImageClick(index)}
-          />
-        ))}
-        
-      </div>
-      {isOverflowing && (
-        <button onClick={scrollDown} className="mt-2 border bg-white">
-          <FaArrowDown size={20} className="item-center w-full" />
-        </button>
-      )}
-    </div>
+  useEffect(() => {
+    //console.log('Fetching item and items for itemId:', itemId);
+    getItem();
+    getItems();
+  }, [itemId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      const container = scrollContainerRef.current;
+      if (container) {
+        setIsOverflowing(container.scrollHeight > container.clientHeight);
+      }
+    };
+
+    const checkOverflowMedium = () => {
+      const containerMedium = scrollContainerMediumRef.current;
+      if (containerMedium) {
+        setIsOverflowingMedium(containerMedium.scrollWidth > containerMedium.clientWidth);
+      }
+    };
+
+    checkOverflow();
+    checkOverflowMedium();
+    window.addEventListener('resize', checkOverflow);
+    window.addEventListener('resize', checkOverflowMedium);
+    return () => {
+      window.removeEventListener('resize', checkOverflow);
+      window.removeEventListener('resize', checkOverflowMedium);
+    };
+  }, [item]);
+
+  
+  return (
+    <div className="mx-auto my-20 mx-10 px-8">
+      <div className="h-12"></div>
+      <div className="flex flex-col md:flex-row gap-6 h-auto">
+
+   
+        <div id="sideimages" className="hidden md:flex w-28 p-3 flex-col max-h-[750px]">
+        {isOverflowing && (
+            <button onClick={scrollUp} className="mb-2 border bg-white">
+              <FaArrowUp size={20} className="item-center w-full" />
+            </button>
+          )}
+          <div ref={scrollContainerRef} className="h-full md:w-full overflow-y-hidden">
+            {item?.attributes?.images?.data.map((image, index) => (
+              <img
+                key={index}
+                alt={item?.name}
+                className="object-fit h-20 w-full border-2 mt-2 cursor-pointer"
+                src={`${constants.backendUrl}${image?.attributes?.formats?.thumbnail?.url}`}
+                onClick={() => handleImageClick(index)}
+              />
+            ))}
+
+          </div>
+          {isOverflowing && (
+            <button onClick={scrollDown} className="mt-2 border bg-white">
+              <FaArrowDown size={20} className="item-center w-full " />
+            </button>
+          )}
+        </div>
+  
+
         <div className="flex-1 flex flex-row mb-10 mr-3">
-          <div id="leftbar" className="h-full w-6 items-center justify-center cursor-pointer" onClick={handlePreviousImage}>
+          <div id="leftbar" className="md:h-full w-6 items-center justify-center cursor-pointer" onClick={handlePreviousImage}>
             <FaArrowLeft className="h-full w-full " />
           </div>
           <div id="imgdiv" className="flex-1">
@@ -158,14 +214,38 @@ const ItemDetails = () => {
               onClick={() => navigate(`/item/${item.id}`)}
             />
           </div>
-          <div id="rightbar" className="h-full w-6 items-center justify-center cursor-pointer" onClick={handleNextImage}>
+          <div id="rightbar" className="md:h-full w-6 items-center justify-center cursor-pointer" onClick={handleNextImage}>
             <FaArrowRight className="h-full w-full ml-6" />
           </div>
         </div>
 
+        <div id="sideimagesmedium" className="flex flex-row w-full md:hidden w-28 p-3 ">
+          {isOverflowingMedium && (
+            <button onClick={scrollLeft} className="w-8 border bg-white">
+              <FaArrowLeft size={20} className="item-center w-full" />
+            </button>
+          )}
+          <div ref={scrollContainerMediumRef} className="flex flex-row overflow-x-hidden">
+            {item?.attributes?.images?.data.map((image, index) => (
+              <img
+                key={index}
+                alt={item?.name}
+                className="object-fit h-24 w-24 border-2 mx-2 cursor-pointer"
+                src={`${constants.backendUrl}${image?.attributes?.formats?.thumbnail?.url}`}
+                onClick={() => handleImageClick(index)}
+              />
+            ))}
+            
+          </div>
+          {isOverflowingMedium && (
+            <button onClick={scrollRight} className="ml-2 w-8 border bg-white">
+              <FaArrowRight size={20} className="item-center w-full " />
+            </button>
+          )}
+        </div>
 
-        {/* ACTIONS */}
-        <div className="flex-1 ">
+          {/* ACTIONS */}
+        <div className="flex-1 pl-12">
 
         <div className="mt-16 border-b border-slate-200">
           <h3 className="text-3xl font-semibold">{item?.attributes?.name}</h3>
@@ -175,70 +255,59 @@ const ItemDetails = () => {
 
 
           <div className=" border-b border-slate-200 my-5">
-           < Accordion description="Hello" />
+            < Accordion description={item?.attributes?.longDescription[0]?.children[0]?.text} />
 
           </div>
-            <div className="p-4 border-b border-slate-200">
-            <div className="">
-              <div >
-              <b className="inline-block mr-8">Material</b>
-              <p className="inline-block">Metal</p>
-              </div>
-              <div >
-              <b className="inline-block mr-8">Material</b>
-              <p className="inline-block">Metal</p>
-              </div>
-              <div >
-              <b className="inline-block mr-8">Material</b>
-              <p className="inline-block">Metal</p>
-              </div>
-              {showMore && (
-                <>
-                <div >
-                <b className="inline-block mr-8">Material</b>
-                <p className="inline-block">Metal</p>
-                </div>
-                <div >
-                <b className="inline-block mr-8">Material</b>
-                <p className="inline-block">Metal</p>
-                </div>
-                <div >
-                <b className="inline-block mr-8">Material</b>
-                <p className="inline-block">Metal</p>
-                </div>
-                </>
-              )}
 
+          {item?.attributes?.preciseDescription && (
+          <div className="p-4 border-b border-slate-200">
+            <div>
+              {item && Object.entries(item?.attributes?.preciseDescription).slice(0, 4).map(([key, value]) => (
+                <div key={key}>
+                  <b className="inline-block mr-8">{key}</b>
+                  <p className="inline-block">{Array.isArray(value) ? value.join(', ') : value}</p>
+                </div>
+              ))}
+              {item && showMore && Object.entries(item?.attributes?.preciseDescription).slice(4).map(([key, value]) => (
+                <div key={key}>
+                  <b className="inline-block mr-8">{key}</b>
+                  <p className="inline-block">{Array.isArray(value) ? value.join(', ') : value}</p>
+                </div>
+              ))}
             </div>
-
-
-
             <div className="mt-2 text-blue-700 cursor-pointer" onClick={toggleShowMore}>
               {showMore ? 'Show less' : 'Show more'}
             </div>
           </div>
+          )}
 
-          {/* <div className=" bg-blue-300 border-b border-slate-200">
-          <button
-              className="flex-1 m-4 font-bold bg-black text-white py-4 px-8 rounded-none "
-              onClick={() => dispatch(addToCart({ item: { ...item, count } }))}
-            >
-              ADD TO CART
-            </button>
-            <button
-              className="flex-1 font-bold bg-black text-white py-4 px-8 rounded-none "
-              onClick={() => dispatch(addToCart({ item: { ...item, count } }))}
-            >
-              ADD TO CART
-            </button>
-            <button
-              className="flex-1 m-4  font-bold bg-black text-white py-4 px-8 rounded-none "
-              onClick={() => dispatch(addToCart({ item: { ...item, count } }))}
-            >
-              ADD TO CART
-            </button>
-           Optional Buttons when there are different variations
-          </div> */}
+          {/* Dropdown for product options */}
+          { item?.attributes?.optionsProduct && (
+          <div className="border-b border-slate-200">
+            {Object.entries(item?.attributes?.optionsProduct?.productOptions).map(([optionIdx, optionDict], index) => (
+              <div key={index} className="m-4">
+              <FormControl fullWidth>
+                <InputLabel id={`select-label-${optionIdx}`}>{optionDict.name}</InputLabel>
+                <Select
+                  labelId={`select-label-${optionIdx}`}
+                  id={`select-${optionIdx}`}
+                  value={selectedOptions[optionDict.name] || ''}
+                  label={optionDict.name}
+                  onChange={(e) => handleOptionChange(optionDict.name, e.target.value)}
+                >
+                  <MenuItem value="">
+                    <em>Select {optionDict.name}</em>
+                  </MenuItem>
+                  {optionDict.values.map((value, idx) => (
+                    <MenuItem key={idx} value={value}>
+                      {value}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+          </div>
+            ))}
+          </div> )}
 
 
           <div className="flex flex-col items-center min-h-[50px]">
@@ -275,7 +344,7 @@ const ItemDetails = () => {
       </div>
 
       
-      <div className="mt-12 w-full">
+      <div className="mt-24 w-full">
         <h3 className="text-3xl font-bold mb-4">Related Products</h3>
         <div
         className="grid justify-center gap-6 "

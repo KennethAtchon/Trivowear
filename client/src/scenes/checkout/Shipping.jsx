@@ -1,4 +1,6 @@
+import React from "react";
 import AddressForm from "./AddressForm";
+import { Box, Typography, Checkbox, FormControlLabel } from "@mui/material";
 
 const Shipping = ({
   values,
@@ -9,10 +11,12 @@ const Shipping = ({
   setFieldValue,
 }) => {
   return (
-    <div className="m-30px auto">
+    <Box m={3}>
       {/* BILLING FORM */}
-      <div>
-        <h2 className="mb-15px text-xl">Billing Information</h2>
+      <Box mb={3}>
+        <Typography variant="h6" mb={2}>
+          Billing Information
+        </Typography>
         <AddressForm
           type="billingAddress"
           values={values.billingAddress}
@@ -21,29 +25,32 @@ const Shipping = ({
           handleBlur={handleBlur}
           handleChange={handleChange}
         />
-      </div>
+      </Box>
 
-      <div className="mb-20px">
-        <label className="flex items-center">
-          <input
-            type="checkbox"
-            className="form-checkbox h-5 w-5 text-primary-300 rounded"
-            defaultChecked={values.shippingAddress.isSameAddress}
-            onChange={() =>
-              setFieldValue(
-                "shippingAddress.isSameAddress",
-                !values.shippingAddress.isSameAddress
-              )
-            }
-          />
-          <span className="ml-2">Same for Shipping Address</span>
-        </label>
-      </div>
+      <Box mb={3}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              color="primary"
+              checked={values.shippingAddress.isSameAddress}
+              onChange={() =>
+                setFieldValue(
+                  "shippingAddress.isSameAddress",
+                  !values.shippingAddress.isSameAddress
+                )
+              }
+            />
+          }
+          label="Same for Shipping Address"
+        />
+      </Box>
 
       {/* SHIPPING FORM */}
       {!values.shippingAddress.isSameAddress && (
-        <div>
-          <h2 className="mb-15px text-xl">Shipping Information</h2>
+        <Box mb={3}>
+          <Typography variant="h6" mb={2}>
+            Shipping Information
+          </Typography>
           <AddressForm
             type="shippingAddress"
             values={values.shippingAddress}
@@ -52,9 +59,9 @@ const Shipping = ({
             handleBlur={handleBlur}
             handleChange={handleChange}
           />
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

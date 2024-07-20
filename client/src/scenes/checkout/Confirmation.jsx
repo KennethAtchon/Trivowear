@@ -1,13 +1,23 @@
+import React from 'react';
+import { Box, Alert, Typography } from '@mui/material';
+
 const Confirmation = () => {
   return (
-    <div className="m-90px auto w-80% h-50vh">
-      <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-        <strong className="font-bold">Success</strong>
-        <span className="block sm:inline">
+    <Box 
+      sx={{
+        marginTop: '30px',
+        margin: '90px auto',
+        width: '80%',
+        height: '50vh',
+      }}
+    >
+      <Alert severity="success">
+        <Typography variant="h6" component="strong">Success</Typography>
+        <Typography variant="body1">
           You have successfully made an Order — <strong>Congrats on Making your Purchase</strong>
-        </span>
-      </div>
-    </div>
+        </Typography>
+      </Alert>
+    </Box>
   );
 };
 
