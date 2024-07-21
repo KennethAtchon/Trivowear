@@ -1,90 +1,43 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { configureStore } from "@reduxjs/toolkit";
+// index.js
+import { configureStore } from '@reduxjs/toolkit';
+import cartReducer from './cart';
+import authReducer from './auth';
 
 // Middleware to save state to localStorage
 const saveToLocalStorage = (store) => (next) => (action) => {
   const result = next(action);
   const state = store.getState();
-  localStorage.setItem("cartState", JSON.stringify(state.cart));
+  localStorage.setItem('cartState', JSON.stringify(state.cart));
+  localStorage.setItem('authState', JSON.stringify(state.auth));
   return result;
 };
 
 // Load initial state from localStorage
 const loadFromLocalStorage = () => {
   try {
-    const serializedState = localStorage.getItem("cartState");
-    if (serializedState === null) {
-      return undefined;
-    }
-    return JSON.parse(serializedState);
+    const cartState = localStorage.getItem('cartState');
+    const authState = localStorage.getItem('authState');
+    return {
+      cart: cartState ? JSON.parse(cartState) : { isCartOpen: false, cart: [], items: [] },
+      auth: authState ? JSON.parse(authState) : { isAuth: false, token: null },
+    };
   } catch (e) {
-    console.warn("Could not load state from localStorage", e);
-    return undefined;
+    console.warn('Could not load state from localStorage', e);
+    return {
+      cart: { isCartOpen: false, cart: [], items: [] },
+      auth: { isAuth: false, token: null },
+    };
   }
 };
 
-const persistedState = loadFromLocalStorage();
-
-const initialState = {
-  isCartOpen: false,
-  cart: [],
-  items: [],
-  ...persistedState,
-};
-
-export const cartSlice = createSlice({
-  name: "cart",
-  initialState,
-  reducers: {
-    setItems: (state, action) => {
-      state.items = action.payload;
-    },
-    addToCart: (state, action) => {
-      state.cart = [...state.cart, action.payload.item];
-    },
-    removeFromCart: (state, action) => {
-      state.cart = state.cart.filter((item) => item.id !== action.payload.id);
-    },
-    increaseCount: (state, action) => {
-      state.cart = state.cart.map((item) => {
-        if (item.id === action.payload.id) {
-          item.count++;
-        }
-        return item;
-      });
-    },
-    decreaseCount: (state, action) => {
-      state.cart = state.cart.map((item) => {
-        if (item.id === action.payload.id && item.count > 1) {
-          item.count--;
-        }
-        return item;
-      });
-    },
-    setIsCartOpen: (state) => {
-      state.isCartOpen = !state.isCartOpen;
-    },
-  },
-});
-
-export const {
-  setItems,
-  addToCart,
-  removeFromCart,
-  increaseCount,
-  decreaseCount,
-  setIsCartOpen,
-} = cartSlice.actions;
-
-export default cartSlice.reducer;
-
 const store = configureStore({
   reducer: {
-    cart: cartSlice.reducer,
+    cart: cartReducer,
+    auth: authReducer,
   },
-  preloadedState: persistedState,
+  preloadedState: loadFromLocalStorage(), // Initialize state
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(saveToLocalStorage),
+    getDefaultMiddleware().concat(saveToLocalStorage), // Use middleware
 });
 
 export { store };

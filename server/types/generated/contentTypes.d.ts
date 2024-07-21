@@ -402,6 +402,7 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     singularName: 'order';
     pluralName: 'orders';
     displayName: 'Order';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -410,6 +411,10 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     user_name: Attribute.String;
     stripeSessionId: Attribute.String;
     products: Attribute.JSON;
+    email: Attribute.Email;
+    billingAddress: Attribute.JSON;
+    shippingAddress: Attribute.JSON;
+    phone_number: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

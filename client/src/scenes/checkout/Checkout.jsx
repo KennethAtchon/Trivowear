@@ -1,3 +1,4 @@
+
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Formik } from "formik";
@@ -20,9 +21,10 @@ const Checkout = () => {
   const isSecondStep = activeStep === 1;
 
   const handleFormSubmit = async (values, actions) => {
+
     setActiveStep(activeStep + 1);
 
-    // Copy the billing address onto shipping address if they are the same
+    // Copy the billing address onto the shipping address if they are the same
     if (isFirstStep && values.shippingAddress.isSameAddress) {
       actions.setFieldValue("shippingAddress", {
         ...values.billingAddress,
@@ -38,23 +40,53 @@ const Checkout = () => {
   };
 
   async function makePayment(values) {
-    setIsLoading(true)
+    setIsLoading(true);
     const stripe = await stripePromise;
     const requestBody = {
-      userName: [values.firstName, values.lastName].join(" "),
+      userName: [values.billingAddress.firstName, values.billingAddress.lastName].join(" "),
       email: values.email,
+      phoneNumber: values.phoneNumber,
       products: cart.map(({ id, count }) => ({
         id,
         count,
       })),
+      billingAddress: {
+        line1: values.billingAddress.street1,
+        line2: values.billingAddress.street2,
+        city: values.billingAddress.city,
+        state: values.billingAddress.state,
+        postalCode: values.billingAddress.zipCode,
+        country: values.billingAddress.country,
+      },
+      shippingAddress: values.shippingAddress.isSameAddress
+        ? {
+            line1: values.billingAddress.street1,
+            line2: values.billingAddress.street2,
+            city: values.billingAddress.city,
+            state: values.billingAddress.state,
+            postalCode: values.billingAddress.zipCode,
+            country: values.billingAddress.country,
+          }
+        : {
+            line1: values.shippingAddress.street1,
+            line2: values.shippingAddress.street2,
+            city: values.shippingAddress.city,
+            state: values.shippingAddress.state,
+            postalCode: values.shippingAddress.zipCode,
+            country: values.shippingAddress.country,
+          },
     };
+
+    console.log(requestBody)
 
     const response = await fetch(`${constants.backendUrl}/api/orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
     });
+
     const session = await response.json();
+    console.log(session)
     await stripe.redirectToCheckout({
       sessionId: session.id,
     });
@@ -214,4 +246,5 @@ const checkoutSchema = [
     phoneNumber: yup.string().required("Required"),
   }),
 ];
+
 export default Checkout;

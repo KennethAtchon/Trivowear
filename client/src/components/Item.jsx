@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addToCart, increaseCount } from "../state";
+import { addToCart, increaseCount } from "../state/cart";
 import { MdAdd, MdRemove } from "react-icons/md";
 import constants from "../constants.json";
 
-const Item = ({ item, width, isRelated = false }) => {
+const Item = ({ item, isRelated = false }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
@@ -27,7 +27,7 @@ const Item = ({ item, width, isRelated = false }) => {
   };
 
   return (
-    <div className={`${width} `}>
+    <div className={`w-[350px]`}>
       <div
         className="relative"
         onMouseOver={() => setIsHovered(true)}
@@ -38,7 +38,7 @@ const Item = ({ item, width, isRelated = false }) => {
             <img
               key={0}
               alt={name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-fit"
               src={`${constants.backendUrl}${images.data[0].attributes.formats.thumbnail.url}`}
               onClick={() => navigate(`/item/${item.id}`)}
             />
@@ -69,10 +69,11 @@ const Item = ({ item, width, isRelated = false }) => {
       </div>
 
       <div className="mt-1">
-        <div className="flex justify-between">
-          <p className="">{name}</p>
-          <p className="font-bold">${price}</p>
+        <div className="flex flex-col">
+          <p className="text-left text-2xl">{name}</p>
+          <p className="font-bold text-left text-xl">${price}</p>
         </div>
+
 
         <button
           className={`py-2 text-[22px] w-full border-black border-2 ${

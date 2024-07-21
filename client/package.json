@@ -8,6 +8,7 @@
     "@mui/material": "^5.16.4",
     "@react-hook/media-query": "^1.1.1",
     "@reduxjs/toolkit": "^2.2.6",
+    "@stripe/react-stripe-js": "^2.7.3",
     "@stripe/stripe-js": "^4.1.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

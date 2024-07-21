@@ -3,7 +3,7 @@ import { useDispatch, useSelector  } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { MdAdd, MdRemove } from "react-icons/md";
 import { FaArrowLeft, FaArrowRight, FaArrowUp, FaArrowDown  } from 'react-icons/fa';
-import { addToCart, increaseCount } from "../../state";
+import { addToCart, increaseCount } from "../../state/cart";
 import Item from "../../components/Item";
 import constants from "../../constants.json";
 import Accordion from './Accordion';

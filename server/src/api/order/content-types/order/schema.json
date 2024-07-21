@@ -4,7 +4,8 @@
   "info": {
     "singularName": "order",
     "pluralName": "orders",
-    "displayName": "Order"
+    "displayName": "Order",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -19,6 +20,18 @@
     },
     "products": {
       "type": "json"
+    },
+    "email": {
+      "type": "email"
+    },
+    "billingAddress": {
+      "type": "json"
+    },
+    "shippingAddress": {
+      "type": "json"
+    },
+    "phone_number": {
+      "type": "string"
     }
   }
 }

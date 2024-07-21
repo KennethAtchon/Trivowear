@@ -1,7 +1,14 @@
 import React from 'react';
-import { Box, Alert, Typography } from '@mui/material';
+import { Box, Alert, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Confirmation = () => {
+  const navigate = useNavigate();
+
+  const handleContinueShopping = () => {
+    navigate('/');
+  };
+
   return (
     <Box 
       sx={{
@@ -17,6 +24,14 @@ const Confirmation = () => {
           You have successfully made an Order — <strong>Congrats on Making your Purchase</strong>
         </Typography>
       </Alert>
+      <Button 
+        variant="contained" 
+        color="primary" 
+        sx={{ marginTop: '20px' }} 
+        onClick={handleContinueShopping}
+      >
+        Want to keep shopping?
+      </Button>
     </Box>
   );
 };

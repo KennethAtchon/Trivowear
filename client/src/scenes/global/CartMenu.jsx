@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { FiX, FiPlus, FiMinus } from "react-icons/fi";
-import { decreaseCount, increaseCount, removeFromCart, setIsCartOpen } from "../../state";
+import { decreaseCount, increaseCount, removeFromCart, setIsCartOpen } from "../../state/cart";
 import { useNavigate } from "react-router-dom";
 import constants from "../../constants.json"; // Adjust the path as per your project structure
 
@@ -20,7 +20,7 @@ const CartMenu = () => {
   const cart = useSelector((state) => state.cart.cart);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
-  console.log(cart);
+  // console.log(cart);
 
   const totalPrice = cart.reduce((total, item) => {
     return total + item.count * item.attributes.price;
@@ -32,7 +32,7 @@ const CartMenu = () => {
       open={isCartOpen}
       onClose={() => dispatch(setIsCartOpen({}))}
     >
-      <Box p={3} width="400px">
+      <Box p={3} width="450px">
         {/* HEADER */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Typography variant="h6">SHOPPING BAG ({cart.length})</Typography>
@@ -50,7 +50,7 @@ const CartMenu = () => {
                   <img
                     alt={item?.name}
                     className="object-fit"
-                    style={{ width: "164px", height: "164px" }}
+                    style={{ width: "auto", height: "164px" }}
                     src={`${constants.backendUrl}${item?.attributes?.images?.data[0]?.attributes?.formats?.medium?.url}`}
                   />
                 </Box>
