@@ -5,8 +5,8 @@ const Subscribe = () => {
   const [email, setEmail] = useState("");
 
   return (
-    <div className="w-4/5 mx-auto my-20 text-center">
-      <h3 className="text-3xl font-semibold mt-4">Subscribe To Our Newsletter</h3>
+    <div className="w-4/5 mx-auto my-20 text-center bg-[#EEEBE8]">
+      <h3 className="text-3xl font-semibold mt-4 ">Subscribe To Our Newsletter</h3>
       <p className="mt-2">
         and receive $20 coupon for your first order when you checkout
       </p>
