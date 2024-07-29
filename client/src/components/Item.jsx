@@ -12,7 +12,7 @@ const Item = ({ item, isRelated = false }) => {
   const [isHovered, setIsHovered] = useState(false);
   const cartItems = useSelector((state) => state.cart.cart);
 
-  const { product_types, price, name, images } = item.attributes;
+  const { price, name, images } = item.attributes;
 
   const handleAddToCart = () => {
     const existingItem =
