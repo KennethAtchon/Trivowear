@@ -11,7 +11,7 @@ const { createCoreController } = require('@strapi/strapi').factories;
 module.exports = createCoreController('api::order.order', ({ strapi }) => ({
     async create(ctx) {
         // @ts-ignore
-        const { userName, email, phoneNumber, products, billingAddress, shippingAddress } = ctx.request.body;
+        const { email, phoneNumber, products, billingAddress, shippingAddress } = ctx.request.body;
 
         try {
             // Retrieve item information
@@ -47,7 +47,7 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
 
             await strapi
             .service("api::order.order")
-            .create({ data: { user_name: userName, products: products, stripeSessionId: session.id, email: email, billingAddress: billingAddress, shippingAddress: shippingAddress, phone_number: phoneNumber } });
+            .create({ data: {  products: products, stripeSessionId: session.id, email: email, billingAddress: billingAddress, shippingAddress: shippingAddress, phone_number: phoneNumber } });
 
             return { id: session.id };
 

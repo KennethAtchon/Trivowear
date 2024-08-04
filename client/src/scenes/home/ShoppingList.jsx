@@ -3,27 +3,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { setItems } from "../../state/cart";
 import Item from "../../components/Item";
 import constants from "../../constants.json";
-import { Box, CircularProgress, Alert, Typography } from "@mui/material";
+import { Box, CircularProgress, Alert, Typography, Button } from "@mui/material";
 
 const ShoppingList = ({ filters }) => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
+  
   const [loading, setLoading] = useState(true);
+  const [displayCount, setDisplayCount] = useState(8);
+  const [totalCount, setTotalCount] = useState(0);
 
   async function getItems() {
+    const accurateCount = totalCount !== 0 ? Math.min(totalCount, displayCount) : displayCount;
+
     const response = await fetch(
-      `${constants.backendUrl}/api/items?populate=images&${filters}`,
+      `${constants.backendUrl}/api/items?populate=images&${filters}&fields[0]=name&fields[1]=price&fields[2]=shortDescription&fields[3]=onSale&fields[4]=discount&fields[5]=product_types&pagination[pageSize]=${accurateCount}`,
       { method: "GET" }
     );
 
     const itemsJson = await response.json();
+    console.log(itemsJson)
     dispatch(setItems(itemsJson.data));
+    setTotalCount(itemsJson.meta.pagination.total)
     setLoading(false);
   }
 
   useEffect(() => {
     getItems();
-  }, [filters]); // Re-run when filters change
+  }, [filters, displayCount]); // Re-run when filters change
 
   if (loading) {
     return (
@@ -33,9 +40,13 @@ const ShoppingList = ({ filters }) => {
     );
   }
 
+  const handleShowMore = () => {
+    setDisplayCount(displayCount + 8);
+  };
+
   return (
-    <Box my={10}>
-      {items.length === 0 ? (
+    <Box mb={10}>
+      {items && items.length === 0 ? (
         <Box
           sx={{
             display: 'flex',
@@ -52,17 +63,22 @@ const ShoppingList = ({ filters }) => {
           </Alert>
         </Box>
       ) : (
-        <Box
-          display="grid"
-          justifyContent="center"
-          gap={6}
-          justifyItems="center"
-          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))" }}
-        >
-          {items.map((item) => (
+        <div className="flex flex-row gap-6 flex-wrap sm:justify-start justify-center">
+          {items.slice(0, displayCount).map((item) => (
             <Item item={item} key={`${item.name}-${item.id}`} />
           ))}
-        </Box>
+          {displayCount < totalCount && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 4 }}>
+                            <button
+                className="py-2 px-12 text-[#B88E2F] text-lg bg-white text-[16px] border border-[#B88E2F]"
+                onClick={handleShowMore}
+              >
+                
+                show More
+              </button>
+            </Box>
+          )}
+        </div>
       )}
     </Box>
   );

@@ -351,7 +351,7 @@ const ItemDetails = () => {
         style={{ gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))" }}
       >
           {items.slice(0, 4).map((item, i) => (
-            <Item key={`${item.name}-${i}`} item={item} isRelated={true} />
+            <Item key={`${item.name}-${i}`} item={item} />
           ))}
         </div>
       </div>

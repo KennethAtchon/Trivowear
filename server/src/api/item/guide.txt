@@ -1,0 +1,22 @@
+preciseDescription
+{
+  "Apple": "Red",
+  "Banana": "Yellow",
+  "Grapes": "Green"
+}
+optionsProduct
+{
+  "optionsProduct": {
+    "color": ["red", "blue", "orange"],
+    "texture": ["cotton", "polyester", "silk"],
+    "size": ["small", "medium", "large", "extra-large"],
+    "sleeve_length": ["short", "long", "three-quarter"],
+    "pattern": ["solid", "striped", "plaid"]
+  }
+}
+{
+  "shippingDetails": {
+    "shippingCost": "free",
+    "timeFrameDays": 15
+  }
+}

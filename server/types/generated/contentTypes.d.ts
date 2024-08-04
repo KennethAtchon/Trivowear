@@ -379,13 +379,17 @@ export interface ApiItemItem extends Schema.CollectionType {
     longDescription: Attribute.Blocks;
     price: Attribute.Decimal;
     images: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
-    product_attributes: Attribute.Enumeration<['shirts', 'polos', 'jeans']>;
+    category: Attribute.Enumeration<['appliances', 'kitchen', 'fitness']>;
     product_types: Attribute.Enumeration<
       ['newArrivals', 'topSellers', 'topRated']
     >;
-    Distinct: Attribute.Enumeration<['LandingPage1', 'LandingPage2']>;
+    Distinct: Attribute.Enumeration<['LandingPage1', 'Not']>;
     preciseDescription: Attribute.JSON;
     optionsProduct: Attribute.JSON;
+    discount: Attribute.Decimal;
+    shippingDetails: Attribute.JSON;
+    brand: Attribute.String;
+    onSale: Attribute.Boolean;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -408,7 +412,6 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    user_name: Attribute.String;
     stripeSessionId: Attribute.String;
     products: Attribute.JSON;
     email: Attribute.Email;

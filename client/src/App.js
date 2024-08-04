@@ -8,7 +8,7 @@ import CartMenu from "./scenes/global/CartMenu";
 import Checkout from "./scenes/checkout/Checkout";
 import Confirmation from "./scenes/checkout/Confirmation";
 import SearchPage from "./scenes/home/SearchPage";
-import ShopAll from "./scenes/home/ShopAll";
+import Shop from "./scenes/home/ShopAll";
 import Account from './scenes/userRoutes/Account'
 import SignIn from "./scenes/auth/SignIn"; // Import SignIn
 import SignUp from "./scenes/auth/SignUp"; // Import SignUp
@@ -35,7 +35,7 @@ function App() {
           <Route path="checkout" element={<Checkout />} />
           <Route path="checkout/success" element={<Confirmation />} />
           <Route path="searchpage" element={<SearchPage />} />
-          <Route path="all" element={<ShopAll />} /> {/* ShopAll route */}
+          <Route path="shop" element={<Shop />} /> {/* ShopAll route */}
           <Route path="signin" element={<SignIn />} /> {/* SignIn route */}
           <Route path="signup" element={<SignUp />} /> {/* SignUp route */}
           <Route path="/account" element={<Account />} />

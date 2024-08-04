@@ -35,12 +35,12 @@
         "audios"
       ]
     },
-    "product_attributes": {
+    "category": {
       "type": "enumeration",
       "enum": [
-        "shirts",
-        "polos",
-        "jeans"
+        "appliances",
+        "kitchen",
+        "fitness"
       ]
     },
     "product_types": {
@@ -55,7 +55,7 @@
       "type": "enumeration",
       "enum": [
         "LandingPage1",
-        "LandingPage2"
+        "Not"
       ]
     },
     "preciseDescription": {
@@ -63,6 +63,18 @@
     },
     "optionsProduct": {
       "type": "json"
+    },
+    "discount": {
+      "type": "decimal"
+    },
+    "shippingDetails": {
+      "type": "json"
+    },
+    "brand": {
+      "type": "string"
+    },
+    "onSale": {
+      "type": "boolean"
     }
   }
 }

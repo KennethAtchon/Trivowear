@@ -12,9 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "user_name": {
-      "type": "string"
-    },
     "stripeSessionId": {
       "type": "string"
     },
