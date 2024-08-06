@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addToCart, increaseCount } from "../state/cart";
@@ -12,6 +12,23 @@ const Item = ({ item }) => {
   const [count, setCount] = useState(1);
   const [isHovered, setIsHovered] = useState(false);
   const cartItems = useSelector((state) => state.cart.cart);
+  const [isClicked, setIsClicked] = useState(false);
+  const [isScaled, setIsScaled] = useState(false);
+  
+  useEffect(() => {
+    if (isClicked) {
+      setIsScaled(true);
+      const timer = setTimeout(() => {
+        setIsScaled(false);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isClicked]);
+
+  const handleClick = () => {
+    setIsClicked(!isClicked);
+  };
 
   const { price, name, images, shortDescription, onSale, discount, product_types } = item.attributes;
 
@@ -67,8 +84,14 @@ const Item = ({ item }) => {
                 <button className="text-white text-lg flex flex-row ">
                   <MdShare className="mr-2 mt-1.5"/> Share
                 </button>
-                <button className="text-white text-lg flex flex-row">
-                  <MdFavorite className="mr-2 mt-1.5 "/> Like
+                <button 
+                  className="text-white text-lg flex flex-row" 
+                  onClick={handleClick}
+                >
+                  <MdFavorite 
+                    className={`mr-2 mt-1.5 transition-transform duration-300 ${isScaled ? 'transform scale-125' : ''} ${isClicked ? 'text-red-500' : ''}`} 
+                  /> 
+                  Like
                 </button>
               </div>
 
