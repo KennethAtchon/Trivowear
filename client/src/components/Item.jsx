@@ -52,7 +52,9 @@ const Item = ({ item }) => {
           )}
 
           {isHovered && (
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center space-y-4" onClick={handleOverlayClick}>
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center space-y-4 z-10">
+
+              <div className="flex-1 w-full h-full" onClick={handleOverlayClick}></div>
 
               <button
                 className="py-2 px-8 text-[#B88E2F] text-lg bg-white text-[16px]"
@@ -62,13 +64,15 @@ const Item = ({ item }) => {
               </button>
 
               <div className="flex space-x-4">
-                <button className="text-white text-lg flex flex-row">
+                <button className="text-white text-lg flex flex-row ">
                   <MdShare className="mr-2 mt-1.5"/> Share
                 </button>
                 <button className="text-white text-lg flex flex-row">
-                  <MdFavorite className="mr-2 mt-1.5"/> Like
+                  <MdFavorite className="mr-2 mt-1.5 "/> Like
                 </button>
               </div>
+
+              <div className="flex-1 w-full h-full" onClick={handleOverlayClick}></div>
             </div>
           )}
 

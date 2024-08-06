@@ -5,6 +5,7 @@ import Item from "../../components/Item";
 import constants from "../../constants.json";
 import { Box, CircularProgress, Alert, Typography, Button } from "@mui/material";
 
+
 const ShoppingList = ({ filters }) => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
@@ -13,19 +14,34 @@ const ShoppingList = ({ filters }) => {
   const [displayCount, setDisplayCount] = useState(8);
   const [totalCount, setTotalCount] = useState(0);
 
+
   async function getItems() {
-    const accurateCount = totalCount !== 0 ? Math.min(totalCount, displayCount) : displayCount;
+
+    console.log(filters)
+
+    try {
 
     const response = await fetch(
-      `${constants.backendUrl}/api/items?populate=images&${filters}&fields[0]=name&fields[1]=price&fields[2]=shortDescription&fields[3]=onSale&fields[4]=discount&fields[5]=product_types&pagination[pageSize]=${accurateCount}`,
+      `${constants.backendUrl}/api/items?populate=images${filters}&fields[0]=name&fields[1]=price&fields[2]=shortDescription&fields[3]=onSale&fields[4]=discount&fields[5]=product_types&pagination[pageSize]=${displayCount}`,
       { method: "GET" }
     );
 
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const itemsJson = await response.json();
-    console.log(itemsJson)
+    console.log("Items Json", itemsJson)
     dispatch(setItems(itemsJson.data));
     setTotalCount(itemsJson.meta.pagination.total)
-    setLoading(false);
+  } catch (error) {
+      console.error("Failed to fetch items:", error);
+    
+    } finally {
+      setLoading(false);
+    }
+
   }
 
   useEffect(() => {
@@ -45,26 +61,26 @@ const ShoppingList = ({ filters }) => {
   };
 
   return (
-    <Box mb={10}>
+    <Box mb={10} >
       {items && items.length === 0 ? (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            height: "30vh"
-          }}
-        >
-          <Alert severity="error">
-            <Typography variant="h6" component="strong">No Results</Typography>
-            <Typography variant="body1">
-              Sorry, no product matches that name.
-            </Typography>
+            <Alert
+            severity="error"
+            sx={{
+              mx: 2,
+              borderRadius: 2, // Rounded corners for Alert
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center'
+            }}
+          >
+            <strong>No Results</strong>
+            <p>Sorry, no product matches that name.</p>
           </Alert>
-        </Box>
       ) : (
-        <div className="flex flex-row gap-6 flex-wrap sm:justify-start justify-center">
-          {items.slice(0, displayCount).map((item) => (
+        <div className="flex flex-row gap-6 flex-wrap justify-evenly ">
+          {items && items.slice(0, displayCount).map((item) => (
             <Item item={item} key={`${item.name}-${item.id}`} />
           ))}
           {displayCount < totalCount && (

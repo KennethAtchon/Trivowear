@@ -35,9 +35,10 @@ function App() {
           <Route path="checkout" element={<Checkout />} />
           <Route path="checkout/success" element={<Confirmation />} />
           <Route path="searchpage" element={<SearchPage />} />
-          <Route path="shop" element={<Shop />} /> {/* ShopAll route */}
-          <Route path="signin" element={<SignIn />} /> {/* SignIn route */}
-          <Route path="signup" element={<SignUp />} /> {/* SignUp route */}
+          <Route path="shop" element={<Shop />} /> 
+          <Route path="shop/:category" element={<Shop />} /> 
+          <Route path="signin" element={<SignIn />} /> 
+          <Route path="signup" element={<SignUp />} /> 
           <Route path="/account" element={<Account />} />
         </Routes>
         <CartMenu />

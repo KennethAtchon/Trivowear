@@ -8,7 +8,7 @@ import { FaGreaterThan } from 'react-icons/fa';
 
 const LandingPage = () => {
   const filters = [
-    'filters[Distinct][$eq]=LandingPage1'
+    '&filters[Distinct][$eq]=LandingPage1'
   ]
 
   return (
@@ -41,7 +41,7 @@ const LandingPage = () => {
         </div>
       </div>
 
-      <div id="category-section" className="h-[935px] w-full pt-16">
+      <div id="category-section" className="h-[935px] w-full pt-16 bg-[#FAFAFA]">
       <div id="box-section" className="mx-40 flex flex-col ">
         <div id="text-section" className="w-full h-[105px]">
 
@@ -60,7 +60,7 @@ const LandingPage = () => {
           </p>
         </div>
         
-        <div id="image-section" className="w-full h-[670px] flex justify-center">
+        <div id="image-section" className="w-full h-[670px] flex justify-center ">
           <div className="flex flex-col w-[568px] mr-10 rounded-xl relative">
             <div
               id="cat1"
