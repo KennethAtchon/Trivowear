@@ -1,18 +1,9 @@
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FiX, FiPlus, FiMinus } from "react-icons/fi";
 import { decreaseCount, increaseCount, removeFromCart, setIsCartOpen } from "../../state/cart";
 import { useNavigate } from "react-router-dom";
 import constants from "../../constants.json"; // Adjust the path as per your project structure
-
-// Import MUI components
-import {
-  Drawer,
-  IconButton,
-  Typography,
-  Box,
-  Button,
-  Divider,
-} from '@mui/material';
 
 const CartMenu = () => {
   const navigate = useNavigate();
@@ -20,87 +11,92 @@ const CartMenu = () => {
   const cart = useSelector((state) => state.cart.cart);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
-  // console.log(cart);
+  console.log(cart)
 
   const totalPrice = cart.reduce((total, item) => {
     return total + item.count * item.attributes.price;
   }, 0).toFixed(2);
 
+  const handleCheckout = () => {
+    dispatch(setIsCartOpen({})); // Close the cart
+    navigate('/checkout'); // Navigate to the checkout page
+  };
+
   return (
-    <Drawer
-      anchor="right"
-      open={isCartOpen}
-      onClose={() => dispatch(setIsCartOpen({}))}
-    >
-      <Box p={3} width="450px">
-        {/* HEADER */}
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h6">SHOPPING BAG ({cart.length})</Typography>
-          <IconButton onClick={() => dispatch(setIsCartOpen({}))}>
-            <FiX />
-          </IconButton>
-        </Box>
+    <div className={`fixed inset-0 z-50 flex justify-end ${isCartOpen ? "block" : "hidden"}`}>
+      <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => dispatch(setIsCartOpen({}))}></div>
+      <div className="relative bg-white w-96 h-full shadow-lg">
+        <div className="flex justify-between items-center p-4 border-b">
+          <h2 className="text-lg font-semibold">Cart</h2>
+          <FiX className="cursor-pointer" onClick={() => dispatch(setIsCartOpen({}))} />
+        </div>
+        <div className="p-4">
 
-        {/* CART LIST */}
-        <Box>
           {cart.map((item) => (
-            <Box key={`${item.attributes.name}-${item.id}`} mb={3}>
-              <Box display="flex" p={2}>
-                <Box flex="1">
-                  <img
-                    alt={item?.name}
-                    className="object-fit"
-                    style={{ width: "auto", height: "164px" }}
-                    src={`${constants.backendUrl}${item?.attributes?.images?.data[0]?.attributes?.formats?.medium?.url}`}
-                  />
-                </Box>
-                <Box flex="1" ml={2}>
-                  <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                    <Typography variant="h6">{item.attributes.name}</Typography>
-                    <IconButton onClick={() => dispatch(removeFromCart({ id: item.id }))}>
-                      <FiX />
-                    </IconButton>
-                  </Box>
-                  <Typography>{item.attributes.shortDescription[0].children[0].text}</Typography>
-                  <Box display="flex" alignItems="center" mt={2}>
-                    <Box display="flex" alignItems="center" border="1px solid grey">
-                      <IconButton onClick={() => dispatch(decreaseCount({ id: item.id }))}>
-                        <FiMinus />
-                      </IconButton>
-                      <Typography>{item.count}</Typography>
-                      <IconButton onClick={() => dispatch(increaseCount({ id: item.id }))}>
-                        <FiPlus />
-                      </IconButton>
-                    </Box>
-                    <Typography variant="h6" ml={2}>${item.attributes.price}</Typography>
-                  </Box>
-                </Box>
-              </Box>
-              <Divider />
-            </Box>
-          ))}
-        </Box>
+            <div key={item.id} className="flex justify-between mb-4">
+              <div className="flex flex-row">
 
-        {/* ACTIONS */}
-        <Box mt={3}>
-          <Box display="flex" justifyContent="space-between" m={2}>
-            <Typography variant="h6">SUBTOTAL</Typography>
-            <Typography variant="h6">${totalPrice}</Typography>
-          </Box>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={() => {
-              navigate("/checkout");
-              dispatch(setIsCartOpen({}));
-            }}
-          >
-            CHECKOUT
-          </Button>
-        </Box>
-      </Box>
-    </Drawer>
+                <div className=" w-[120px] h-[96px] ">        
+                  {item && <img
+                  alt={item.name}
+                  className="w-full h-full object-fit"
+                  src={`${constants.backendUrl}${item.attributes.images.data[0].attributes.url}`}
+                
+                />}
+                </div>
+
+                <div className="ml-3 w-full">
+                <h3 className="font-semibold text-[14px] mb-2">{item.attributes.name} </h3>
+
+                <div id="options" className="text-[12px] mb-2">
+                  {item.attributes.selectedProduct && (
+                    <>
+                      {Object.entries(item.attributes.selectedProduct).map(([key, value], index) => (
+                        <div key={index}>
+                          {key}: {value}
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+
+                <div className="flex items-center ">
+
+                  <div className="flex items-center border border-[#6C7275] p-1 rounded-lg">
+                  <FiMinus className="cursor-pointer" onClick={() => dispatch(decreaseCount({ id: item.id }))} />
+                  <span className="mx-4">{item.count}</span>
+                  <FiPlus className="cursor-pointer" onClick={() => dispatch(increaseCount({ id: item.id }))} />                    
+                  </div>
+
+                </div>
+                </div>
+
+
+
+              </div>
+              <div className="flex flex-col items-end  pl-3">
+                <span className="mb-2">${(item.count * item.attributes.price).toFixed(2)}</span>
+                <FiX className="cursor-pointer text-lg" onClick={() => dispatch(removeFromCart({ id: item.id }))} />
+              </div>
+            </div>
+          ))}
+
+
+          <div className="mt-4 border-t pt-4">
+            <div className="flex justify-between">
+              <span className="font-semibold">Total:</span>
+              <span className="font-semibold">${totalPrice}</span>
+            </div>
+            <button
+              className="mt-4 w-full bg-blue-600 text-white py-2 rounded"
+              onClick={handleCheckout}
+            >
+              Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

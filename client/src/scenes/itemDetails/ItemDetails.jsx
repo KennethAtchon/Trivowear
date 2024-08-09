@@ -25,6 +25,7 @@ const ItemDetails = () => {
   const cartItems = useSelector((state) => state.cart.cart);
   const [isClicked, setIsClicked] = useState(false);
   const [isScaled, setIsScaled] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(0);
   
   const handleClick = () => {
     setIsClicked(!isClicked);
@@ -56,8 +57,21 @@ const ItemDetails = () => {
 
   const handleAddToCart = () => {
     // Check if item already exists in cart
-    const existingItem = cartItems.length !== 0 && cartItems.some((cartItem) => cartItem.id === item.id) ;
-
+    const existingItem = cartItems.length !== 0 && cartItems.some((cartItem) => 
+      cartItem.id === item.id && 
+      (selectedOption === 0 || cartItem.attributes.selectedProduct === item.attributes.selectedProduct)
+    );
+  
+    if (item.attributes.optionsProduct && selectedOption !== 0) {
+      const options = item.attributes.optionsProduct.optionsProduct;
+      const selectedOptionKey = Object.keys(options).find(key => options[key][selectedOption] !== undefined);
+      if (selectedOptionKey) {
+        item.attributes.selectedProduct = {
+          [selectedOptionKey]: options[selectedOptionKey][selectedOption]
+        };
+      }
+    }
+  
     if (existingItem) {
       dispatch(increaseCount({ id: item.id }));
     } else {
@@ -65,32 +79,56 @@ const ItemDetails = () => {
       dispatch(addToCart({ item: { ...item, count } }));
     }
   };
+  
 
 
-  async function getItems() {
+  async function getItemsByIds(ids) {
+    const query = ids.id.map(id2 => `filters[id][$in]=${id2}`).join('&');
     const response = await fetch(
-      `${constants.backendUrl}/api/items?populate=images`,
+      `${constants.backendUrl}/api/items?${query}&populate=images`,
       {
         method: "GET",
       }
     );
     const itemsJson = await response.json();
     setItems(itemsJson.data);
+    console.log(itemsJson.data)
   }
+  
+  
 
   async function getItem() {
-    const response = await fetch(
-      `${constants.backendUrl}/api/items/${itemId}?populate=images`,
-      {
-        method: "GET",
+    try {
+      const response = await fetch(
+        `${constants.backendUrl}/api/items/${itemId}?populate=images`,
+        {
+          method: "GET",
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    );
-    console.log(response)
-    const itemJson = await response.json();
-    setItem(itemJson.data);
-    
+  
+      const itemJson = await response.json();
+      itemJson.data.attributes.selectedProduct = null;
+      setItem(itemJson.data);
+      if (itemJson.data.attributes.relatedproducts){
+        getItemsByIds(itemJson.data.attributes.relatedproducts);        
+      }
+
+    } catch (error) {
+      console.error('Error fetching item:', error);
+    }
   }
+  
   console.log(item)
+
+  useEffect(() => {
+    
+    console.log('Fetching item and items for itemId:', itemId);
+    getItem();
+  }, [itemId]);
 
   useEffect(() => {
     if (isClicked) {
@@ -103,16 +141,12 @@ const ItemDetails = () => {
     }
   }, [isClicked]);
 
-  useEffect(() => {
-    
-    console.log('Fetching item and items for itemId:', itemId);
-    getItem();
-    getItems();
-  }, [itemId]);
+
 
 
   return (
-    <div className="w-full h-auto px-20 mb-20">
+    // add smaller screen functionality at px-10 level
+    <div className="w-full h-auto px-10 md:px-10 xl:px-28 mb-20">
       <div className="h-[55px] w-full flex items-center">
       <Breadcrumbs
           separator={<GrNext className="text-[8px] ml-1 mr-1" />}
@@ -126,11 +160,11 @@ const ItemDetails = () => {
         </Breadcrumbs>
       </div>
 
-      <div className="h-full flex flex-row mt-2">
+      <div className="h-full flex flex-col md:flex-row mt-2">
 
         <div className=" flex flex-col">
 
-        <div className=" w-[550px] h-[730px] relative border rounded-lg">
+        <div className=" md:w-[550px] h-[730px] relative border rounded-lg">
         {item && <img
               alt={item.name}
               className="w-full h-full object-fit"
@@ -139,16 +173,29 @@ const ItemDetails = () => {
             />}
           {/* Container for child divs */}
           <div className="absolute top-8 left-8 right-0 bottom-0 flex flex-col items-start">
-            <div className="bg-[#38CB89] w-[84px] h-[34px] text-white rounded flex items-center justify-center mb-3 opacity-75">-50%</div>
-            <div className="bg-white w-[84px] h-[34px] border-2 rounded flex items-center justify-center font-bold opacity-75">NEW</div>
+
+          {item && item.attributes.onSale && item.attributes.price > 0 ? (
+            <div className="bg-[#38CB89] w-[84px] h-[34px] text-white rounded flex items-center justify-center mb-3 opacity-75">
+              {((item.attributes.price - item.attributes.discount) / item.attributes.price * 100).toFixed(0)}%
+            </div>
+          ) : null}
+
+
+            {item && item.attributes.product_types === "newArrivals" ? (
+              <div className="bg-white w-[84px] h-[34px] border-2 rounded flex items-center justify-center font-bold opacity-75">
+                NEW
+              </div>
+            ) : null}
+
+
           </div>
 
           <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-wrap justify-between items-center">
 
-            <div className="flex items-center justify-center bg-white border w-8 h-8 rounded-full shadow-md ml-4 opacity-75" onClick={handlePreviousImage}>
+            <div className="flex items-center justify-center bg-white border w-8 h-8 rounded-full shadow-md ml-4 opacity-75 cursor-pointer" onClick={handlePreviousImage}>
                 <FaArrowLeft className="text-gray-500" />
             </div>
-            <div className="flex items-center justify-center border bg-white w-8 h-8 rounded-full shadow-md mr-4 opacity-75" onClick={handleNextImage}>
+            <div className="flex items-center justify-center border bg-white w-8 h-8 rounded-full shadow-md mr-4 opacity-75 cursor-pointer" onClick={handleNextImage}>
                 <FaArrowRight className="text-gray-500" />
             </div>
 
@@ -173,54 +220,67 @@ const ItemDetails = () => {
 
         </div>
 
-        <div className="bg-red-400 flex-1 pl-20">
+        <div className=" pl-20">
 
-          <div className="bg-yellow-100 h-auto pb-6 w-[500px] border-b border-[#E8ECEF]">
-            <div className="text-[40px] font-bold mt-10 mb-2" style={{ fontFamily: 'Poppins, sans-serif'}}>Tray Table</div>
+          <div className=" h-auto pb-6 w-[500px] border-b border-[#E8ECEF]">
+            <div className="text-[40px] font-bold mt-10 mb-2" style={{ fontFamily: 'Poppins, sans-serif'}}>{item && item.attributes.name}</div>
             <div style={{ fontFamily: 'Inter, sans-serif'}} className="text-[
-#6C7275]">Lorem ipsum dolor sit, amet consectetur adipisicing elit. A et laborum maxime, nisi consequatur laudantium possimus ipsam iure distinctio obcaecati ducimus repudiandae harum temporibus ea laboriosam labore unde. Ipsam, sequi.</div>
+#6C7275]">{item && item.attributes.longDescription[0].children[0].text}</div>
             <div className="flex flex-row mt-2" >
-              <div id="discount" className="mr-2 font-bold text-[28px]" style={{ fontFamily: 'Poppins, sans-serif'}} >$199.00</div>
-              <div id="price" className="text-[20px] text-[#6C7275] mt-1 ml-3 line-through" style={{ fontFamily: 'Poppins, sans-serif'}}>$400.00</div>
+            {item && (
+              item.attributes.onSale ? (
+                <>
+                  <div id="discount" className="mr-2 font-bold text-[28px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    ${item.attributes.discount}
+                  </div>
+                  <div id="price" className="text-[20px] text-[#6C7275] mt-1 ml-3 line-through" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    ${item.attributes.price}
+                  </div>
+                </>
+              ) : (
+                <div id="price" className="text-[20px] mt-1 ml-3" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  ${item.attributes.price}
+                </div>
+              )
+            )}
             </div>
           </div>
 
-          <div id="measurements" className="mt-4 h-[60px] w-[150px] bg-pink-100 mb-6">
+          <div id="measurements" className="mt-4 h-[60px] w-[150px] mb-6">
             <div className="font-semibold text-[16px] leading-[26px] text-[#6C7275] mb-1" style={{ fontFamily: 'Inter, sans-serif'}}>Measurements</div>
 
             <div className="font-normal text-[20px] leading-[32px] text-[#000000]" style={{ fontFamily: 'Inter, sans-serif' }}>
-              17 1/2x20 5/8"
+            {item && item.attributes.measurements}
             </div>
 
           </div>
 
-          <div id="options" className="bg-blue-100">
+          <div id="options" className="">
+          {item && item.attributes.optionsProduct && 
+            Object.keys(item.attributes.optionsProduct.optionsProduct).map((key) => (
+              <div key={key}>
+                <div className="flex flex-row">
+                  <div className="font-semibold text-[16px] leading-[26px] text-[#6C7275]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Choose {key}
+                  </div>
+                  <GrNext className="mt-1.5 ml-2 h-3 w-3 text-[#6C7275]"/>
+                </div>
 
-            <div className="flex flex-row">
-              <div className="font-semibold text-[16px] leading-[26px] text-[#6C7275]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  Choose Color
+  
+                <div className="font-normal text-[20px] leading-[32px] text-[#000000]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  {item.attributes.optionsProduct.optionsProduct[key][selectedOption]}
+                </div>
+      
+
+                <div id="images" className="flex flex-row gap-x-4 my-2 flex-wrap">
+                  {item.attributes.optionsProduct.optionsProduct[key].map((option, index) => (
+                    <div key={index} className={`h-16 w-16 bg-red-${100 * (index + 1)} my-2`}></div>
+                  ))}
+                </div>
               </div>
-              <GrNext className="mt-1.5 ml-2  h-3 w-3 text-[#6C7275]"/>
+          ))}
+        </div>
 
-            </div>
-
-            <div className="font-normal text-[20px] leading-[32px] text-[#000000]" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Black
-            </div>
-
-            <div id="images " className="flex flex-row gap-x-4 my-2 flex-wrap">
-                <div className="h-16 w-16 bg-red-100 my-2">
-
-                </div>
-                <div className="h-16 w-16 bg-red-200 my-2">
-
-                </div>
-                <div className="h-16 w-16 bg-red-300 my-2">
-
-                </div>
-
-            </div>
-          </div>
 
           <div id="Add" className="flex flex-row">
             <div id="counter" className="h-[55px] w-[130px] mr-14 bg-[#F5F5F5] rounded-lg flex flex-row items-center">
@@ -262,7 +322,7 @@ const ItemDetails = () => {
                   ))}
                   {showMore && Object.entries(item?.attributes?.preciseDescription).slice(4).map(([key, value]) => (
                     <div key={key} className="h-5 flex flex-row text-xs items-center">
-                      <div className="text-[#6C7275] w-[100px]" style={{ fontFamily: 'Inter, sans-serif'}}>{key}</div>
+                      <div className="text-[#6C7275] w-[190px]" style={{ fontFamily: 'Inter, sans-serif'}}>{key}</div>
                       <div style={{ fontFamily: 'Inter, sans-serif'}}>{Array.isArray(value) ? value.join(', ') : value}</div>
                     </div>
                   ))}
@@ -279,7 +339,19 @@ const ItemDetails = () => {
         </div>
       </div>
 
-      <div id="relatedproducts" className="mt-20 h-[400px] bg-blue-200">
+      <div id="relatedproducts" className="mt-20 h-auto">
+        <div>
+          <div className="font-bold text-[28px] mt-6 mb-10" style={{ fontFamily: 'Poppins, sans-serif'}}>You might also like</div>
+        </div>
+
+        <div id="slideshow">
+
+        <div className="flex flex-row gap-10 flex-wrap justify-start ">
+          {items && items.map((item) => (
+            <Item item={item} key={`${item.name}-${item.id}`} />
+          ))}
+        </div>
+        </div>
 
       </div>
 
@@ -291,18 +363,4 @@ const ItemDetails = () => {
 export default ItemDetails;
 
 
-//       <div className="mt-24 w-full">
-//         <h3 className="text-3xl font-bold mb-4">Related Products</h3>
-//         <div
-//         className="grid justify-center gap-6 "
-//         style={{ gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))" }}
-//       >
-//           {items && items.slice(0, 4).map((item, i) => (
-//             <Item key={`${item.name}-${i}`} item={item} />
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 

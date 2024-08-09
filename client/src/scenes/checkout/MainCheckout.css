@@ -1,0 +1,31 @@
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 0.5s linear 2;
+}
+
+@keyframes lineAnimation {
+    0% {
+        width: 0;
+        transform: translateX(-50%);
+    }
+    50% {
+        width: 50%;
+        transform: translateX(-50%);
+    }
+    100% {
+        width: 100%;
+        transform: translateX(0);
+    }
+}
+
+.line-animation {
+    animation: lineAnimation 1s ease-out;
+}

@@ -23,11 +23,11 @@ const LandingPage = () => {
                 <span><b>Sellers</b></span>
               </div>
               
-              <div className="font-poppins font-bold text-[52px] text-[#B88E2F]">
+              <div className="font-bold text-[52px] text-[#B88E2F]" style={{ fontFamily: 'Poppins, sans-serif'}}>
                 Discover Our New Collection
               </div>
 
-              <div className="font-poppins font-medium text-[15px]">
+              <div className=" font-medium text-[15px]" style={{ fontFamily: 'Poppins, sans-serif'}}>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo saepe repellat aliquam, ut eaque, nisi exercitationem velit, laudantium minima repudiandae nihil asperiores recusandae est nulla sed sapiente nam molestias vero.
               </div>
 
@@ -42,7 +42,7 @@ const LandingPage = () => {
       </div>
 
       <div id="category-section" className="h-[935px] w-full pt-16 bg-[#FAFAFA]">
-      <div id="box-section" className="mx-40 flex flex-col ">
+      <div id="box-section" className="md:mx-40 flex flex-col ">
         <div id="text-section" className="w-full h-[105px]">
 
           <h2

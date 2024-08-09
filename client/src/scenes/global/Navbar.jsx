@@ -7,6 +7,8 @@ import { BsCart2 } from "react-icons/bs";
 import broovielogo from "../../assets/broovielogonew.png";
 import SearchBar from "./SearchBar"; // Import the SearchBar component
 import { MdFavoriteBorder } from "react-icons/md";
+import LikeMenu from "./LikeMenu"; 
+import { setIsLikeMenuOpen } from "../../state/likes";
 
 const Banner = () => {
   return (
@@ -19,9 +21,12 @@ const Banner = () => {
 
 function Navbar() {
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
+  const [isLikeMenuOpen, setIsLikeMenuOpenState] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuth); // Access the isAuth state
+  const cart = useSelector((state) => state.cart.cart); 
+  const likedItems = useSelector((state) => state.likes.likedItems);
 
 
   const toggleSearchBar = () => {
@@ -35,6 +40,13 @@ function Navbar() {
       navigate("/signin");
     }
   };
+
+  const handleLikeIconClick = () => {
+    setIsLikeMenuOpenState(!isLikeMenuOpen);
+    dispatch(setIsLikeMenuOpen(!isLikeMenuOpen)); // Update Redux state
+  };
+
+  const totalItems = cart.reduce((total, item) => total + item.count, 0);
 
 
 
@@ -87,11 +99,11 @@ function Navbar() {
             </div>
             <div className="flex items-center space-x-1 cursor-pointer">
               <BsCart2 onClick={() => dispatch(setIsCartOpen(true))} className=" mr-1"/>
-              <span>1</span>
+              <span>{totalItems}</span>
             </div>
-            <div className="flex items-center space-x-1 cursor-pointer">
+            <div className="flex items-center space-x-1 cursor-pointer" onClick={handleLikeIconClick}>
               <MdFavoriteBorder className=" mr-1"/>
-              <span>1</span>
+              <span>{likedItems.length}</span>
             </div>
           </div>
 
@@ -99,7 +111,7 @@ function Navbar() {
 
 
       </div>
-     
+      <LikeMenu /> 
     </div>
   );
 }

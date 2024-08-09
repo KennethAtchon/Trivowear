@@ -18,11 +18,10 @@ const ShoppingList = ({ filters }) => {
   async function getItems() {
 
     console.log(filters)
-
     try {
 
     const response = await fetch(
-      `${constants.backendUrl}/api/items?populate=images${filters}&fields[0]=name&fields[1]=price&fields[2]=shortDescription&fields[3]=onSale&fields[4]=discount&fields[5]=product_types&pagination[pageSize]=${displayCount}`,
+      `${constants.backendUrl}/api/items?populate=images${filters}&fields[0]=name&fields[1]=price&fields[2]=shortDescription&fields[3]=onSale&fields[4]=discount&fields[5]=product_types&fields[6]=shippingDetails&pagination[pageSize]=${displayCount}`,
       { method: "GET" }
     );
 
@@ -85,7 +84,7 @@ const ShoppingList = ({ filters }) => {
           ))}
           {displayCount < totalCount && (
             <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 4 }}>
-                            <button
+              <button
                 className="py-2 px-12 text-[#B88E2F] text-lg bg-white text-[16px] border border-[#B88E2F]"
                 onClick={handleShowMore}
               >

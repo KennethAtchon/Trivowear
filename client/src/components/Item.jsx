@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { addToCart, increaseCount } from "../state/cart";
 import { MdShare, MdFavorite } from "react-icons/md";
 import constants from "../constants.json";
-
+import { addToLikes, removeFromLikes } from "../state/likes";
 
 const Item = ({ item }) => {
   const navigate = useNavigate();
@@ -12,8 +12,17 @@ const Item = ({ item }) => {
   const [count, setCount] = useState(1);
   const [isHovered, setIsHovered] = useState(false);
   const cartItems = useSelector((state) => state.cart.cart);
+  const likedItems = useSelector((state) => state.likes.likedItems);
   const [isClicked, setIsClicked] = useState(false);
   const [isScaled, setIsScaled] = useState(false);
+
+  const { price, name, images, shortDescription, onSale, discount, product_types } = item.attributes;
+
+  const isLiked = likedItems.some((likedItem) => likedItem.id === item.id);
+
+  useEffect(() => {
+    setIsClicked(isLiked);
+  }, [isLiked]);
   
   useEffect(() => {
     if (isClicked) {
@@ -29,9 +38,6 @@ const Item = ({ item }) => {
   const handleClick = () => {
     setIsClicked(!isClicked);
   };
-
-  const { price, name, images, shortDescription, onSale, discount, product_types } = item.attributes;
-
 
   const handleAddToCart = () => {
     const existingItem =
@@ -49,6 +55,34 @@ const Item = ({ item }) => {
     navigate(`/item/${item.id}`);
   };
 
+  const parseItem = (item) => {
+    return {
+      id: item.id,
+      attributes:{
+      name: item.attributes.name,
+      images: item.attributes.images.data.map(image => ({
+        id: image.id,
+        url: image.attributes.url
+      }))        
+      }
+
+    };
+  };
+  
+  // Usage example within your `handleLikeClick` function
+  const handleLikeClick = () => {
+    const parsedItem = parseItem(item);
+    console.log("likes", JSON.stringify(parsedItem));
+    
+    if (isLiked) {
+      dispatch(removeFromLikes({ id: parsedItem.id }));
+    } else {
+      dispatch(addToLikes(parsedItem));
+    }
+    setIsClicked(!isClicked); // Toggle click state
+  };
+  
+
   return (
 <div className={`w-[290px] h-[450px]`}>
       <div
@@ -63,7 +97,7 @@ const Item = ({ item }) => {
               key={0}
               alt={name}
               className="w-full h-full object-fit"
-              src={`${constants.backendUrl}${images.data[0].attributes.url}`}
+              src={`${constants.backendUrl}${item.attributes.images.data[0].attributes.url}`}
               onClick={() => navigate(`/item/${item.id}`)}
             />
           )}
@@ -90,6 +124,7 @@ const Item = ({ item }) => {
                 >
                   <MdFavorite 
                     className={`mr-2 mt-1.5 transition-transform duration-300 ${isScaled ? 'transform scale-125' : ''} ${isClicked ? 'text-red-500' : ''}`} 
+                    onClick={handleLikeClick}
                   /> 
                   Like
                 </button>

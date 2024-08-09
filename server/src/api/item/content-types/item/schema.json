@@ -75,6 +75,23 @@
     },
     "onSale": {
       "type": "boolean"
+    },
+    "optionsimages": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "relatedproducts": {
+      "type": "json"
+    },
+    "measurements": {
+      "type": "string"
     }
   }
 }

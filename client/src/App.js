@@ -5,8 +5,7 @@ import Navbar from "./scenes/global/Navbar";
 import Footer from "./scenes/global/Footer";
 import ItemDetails from "./scenes/itemDetails/ItemDetails";
 import CartMenu from "./scenes/global/CartMenu";
-import Checkout from "./scenes/checkout/Checkout";
-import Confirmation from "./scenes/checkout/Confirmation";
+import MainCheckout from "./scenes/checkout/MainCheckout";
 import SearchPage from "./scenes/home/SearchPage";
 import Shop from "./scenes/home/ShopAll";
 import Account from './scenes/userRoutes/Account'
@@ -32,8 +31,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="item/:itemId" element={<ItemDetails />} />
-          <Route path="checkout" element={<Checkout />} />
-          <Route path="checkout/success" element={<Confirmation />} />
+          <Route path="checkout" element={<MainCheckout />} />
           <Route path="searchpage" element={<SearchPage />} />
           <Route path="shop" element={<Shop />} /> 
           <Route path="shop/:category" element={<Shop />} /> 

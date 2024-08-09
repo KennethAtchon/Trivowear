@@ -390,6 +390,12 @@ export interface ApiItemItem extends Schema.CollectionType {
     shippingDetails: Attribute.JSON;
     brand: Attribute.String;
     onSale: Attribute.Boolean;
+    optionsimages: Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    relatedproducts: Attribute.JSON;
+    measurements: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
