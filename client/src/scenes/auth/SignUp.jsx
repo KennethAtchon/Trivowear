@@ -49,7 +49,7 @@ const SignUp = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      height="49vh"
+      height="55vh"
       mx="auto"
       p={3}
       mt={8}

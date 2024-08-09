@@ -49,7 +49,7 @@ const MainCheckout = () => {
     const stepTitle = ["Cart", "Checkout", "Complete"];
 
     return (
-        <div id="main-checkout-container" className='w-full h-[1100px]  flex flex-col items-center'>
+        <div id="main-checkout-container" className='w-full h-auto flex flex-col items-center'>
             <div id="Slider" className='h-auto w-[830px] mt-12 flex flex-col'>
                 <div className='font-bold text-[54px] text-center' style={{ fontFamily: 'Poppins, sans-serif' }}>{stepTitle[activeStep]}</div>
 
@@ -83,7 +83,7 @@ const MainCheckout = () => {
                 Next Step
             </button> */}
 
-            <div id="maincomponent" className='h-[770px] w-[1120px] bg-green-100 mt-4'>
+            <div id="maincomponent" className='h-auto w-[1120px] bg-green-100 mt-4 mb-16'>
                 {/* Render the component based on the active step */}
                 {activeStep === 0 && <Cart handleNextStep={handleNextStep}/>}
                 {activeStep === 1 && <Checkout />}

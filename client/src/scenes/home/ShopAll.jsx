@@ -42,7 +42,7 @@ const SortDropdown = ({ setSorter }) => {
         <RiArrowDropDownLine size={28} />
       </div>
       {isOpen && (
-        <div className=" absolute z-50  mt-2 bg-white border rounded-lg shadow-md ">
+        <div className=" absolute z-50 mt-2 bg-white border rounded-lg shadow-md ">
           <div className="p-2 hover:bg-gray-200 cursor-pointer pr-4" onClick={() => handleOptionClick('Price: Low to High')}>Price: Low to High</div>
           <div className="p-2 hover:bg-gray-200 cursor-pointer pr-4" onClick={() => handleOptionClick('Price: High to Low')}>Price: High to Low</div>
           <div className="p-2 hover:bg-gray-200 cursor-pointer pr-4" onClick={() => handleOptionClick('Newest Arrivals')}>Newsest Arrivals</div>
