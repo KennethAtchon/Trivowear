@@ -21,14 +21,14 @@
     "email": {
       "type": "email"
     },
-    "billingAddress": {
-      "type": "json"
-    },
     "shippingAddress": {
       "type": "json"
     },
-    "phone_number": {
+    "phone": {
       "type": "string"
+    },
+    "orderId": {
+      "type": "uid"
     }
   }
 }

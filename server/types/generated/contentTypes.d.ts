@@ -421,9 +421,9 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     stripeSessionId: Attribute.String;
     products: Attribute.JSON;
     email: Attribute.Email;
-    billingAddress: Attribute.JSON;
     shippingAddress: Attribute.JSON;
-    phone_number: Attribute.String;
+    phone: Attribute.String;
+    orderId: Attribute.UID;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

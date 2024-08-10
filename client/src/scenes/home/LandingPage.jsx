@@ -130,7 +130,7 @@ const LandingPage = () => {
     </div>
 
 <div id="banner-section" className='h-auto bg-[#FAFAFA]'>
-      <div id="banner" className='lg:mx-20 xl:mx-40 2xl:mx-60 h-full flex flex-col md:flex-row gap-x-8 py-20 m-4 md:mx-20'>
+      <div id="banner" className='lg:mx-20 xl:mx-40 2xl:mx-60 h-full flex flex-col md:flex-row gap-x-8 py-20 md:mx-20'>
 
         <div className='relative flex-1 md:mb-0 mb-5'>
           <div 

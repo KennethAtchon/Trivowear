@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 // Cart slice
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: { isCartOpen: false, cart: [], items: [] },
+  initialState: { isCartOpen: false, cart: [], items: [], selectedShipping: '', selectedShippingPrice: 0 },
   reducers: {
     setItems: (state, action) => {
       state.items = action.payload;
@@ -34,8 +34,12 @@ const cartSlice = createSlice({
     setIsCartOpen: (state) => {
       state.isCartOpen = !state.isCartOpen;
     },
+    updateShippingInCart: (state, action) => {
+      state.selectedShipping = action.payload.selectedShipping;
+      state.selectedShippingPrice = action.payload.selectedShippingPrice;
+    },
   },
 });
 
-export const { setItems, addToCart, removeFromCart, increaseCount, decreaseCount, setIsCartOpen } = cartSlice.actions;
+export const { setItems, addToCart, removeFromCart, increaseCount, decreaseCount, setIsCartOpen, updateShippingInCart } = cartSlice.actions;
 export default cartSlice.reducer;

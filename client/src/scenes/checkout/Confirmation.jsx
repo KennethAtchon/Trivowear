@@ -1,11 +1,86 @@
 // Confirmation.js
 import React from 'react';
+import popper from '../../assets/party-popper.svg'
 
-const Confirmation = () => {
+/*
+** This does not need anymore information from the cart state**
+** This will clear the cart state from localstorage, and what we currently have**
+** should probably pull data here from the database, using a unique id**
+**format : checkout/success/:orderId**
+*/
+
+const Confirmation = ({ orderId }) => {
   return (
-    <div>
-      <h1>Confirmation</h1>
-      {/* Add confirmation functionality here */}
+    <div className='h-[800px] px-40 py-16'>
+      <div className='h-full w-full border border-black rounded-lg shadow-lg flex flex-col items-center'>
+        <div className='flex flex-col w-[550px] items-center pt-10'>
+          <div className='text-[#6C7275] text-[28px] font-bold flex flex-row'>Thank you! {orderId}
+            <img src={popper} alt="popper" className='ml-2 mt-1 h-8 w-8' />
+          </div>
+          <div className='text-[#23262F] text-[40px] font-bold text-center'>Your order has been received</div>
+        </div>
+
+        <div 
+          className='mt-5 flex flex-row justify-center gap-x-10 w-[550px]  items-center overflow-x-auto pb-2 pt-4' 
+          style={{
+            scrollbarWidth: "thin", // Firefox
+            msOverflowStyle: "auto", // IE/Edge
+          }}
+        >
+          <div id="imagecontainer">
+            <div id="image" className='h-28 w-24 bg-red-100 relative'>
+              <div 
+                className='absolute top-0 right-0 w-8 h-8 bg-black rounded-full flex justify-center items-center'
+                style={{ transform: 'translate(25%,-25%)' }}>
+                <p className='text-white text-sm font-bold'>1</p>
+              </div>
+            </div>  
+          </div>
+          <div id="imagecontainer">
+            <div id="image" className='h-28 w-24 bg-red-100 relative'>
+              <div 
+                className='absolute top-0 right-0 w-8 h-8 bg-black rounded-full flex justify-center items-center'
+                style={{ transform: 'translate(25%,-25%)' }}>
+                <p className='text-white text-sm font-bold'>1</p>
+              </div>
+            </div>  
+          </div>
+          <div id="imagecontainer">
+            <div id="image" className='h-28 w-24 bg-red-100 relative'>
+              <div 
+                className='absolute top-0 right-0 w-8 h-8 bg-black rounded-full flex justify-center items-center'
+                style={{ transform: 'translate(25%,-25%)' }}>
+                <p className='text-white text-sm font-bold'>1</p>
+              </div>
+            </div>  
+          </div>
+          
+
+
+        </div>
+
+        <div className='mt-5 flex flex-col justify-evenly w-[550px] h-[150px]  items-center '>
+          <div className='flex flex-row justify-between w-[250px]'>
+            <div className='text-[#6C7275]'>Order Code: </div>
+            <div>#0123_45678</div>
+          </div>
+          <div className='flex flex-row justify-between w-[250px]'>
+            <div className='text-[#6C7275]'>Date: </div>
+            <div>October 19, 2023</div>
+          </div>
+          <div className='flex flex-row justify-between w-[250px]'>
+            <div className='text-[#6C7275]'>Total: </div>
+            <div>$1,345.00</div>
+          </div>
+          
+        </div>
+
+        <div className='mt-12 flex flex-col w-[200px] h-[55px] bg-black rounded-2xl items-center justify-center'>
+          <div className='text-white'>Shop for More</div>
+
+        </div>
+
+      </div>
     </div>
   );
 };

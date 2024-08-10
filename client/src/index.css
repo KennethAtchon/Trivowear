@@ -11,13 +11,10 @@
 
 
 /* WebKit browsers (Chrome, Safari) */
-*::-webkit-scrollbar {
-  display: none; /* Hide scrollbar */
-}
+
 
 /* Firefox */
 * {
-  overflow: auto; /* Ensure scrolling is enabled */
   scrollbar-width: none; /* Hide scrollbar */
   -ms-overflow-style: none; /* Hide scrollbar */
 }

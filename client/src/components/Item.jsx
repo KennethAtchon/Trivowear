@@ -158,7 +158,8 @@ const Item = ({ item }) => {
         </div>
 
         <div className="w-full h-[145px] flex flex-col bg-[#F4F5F7] pl-2">
-          <div className="w-full h-[30px] text-[20px] mt-4 mb-4">{name}</div>
+          {/* attention */}
+          <div className="w-full h-[30px] text-[20px] mt-4 mb-4 overflow-auto">{name}</div>
           <div className="w-full h-[25px] text-[14px] mb-3 text-[#898989]">
             {shortDescription[0].children[0].text}
           </div>

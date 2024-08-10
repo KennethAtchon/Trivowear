@@ -16,10 +16,17 @@ optionsProduct
 }
 {
   "shippingDetails": {
-    "shippingCost": "free",
-    "timeFrameDays": 15
+    "freeShipping": {
+      "shippingCost": "free",
+      "timeFrameDays": 15
+    },
+    "expressShipping": {
+      "shippingCost": "$10.00",
+      "timeFrameDays": 3
+    }
   }
 }
+
 {
   "id": [
     1,

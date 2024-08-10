@@ -30,7 +30,7 @@ const SignIn = () => {
       if (response.ok) {
         setStatus({ success: 'Signed in successfully!' });
         // Dispatch the login action with the received token
-        dispatch(login({ token: data.jwt }));
+        dispatch(login({ token: data.jwt, email: values.email }));
         // Redirect to home or another page upon successful sign-in
         navigate('/');
       } else {

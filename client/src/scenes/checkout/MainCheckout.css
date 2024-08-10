@@ -14,15 +14,12 @@
 @keyframes lineAnimation {
     0% {
         width: 0;
-        transform: translateX(-50%);
     }
     50% {
         width: 50%;
-        transform: translateX(-50%);
     }
     100% {
         width: 100%;
-        transform: translateX(0);
     }
 }
 

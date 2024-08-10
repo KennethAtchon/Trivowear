@@ -1,15 +1,67 @@
 // Cart.js
-import React from 'react';
+import React , {useState, useEffect} from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import { FiX, FiPlus, FiMinus } from "react-icons/fi";
 import Radio from '@mui/material/Radio';
 import { RiCouponLine } from "react-icons/ri";
+import { decreaseCount, increaseCount, removeFromCart, updateShippingInCart  } from "../../state/cart";
+import constants from "../../constants.json";
+/*
+Coupons: Work later
+(Later: lock in the coupons)
+
+*/
 
 const Cart = ({ handleNextStep }) => {
+  const cart = useSelector((state) => state.cart.cart);
+  const dispatch = useDispatch();
+  const [selectedShipping, setSelectedShipping] = useState('');
+  const [selectedShippingPrice, setSelectedShippingPrice] = useState(0);
+  const [subtotal, setSubtotal] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  // Calculate subtotal and set the default shipping option
+  useEffect(() => {
+    if (cart && cart.length > 0) {
+      // Calculate the subtotal
+      const calculatedSubtotal = cart.reduce((acc, item) => {
+        const price = item.attributes.onSale ? item.attributes.discount : item.attributes.price;
+        return acc + item.count * price;
+      }, 0);
+      setSubtotal(calculatedSubtotal);
+
+      // Set the first available shipping option as default
+      const firstShippingOption = Object.keys(cart[0].attributes.shippingDetails.shippingDetails)[0];
+      setSelectedShipping(firstShippingOption);
+    }
+  }, [cart]);
+
+  // Update the total when the selected shipping option changes
+  useEffect(() => {
+    if (cart && selectedShipping) {
+      const selectedShippingCost = parseFloat(cart[0].attributes.shippingDetails.shippingDetails[selectedShipping].shippingCost.replace('$', '')) || 0;
+      setSelectedShippingPrice(selectedShippingCost);
+      setTotal(subtotal + selectedShippingCost);
+    }
+  }, [selectedShipping, subtotal, cart]);
 
   const handleSubmit = () => {
-
+    dispatch(updateShippingInCart({ selectedShipping, selectedShippingPrice }));
     handleNextStep();
   };
+
+  useEffect(() => {
+    if (cart && cart.length > 0) {
+      const firstShippingOption = Object.keys(cart[0].attributes.shippingDetails.shippingDetails)[0];
+      setSelectedShipping(firstShippingOption);
+    }
+  }, [cart]);
+
+  const handleChange = (event) => {
+    setSelectedShipping(event.target.value);
+  };  
+  const shippingOptions = cart.length > 0 ? Object.entries(cart[0].attributes.shippingDetails.shippingDetails) : [];
+  console.log(cart[0].attributes.shippingDetails.shippingDetails['freeShipping'].shippingCost)
 
   return (
     <div className=" w-full h-full flex flex-col">
@@ -26,67 +78,106 @@ const Cart = ({ handleNextStep }) => {
             </div>
            </div>
 
-           <div id="item" className='flex flex-row justify-between  my-4'>
-            <div className='h-24 w-80 flex flex-row items-center'>
-              <div id="image" className='h-20 w-24 bg-blue-500 mr-2'>
-                
-              </div>
-              <div id="productdesc" className='h-20 w-56 flex flex-col justify-evenly'>
-                <div className='text-[14px] font-semibold' style={{ fontFamily: 'Inter, sans-serif'}}>Tray Table</div>
-                <div className='text-[12px] text-[#6C7275]' style={{ fontFamily: 'Inter, sans-serif'}}>Color: black</div>
-                <div className='flex flex-row text-[#6C7275]'> <FiX className='mt-[3px] text-[20px]'/> Remove</div>
-              </div>              
-            </div>
+           <div id="itemcontainer" className='overflow-y-auto h-[450px]'
+            style={{
+              scrollbarWidth: "thin", // Firefox
+              msOverflowStyle: "auto", // IE/Edge
+            }}>
+            {cart && cart.map((item) => {
+              const price = item.attributes.onSale ? item.attributes.discount : item.attributes.price;
+              const itemSubtotal = item.count * price;
+              return (
+                <div key={item.id} id="item" className="flex flex-row justify-between my-4 border-b pb-3">
+                  <div className="h-24 w-80 flex flex-row items-center">
+                    <div id="image" className="h-24 w-20 bg-blue-500 mr-2">
+                      {item && (
+                        <img
+                          alt={item.name}
+                          className="w-full h-full object-fit"
+                          src={`${constants.backendUrl}${item.attributes.images.data[0].attributes.url}`}
+                        />
+                      )}
+                    </div>
+                    <div id="productdesc" className="h-20 w-56 flex flex-col justify-evenly">
+                      <div className="text-[14px] font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        {item.attributes.name}
+                      </div>
+                      <div id="options" className="text-[12px] text-[#6C7275]">
+                        {item.attributes.selectedProduct && (
+                          <>
+                            {Object.entries(item.attributes.selectedProduct).map(([key, value], index) => (
+                              <div key={index}>
+                                {key}: {value}
+                              </div>
+                            ))}
+                          </>
+                        )}
+                      </div>
+                      <div className="flex flex-row text-[#6C7275]">
+                        <FiX className="mt-[3px] text-[20px] cursor-pointer" onClick={() => dispatch(removeFromCart({ id: item.id }))} />
+                        Remove
+                      </div>
+                    </div>
+                  </div>
+                  <div id="quantity-price-subtotal" className="flex flex-row justify-between w-[325px] items-center">
+                    <div className="flex items-center border border-[#6C7275] p-1 rounded-lg">
+                      <FiMinus className="cursor-pointer" onClick={() => dispatch(decreaseCount({ id: item.id }))} />
+                      <span className="mx-3">{item.count}</span>
+                      <FiPlus className="cursor-pointer" onClick={() => dispatch(increaseCount({ id: item.id }))} />
+                    </div>
+                    <div className="pr-4">
+                      ${(price).toFixed(2)}
+                    </div>
+                    <div>${itemSubtotal.toFixed(2)}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
-            <div id="quantity-price-subtotal" className='flex flex-row justify-between w-[325px] items-center'>
-              <div className="flex items-center border border-[#6C7275] p-1 rounded-lg">
-              <FiMinus className="cursor-pointer"  />
-              <span className="mx-3">1</span>
-              <FiPlus className="cursor-pointer" />                    
-              </div>
-              <div className='pr-4'>$19.00</div>
-              <div>$38.00</div>              
-            </div>
-
-
-
-           </div>
+           
         </div>
 
         <div id="cartsummary" className="w-[415px] rounded-lg p-4 border-black border">
           <div className='text-[20px] mb-2' style={{ fontFamily: 'Poppins, sans-serif'}}>Cart Summary</div>
 
-          <div id="shipping" className='h-[210px]  overflow-y-auto'>
-            <div id="shippingoption" className='flex flex-row justify-between rounded-md border border-black p-2 mb-3'>
-              <div className='flex flex-row items-center'>
-                <Radio
-                  // checked={selectedValue === 'a'}
-                  // onChange={handleChange}
-                  value="a"
-                  name="radio-buttons"
-                  inputProps={{ 'aria-label': 'A' }}
-                  color="default"
-                />
-                <div>Free Shipping</div>
+          <div id="shipping" className="h-[210px] overflow-y-auto" style={{ scrollbarWidth: 'thin', msOverflowStyle: 'auto' }}>
+            {shippingOptions.map(([key, details], index) => (
+              <div key={index} id="shippingoption" className="flex flex-row justify-between rounded-md border border-black p-2 mb-3">
+                <div className="flex flex-row items-center">
+                  <Radio
+                    checked={selectedShipping === key}
+                    onChange={handleChange}
+                    value={key}
+                    name="radio-buttons"
+                    inputProps={{ 'aria-label': key }}
+                    color="default"
+                  />
+                  <div>{key.split("Shipping")[0].replace(/^./, key[0].toUpperCase()) + " Shipping"} ({details.timeFrameDays-2}-{details.timeFrameDays+2})</div>
+                </div>
+                <div className="flex flex-row items-center mr-2">
+                  {details.shippingCost === 'free' ? '$0.00' : details.shippingCost}
+                </div>
               </div>
-              <div className='flex flex-row items-center mr-2'>$0.00</div>
-            </div>
+            ))}
           </div>
+
 
 
           <div id='subtotal' className='mt-5 flex flex-row justify-between border-b border-[
 #EAEAEA] pb-3'>
             <div style={{ fontFamily: 'Inter, sans-serif'}}>Subtotal</div>
-            <div style={{ fontFamily: 'Inter, sans-serif'}}>$1234.00</div>
+            <div style={{ fontFamily: 'Inter, sans-serif'}}>${subtotal.toFixed(2)}</div>
           </div>
 
           <div id='total' className='mt-3 flex flex-row justify-between '>
           <div className='text-[20px] font-bold' style={{ fontFamily: 'Inter, sans-serif'}}>Total</div>
-          <div className='font-bold mt-1' style={{ fontFamily: 'Inter, sans-serif'}}>$1235.00</div>
+          <div className='font-bold mt-1' style={{ fontFamily: 'Inter, sans-serif'}}>${total.toFixed(2)}</div>
           </div>
 
-          <div id='checkout' className='mt-8 flex flex-row justify-center items-center rounded-md bg-black p-2 py-3'>
-                <div className='text-white' style={{ fontFamily: 'Inter, sans-serif'}}>Checkout</div>
+          <div id='checkout' className='mt-8 flex flex-row justify-center items-center rounded-md bg-black p-2 py-3 cursor-pointer' onClick={handleSubmit}>
+                <div className='text-white' style={{ fontFamily: 'Inter, sans-serif'}}>
+                  Checkout</div>
           </div>
 
 
@@ -101,23 +192,20 @@ const Cart = ({ handleNextStep }) => {
           <div className="font-bold text-[20px]">Have a coupon?</div>
           <div className="font-semibold text-[16px] text-[#6C7275]">Add your code for an instant cart discount</div>
           <div className="mt-4 flex flex-row justify-between items-center rounded-md border p-2">
-            <div className="flex flex-row">
-              <RiCouponLine className="ml-1 mr-2 text-xl text-[#6C7275]"/>
-              <div className="text-[#6C7275]">Coupon Code</div>
-            </div>
-            <div className="mr-2">Apply</div>
-          </div>
+        <div className="flex flex-row items-center">
+          <RiCouponLine className="ml-1 mr-2 text-xl text-[#6C7275]" />
+          <input 
+            type="text" 
+            placeholder="Enter coupon code" 
+            className="outline-none text-[#6C7275] bg-transparent" 
+          />
+        </div>
+        <button className="mr-2 font-semibold">Apply</button>
+      </div>
+
 
         </div>
-        <div id="nextstep" className='w-[225px] flex justify-end'>
-            <button
-                onClick={handleSubmit}
-                className='h-16 mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg'
-            >
-                Checkout
-            </button>
 
-        </div>
 
       </div>
 

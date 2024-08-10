@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { FaCheck } from "react-icons/fa";
 import Cart from './Cart';
 import Checkout from './Checkout';
@@ -6,9 +7,29 @@ import Confirmation from './Confirmation';
 import './MainCheckout.css'; // Import the CSS file
 
 const MainCheckout = () => {
+    const location = useLocation();
+    const { orderId } = useParams();
+    const query = new URLSearchParams(location.search);
+
+    console.log(orderId)
+
+    // Read parameters from URL
+    const activeStepParam = query.get('activeStep');
+    const successfulParam = query.get('successful');
+
     const [successful, setSuccess] = useState([false, false, false]);
     const [activeStep, setActiveStep] = useState(0);
     const [spinning, setSpinning] = useState([false, false, false]);
+
+    useEffect(() => {
+        if (activeStepParam) {
+            setActiveStep(Number(activeStepParam));
+        }
+        if (successfulParam) {
+            const successArray = successfulParam.split(',').map(item => item === 'true');
+            setSuccess(successArray);
+        }
+    }, [activeStepParam, successfulParam]);
 
     const getStepStyles = (index) => {
         if (index === activeStep) {
@@ -45,6 +66,14 @@ const MainCheckout = () => {
         }
     };
 
+    const handlePrevStep = () => {
+        if (activeStep > 0) {
+            setActiveStep(prev => prev - 1);
+        }
+    };
+
+
+
     const stepLabels = ["Shopping Cart", "Checkout Details", "Order complete"];
     const stepTitle = ["Cart", "Checkout", "Complete"];
 
@@ -76,18 +105,12 @@ const MainCheckout = () => {
                     })}
                 </div>
             </div>
-            {/* <button
-                onClick={handleNextStep}
-                className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg'
-            >
-                Next Step
-            </button> */}
 
-            <div id="maincomponent" className='h-auto w-[1120px] bg-green-100 mt-4 mb-16'>
+            <div id="maincomponent" className='h-auto w-[1120px] mt-4 mb-16'>
                 {/* Render the component based on the active step */}
                 {activeStep === 0 && <Cart handleNextStep={handleNextStep}/>}
-                {activeStep === 1 && <Checkout />}
-                {activeStep === 2 && <Confirmation />}
+                {activeStep === 1 && <Checkout handleNextStep={handleNextStep} handlePrevStep={handlePrevStep} />}
+                {activeStep === 2 && <Confirmation orderId={orderId}/>}
             </div>
         </div>
     );

@@ -8,17 +8,34 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
+/*
+Differentiate price and discount using onsale
+Add the type of shipping they chose, 
+add coupons (later)
+*/
+
 module.exports = createCoreController('api::order.order', ({ strapi }) => ({
     async create(ctx) {
         // @ts-ignore
-        const { email, phoneNumber, products, billingAddress, shippingAddress } = ctx.request.body;
+        const { email, phone, products, shippingAddress, cartShipping } = ctx.request.body;
+
+
 
         try {
             // Retrieve item information
+            var shippingPrice = 0;
             const lineItems = await Promise.all(
                 products.map(async (product) => {
                     const item = await strapi.service("api::item.item").findOne(product.id);
                     console.log('Fetched item:', item);
+                    console.log(cartShipping)
+
+                    var shippingValue = item.shippingDetails.shippingDetails[cartShipping].shippingCost;
+                    if(shippingValue == "free"){
+                        shippingPrice = 0;
+                    }else{ 
+                        shippingPrice = parseFloat(shippingValue.replace('$', '')) * 100;
+                    }
 
                     return {
                         price_data: {
@@ -34,6 +51,7 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
             );
 
             console.log('Line Items:', lineItems);
+            console.log(shippingPrice)
 
             // Create Stripe Checkout Session
             const session = await stripe.checkout.sessions.create({
@@ -41,13 +59,27 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
                 customer_email: email,
                 mode: "payment",
                 success_url: "http://localhost:3000/checkout/success",
+                /* http://localhost:3000/checkout/success/{id}?activeStep=2&successful=true,true,false */
                 cancel_url: "http://localhost:3000",
-                line_items: lineItems
+                line_items: lineItems,
+                shipping_options: [
+                    {
+                        shipping_rate_data: {
+                            type: 'fixed_amount',
+                            fixed_amount: {
+                                amount: shippingPrice, // Stripe expects amounts in the smallest currency unit (e.g., cents for USD)
+                                currency: 'usd',
+                            },
+                            display_name: 'Standard Shipping', // Display name for the shipping option
+                        },
+                    },
+                ],
             });
+            
 
             await strapi
             .service("api::order.order")
-            .create({ data: {  products: products, stripeSessionId: session.id, email: email, billingAddress: billingAddress, shippingAddress: shippingAddress, phone_number: phoneNumber } });
+            .create({ data: {  products: products, stripeSessionId: session.id, email: email, shippingAddress: shippingAddress, phone: phone } });
 
             return { id: session.id };
 

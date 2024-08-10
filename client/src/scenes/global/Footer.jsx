@@ -10,9 +10,9 @@ function Footer() {
   const navigate = useNavigate();
   return (
     <>
-    <div className="h-[550px] w-full bg-[#D9D9D9]">
+    <div className="h-[550px] w-full bg-[#D9D9D9] overflow-auto">
 
-      <div className="h-[380px] mx-40 my-20">
+      <div className="h-auto mx-40 my-20 ">
 
         <div className="h-[300px] w-full flex flex-row justify-between">
 
@@ -55,16 +55,16 @@ function Footer() {
                 <b>Subscribe</b>
               </div>
               <div id="emailform" className="h-12 bg-[#0081FE] mb-5 rounded-lg flex flex-row">
-                <div className="bg-white h-full w-full">
-                  <div className="mt-3 ml-2 text-[#0A142F]" >
-                    Email Address...
-                  </div>
-
+                <div className="bg-white h-full flex-grow rounded-l-lg flex items-center">
+                  <input 
+                    type="email" 
+                    placeholder="Email Address..." 
+                    className="ml-2 w-full h-full bg-transparent outline-none text-[#0A142F] pl-2"
+                  />
                 </div>
-                <div className=" h-full w-16">
-                <FaArrowRight className="text-white text-xl mt-4 ml-4"/>
-                </div>
-
+                <button className="h-full w-16 bg-[#0081FE] flex items-center justify-center rounded-r-lg">
+                  <FaArrowRight className="text-white text-xl"/>
+                </button>
               </div>
               <div className="text-[12px]">
                 Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quae, expedita. Consequuntur neque maxime iusto nemo. Ex est quidem a. Cumque adipisci vitae minus illum vel necessitatibus placeat modi odit quia.
