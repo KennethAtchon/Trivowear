@@ -1,3 +1,25 @@
+// import React from "react";
+
+
+
+// const itemStyle = {
+//   width: "290px",
+//   height: "450px",
+//   backgroundColor: "white",
+//   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+// };
+
+// const ShoppingList = ({ filters }) => {
+//   return (
+//     <div style={containerStyle} className="bg-red-500">
+//     </div>
+//   );
+// };
+
+// export default ShoppingList;
+
+
+
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setItems } from "../../state/cart";
@@ -5,6 +27,12 @@ import Item from "../../components/Item";
 import constants from "../../constants.json";
 import { Box, CircularProgress, Alert, Typography, Button } from "@mui/material";
 
+const containerStyle = {
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fill, 290px)",
+  justifyContent: "center",
+  gap: "20px",
+};
 
 const ShoppingList = ({ filters }) => {
   const dispatch = useDispatch();
@@ -29,6 +57,8 @@ const ShoppingList = ({ filters }) => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    console.log(response)
 
     const itemsJson = await response.json();
     console.log("Items Json", itemsJson)
@@ -78,22 +108,33 @@ const ShoppingList = ({ filters }) => {
             <p>Sorry, no product matches that name.</p>
           </Alert>
       ) : (
-        <div className="flex flex-row gap-6 flex-wrap justify-evenly ">
-          {items && items.slice(0, displayCount).map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
-          ))}
-          {displayCount < totalCount && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 4 }}>
-              <button
-                className="py-2 px-12 text-[#B88E2F] text-lg bg-white text-[16px] border border-[#B88E2F]"
-                onClick={handleShowMore}
-              >
-                
-                show More
-              </button>
-            </Box>
-          )}
+        <div>
+
+          <div style={containerStyle} >
+
+            {items && items.slice(0, displayCount).map((item) => (
+              <Item item={item} key={`${item.name}-${item.id}`} />
+            ))}
+
+          </div>
+
+          <div>
+            {displayCount < totalCount && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 4 }}>
+                <button
+                  className="py-2 px-12 text-[#B88E2F] text-lg bg-white text-[16px] border border-[#B88E2F]"
+                  onClick={handleShowMore}
+                >
+                  
+                  show More
+                </button>
+              </Box>
+            )}
+
+          </div>   
+
         </div>
+
       )}
     </Box>
   );

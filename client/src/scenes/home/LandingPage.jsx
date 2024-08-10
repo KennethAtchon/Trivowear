@@ -117,7 +117,7 @@ const LandingPage = () => {
     </div>
 
     <div id="product-section" className='w-full '>
-      <div className='mx-10 md:mx-20 lg:mx-30 xl:mx-40'>
+      <div className='mx-10 md:mx-20 lg:mx-30 xl:mx-60'>
       <h2
             className="font-[600] text-[30px] leading-[41.1px] mt-10 flex items-center justify-center text-[#3A3A3A] mb-10"
             style={{ fontFamily: 'Noto Sans' }}

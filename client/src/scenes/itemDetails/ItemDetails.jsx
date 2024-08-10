@@ -56,29 +56,57 @@ const ItemDetails = () => {
   };
 
   const handleAddToCart = () => {
-    // Check if item already exists in cart
-    const existingItem = cartItems.length !== 0 && cartItems.some((cartItem) => 
-      cartItem.id === item.id && 
-      (selectedOption === 0 || cartItem.attributes.selectedProduct === item.attributes.selectedProduct)
-    );
+    let selectedProductDetails = null;
   
-    if (item.attributes.optionsProduct && selectedOption !== 0) {
+    // Check if the product has options
+    if (item.attributes.optionsProduct) {
       const options = item.attributes.optionsProduct.optionsProduct;
-      const selectedOptionKey = Object.keys(options).find(key => options[key][selectedOption] !== undefined);
-      if (selectedOptionKey) {
-        item.attributes.selectedProduct = {
-          [selectedOptionKey]: options[selectedOptionKey][selectedOption]
+      const optionKeys = Object.keys(options);
+  
+      // Case 1: Product with 1 option
+      if (optionKeys.length === 1) {
+        const selectedOptionKey = optionKeys[0];
+        selectedProductDetails = {
+          [selectedOptionKey]: options[selectedOptionKey][selectedOption],
         };
       }
+      // Case 2: Product with 2+ options
+      else if (optionKeys.length > 1 && selectedOption !== 0) {
+        const selectedOptionKey = optionKeys.find(
+          (key) => options[key][selectedOption] !== undefined
+        );
+        if (selectedOptionKey) {
+          selectedProductDetails = {
+            [selectedOptionKey]: options[selectedOptionKey][selectedOption],
+          };
+        }
+      }
     }
+  
+    // Create a new item object with selectedProductDetails
+    const updatedItem = {
+      ...item,
+      attributes: {
+        ...item.attributes,
+        selectedProduct: selectedProductDetails,
+      },
+    };
+  
+    // Check if item already exists in cart
+    const existingItem = cartItems.some((cartItem) => 
+      cartItem.id === item.id && 
+      (selectedProductDetails === null || cartItem.attributes.selectedProduct === updatedItem.attributes.selectedProduct)
+    );
   
     if (existingItem) {
       dispatch(increaseCount({ id: item.id }));
     } else {
       // Item doesn't exist, add it to the cart
-      dispatch(addToCart({ item: { ...item, count } }));
+      dispatch(addToCart({ item: { ...updatedItem, count } }));
     }
   };
+  
+  
   
 
 
@@ -100,7 +128,7 @@ const ItemDetails = () => {
   async function getItem() {
     try {
       const response = await fetch(
-        `${constants.backendUrl}/api/items/${itemId}?populate=images`,
+        `${constants.backendUrl}/api/items/${itemId}?populate[images]=*&populate[optionsimages]=*`,
         {
           method: "GET",
         }
@@ -154,7 +182,7 @@ const ItemDetails = () => {
         >
           <div className="text-[14px]">Home</div>
           <div className="text-[14px]">Shop</div>
-          <div className="text-[14px]">Category</div>
+          <div className="text-[14px] capitalize">{item && item.attributes.category}</div>
           <div className="text-[14px]">Product</div>
           
         </Breadcrumbs>
@@ -272,9 +300,21 @@ const ItemDetails = () => {
                 </div>
       
 
-                <div id="images" className="flex flex-row gap-x-4 my-2 flex-wrap">
+                <div id="images" className="flex flex-row gap-x-4 my-2 flex-wrap mb-6">
                   {item.attributes.optionsProduct.optionsProduct[key].map((option, index) => (
-                    <div key={index} className={`h-16 w-16 bg-red-${100 * (index + 1)} my-2`}></div>
+                    <div
+                      key={index}
+                      className={`h-16 w-16 my-2 cursor-pointer ${selectedOption === index ? 'border-2 border-black' : ''}`}
+                      onClick={() => setSelectedOption(index)}
+                    >
+                      <img
+                      alt={item.name}
+                      className="w-full h-full object-fit"
+                      src={`${constants.backendUrl}${item.attributes.optionsimages.data[index].attributes.url}`}
+                    
+                    />
+
+                    </div>
                   ))}
                 </div>
               </div>

@@ -52,7 +52,7 @@ const SortDropdown = ({ setSorter }) => {
   );
 };
 
-const Shop = () => {
+const Shop = ({ searchQuery = '' }) => {
   const { category } = useParams();
   const [filters, setFilters] = useState("");
   const [sorters, setSorter] = useState("");
@@ -232,9 +232,9 @@ const Shop = () => {
 
 
           {category ? (
-              <ShoppingList filters={sorters + filters + `&filters[category][$eq]=${category}`} />
+              <ShoppingList filters={sorters + filters + `&filters[category][$eq]=${category}` + searchQuery} />
             ) : (
-              <ShoppingList filters={sorters + filters} />
+              <ShoppingList filters={sorters + filters + searchQuery}  />
             )}
 
         </div>

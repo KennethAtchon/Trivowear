@@ -26,9 +26,6 @@
     },
     "phone": {
       "type": "string"
-    },
-    "orderId": {
-      "type": "uid"
     }
   }
 }

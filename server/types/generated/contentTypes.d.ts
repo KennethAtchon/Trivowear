@@ -423,7 +423,6 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     email: Attribute.Email;
     shippingAddress: Attribute.JSON;
     phone: Attribute.String;
-    orderId: Attribute.UID;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
