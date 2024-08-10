@@ -6,8 +6,6 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { addToCart, increaseCount } from "../../state/cart";
 import Item from "../../components/Item";
 import constants from "../../constants.json";
-import Accordion from './Accordion';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { GrNext } from "react-icons/gr";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { MdFavorite } from "react-icons/md";

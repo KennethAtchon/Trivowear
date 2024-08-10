@@ -12,12 +12,11 @@ import { setIsLikeMenuOpen } from "../../state/likes";
 
 const Banner = () => {
   return (
-    <div className="w-full h-[50px] bg-[#3C403D]">
+    <div className="w-full h-[40px] bg-[#3C403D]">
       {/* You can add more content here if needed */}
     </div>
   );
 };
-
 
 function Navbar() {
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
@@ -27,7 +26,6 @@ function Navbar() {
   const isAuth = useSelector((state) => state.auth.isAuth); // Access the isAuth state
   const cart = useSelector((state) => state.cart.cart); 
   const likedItems = useSelector((state) => state.likes.likedItems);
-
 
   const toggleSearchBar = () => {
     setIsSearchBarVisible(!isSearchBarVisible);
@@ -47,8 +45,6 @@ function Navbar() {
   };
 
   const totalItems = cart.reduce((total, item) => total + item.count, 0);
-
-
 
   return (
     <div className="w-full h-auto bg-red-100">
@@ -86,15 +82,21 @@ function Navbar() {
 
           <div id="icons" className=" w-[350px] flex items-center justify-end space-x-4">
             <div className="flex items-center space-x-2 cursor-pointer mr-10">
-              <MdPersonOutline onClick={handleUserIconClick} />
-              <a className="hover:text-black" onClick={() => navigate("/signin")} ><b>Login</b></a>
-              <span><b>/</b></span>
-              <a className="hover:text-black" onClick={() => navigate("/signup")}><b>Register</b></a>
+            <MdPersonOutline 
+                onClick={handleUserIconClick} 
+                className={`${isAuth ? "text-xl" : ""}`} 
+              />
+              {!isAuth && (
+                <>
+                  <a className="hover:text-black" onClick={() => navigate("/signin")} ><b>Login</b></a>
+                  <span><b>/</b></span>
+                  <a className="hover:text-black" onClick={() => navigate("/signup")}><b>Register</b></a>
+                </>
+              )}
             </div>
 
             <div className="cursor-pointer">
               <MdSearch onClick={toggleSearchBar} />  
-              
               <SearchBar open={isSearchBarVisible} onClose={toggleSearchBar} />
             </div>
             <div className="flex items-center space-x-1 cursor-pointer">
@@ -109,7 +111,6 @@ function Navbar() {
 
         </div>
 
-
       </div>
       <LikeMenu /> 
     </div>
@@ -117,4 +118,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
