@@ -5,8 +5,11 @@ import Category1 from '../../assets/category1.jpg'
 import Category2 from '../../assets/category2.jpg'
 import Category3 from '../../assets/category3.jpg'
 import { FaGreaterThan } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
   const filters = [
     '&filters[Distinct][$eq]=LandingPage1'
   ]
@@ -19,19 +22,19 @@ const LandingPage = () => {
 
             <div id="content" className='h-[350px] w-[560px] mt-16 flex flex-col'>
               <div className='text-[#333333] font-bold text-base' style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '0.1em' }}>
-                <span className="mr-2"><b>Best</b></span>
-                <span><b>Sellers</b></span>
+                <span className="mr-2"><b>Top</b></span>
+                <span><b>Picks</b></span>
               </div>
               
               <div className="font-bold text-[52px] text-[#B88E2F]" style={{ fontFamily: 'Poppins, sans-serif'}}>
-                Discover Our New Collection
+              Elevate Your Home Experience
               </div>
 
               <div className=" font-medium text-[15px]" style={{ fontFamily: 'Poppins, sans-serif'}}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo saepe repellat aliquam, ut eaque, nisi exercitationem velit, laudantium minima repudiandae nihil asperiores recusandae est nulla sed sapiente nam molestias vero.
+              Explore our curated selection of premium home products. From powerful vacuum cleaners to the perfect coffee machines, find everything you need to make your home more comfortable and convenient.
               </div>
 
-              <div id="Buynowbutton" className="bg-[#B88E2F] text-white font-bold  text-[12px] rounded cursor-pointer h-[75px] w-[220px] flex justify-center items-center mt-auto" style={{ fontFamily: 'Poppins, sans-serif'}}>
+              <div id="Buynowbutton" className="bg-[#B88E2F] text-white font-bold  text-[18px] rounded cursor-pointer h-[75px] w-[220px] flex justify-center items-center mt-auto" style={{ fontFamily: 'Poppins, sans-serif'}}>
                 BUY NOW
               </div>
             </div>
@@ -42,7 +45,7 @@ const LandingPage = () => {
       </div>
 
       <div id="category-section" className="h-[935px] w-full pt-16 bg-[#FAFAFA]">
-      <div id="box-section" className="md:mx-40 flex flex-col ">
+      <div id="box-section" className="md:mx-20 xl:mx-40 flex flex-col ">
         <div id="text-section" className="w-full h-[105px]">
 
           <h2
@@ -71,8 +74,8 @@ const LandingPage = () => {
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-xl font-bold">
                 <div className="text-xl font-bold mb-2">Exercise</div>
                 <div className="text-sm flex flex-row">
-                  <p className='mr-2'>See Products</p> 
-                  <FaGreaterThan size={12} className='mt-1'/> 
+                  <p className='mr-2 cursor-pointer' onClick={() => navigate(`/shop/fitness`)}>See Products</p> 
+                  <FaGreaterThan size={12} className='mt-1'/>  
                 </div>
 
               </div>
@@ -89,7 +92,7 @@ const LandingPage = () => {
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-xl font-bold">
                 <div className="text-xl font-bold mb-2">Coffee Machines</div>
                   <div className="text-sm flex flex-row">
-                    <p className='mr-2'>See Products</p> 
+                  <p className='mr-2 cursor-pointer' onClick={() => navigate(`/shop/appliances`)}>See Products</p> 
                     <FaGreaterThan size={12} className='mt-1'/> 
                   </div>
                 </div>
@@ -103,7 +106,7 @@ const LandingPage = () => {
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-xl font-bold">
                 <div className="text-xl font-bold mb-2">Home Care</div>
                   <div className="text-sm flex flex-row">
-                    <p className='mr-2'>See Products</p> 
+                  <p className='mr-2 cursor-pointer' onClick={() => navigate(`/shop/care`)}>See Products</p> 
                     <FaGreaterThan size={12} className='mt-1'/> 
                   </div>
               </div>

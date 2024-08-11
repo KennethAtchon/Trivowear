@@ -134,7 +134,7 @@ const Shop = ({ searchQuery = '' }) => {
 
 
   return (
-    <div className="mx-28">
+    <div className="mx-0 md:mx-28">
       <div 
         id="home-page" 
         className=' bg-[#FAFAFA] relative'
@@ -180,6 +180,7 @@ const Shop = ({ searchQuery = '' }) => {
               <div onClick={() => handleCategoryClick('appliances')} className="cursor-pointer">Appliances</div>
               <div onClick={() => handleCategoryClick('fitness')} className="cursor-pointer">Fitness</div>
               <div onClick={() => handleCategoryClick('kitchen')} className="cursor-pointer">Kitchen</div>
+              <div onClick={() => handleCategoryClick('care')} className="cursor-pointer">Home Care</div>
             </div>
           </div>
 

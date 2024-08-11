@@ -11,6 +11,9 @@ import Shop from "./scenes/home/ShopAll";
 import Account from './scenes/userRoutes/Account'
 import SignIn from "./scenes/auth/SignIn"; // Import SignIn
 import SignUp from "./scenes/auth/SignUp"; // Import SignUp
+import About from './scenes/extra/About';
+import Contact from './scenes/extra/Contact';
+import FAQ from './scenes/extra/Faq';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -39,6 +42,9 @@ function App() {
           <Route path="signin" element={<SignIn />} /> 
           <Route path="signup" element={<SignUp />} /> 
           <Route path="/account" element={<Account />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} />
         </Routes>
         <CartMenu />
         <Footer />
