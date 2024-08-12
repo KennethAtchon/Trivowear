@@ -366,7 +366,7 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
                 </div>
 
                 <div id="quantity-price-subtotal" className='flex flex-row justify-end w-[325px]'>
-                <div>${(item.attributes.onSale ? item.attributes.discount : item.attributes.price).toFixed(2)}</div>        
+                <div>${(item.attributes.onSale ? item.attributes.discount * item.count : item.attributes.price * item.count).toFixed(2)}</div>        
                 </div>
               </div>
             ))}

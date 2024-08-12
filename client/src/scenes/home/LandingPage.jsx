@@ -18,7 +18,8 @@ const LandingPage = () => {
     <>
       <div id="Hero" className="relative w-auto h-[700px] bg-cover bg-center" style={{ backgroundImage: `url(${LandingImage})` }}>
         <div className="absolute inset-0 flex items-center justify-end">
-          <div className="bg-[#FFF3E3] w-[640px] h-[445px] rounded-xl mr-40 flex justify-center">
+          <div className="bg-[#FFF3E3] w-[640px] h-[445px] rounded-xl mr-0
+          md:mr-40 flex justify-center">
 
             <div id="content" className='h-[350px] w-[560px] mt-16 flex flex-col'>
               <div className='text-[#333333] font-bold text-base' style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '0.1em' }}>

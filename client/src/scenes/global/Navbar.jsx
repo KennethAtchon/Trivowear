@@ -174,7 +174,7 @@ function Navbar() {
 
           <div id="icons" className=" w-auto flex items-center justify-end space-x-4">
             
-            <div className={`flex items-center space-x-2 cursor-pointer ${isAuth ? "" : "mr-10"}`}>
+            <div className={`flex items-center space-x-2 cursor-pointer ${isAuth ? "" : "mr-0 md:mr-10"}`}>
               <MdPersonOutline 
                 onClick={handleUserIconClick} 
                 className={`${isAuth ? "text-xl" : ""}`} 
