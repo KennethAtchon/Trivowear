@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Accordion, AccordionSummary, AccordionDetails, IconButton } from '@mui/material';
+import { Container, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const faqData = [
