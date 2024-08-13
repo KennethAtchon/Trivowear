@@ -154,7 +154,7 @@ const ItemDetails = () => {
     
     console.log('Fetching item and items for itemId:', itemId);
     getItem();
-  }, [itemId]);
+  }, [itemId, getItem]);
 
   useEffect(() => {
     if (isClicked) {
