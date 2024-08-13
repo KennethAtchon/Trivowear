@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ShoppingList from './ShoppingList';
 import shopall from "../../assets/shopallbg.jpg";
 import { GrNext } from "react-icons/gr";

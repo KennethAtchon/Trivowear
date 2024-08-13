@@ -96,7 +96,7 @@ function Navbar() {
                   id="navlinks"
                   className="mt-6 w-auto flex flex-col items-center space-y-2 text-[#737373]"
                 >
-                  <a
+                  <div
                     onClick={() => {
                       navigate("/");
                       toggleMenu(); // Close the menu when clicking Home
@@ -104,7 +104,7 @@ function Navbar() {
                     className="cursor-pointer hover:text-blue-500 hover:bg-gray-200 p-2 rounded transition-colors duration-200"
                   >
                     <b>Home</b>
-                  </a>
+                  </div>
                   <div className="flex items-center">
                     <div className="relative inline-block text-left">
                       <button
@@ -141,12 +141,12 @@ function Navbar() {
 
         <div id="grouper" className=" h-[60px] w-full mr-6 ml-10 flex flex-row justify-end sm:justify-between text-[14px] " >
         <div id="navlinks" className="hidden w-auto sm:flex items-center space-x-2 text-[#737373]">
-          <a
+          <div
             onClick={() => navigate("/")}
             className="cursor-pointer hover:text-blue-500 hover:bg-gray-200 p-2 rounded transition-colors duration-200"
           >
             <b>Home</b>
-          </a>
+          </div>
           <div className="flex items-center">
             <div className="relative inline-block text-left">
               <button
@@ -181,9 +181,9 @@ function Navbar() {
               />
               {!isAuth && (
                 <>
-                  <a className="hover:text-black" onClick={() => navigate("/signin")} ><b>Login</b></a>
+                  <div className="hover:text-black" onClick={() => navigate("/signin")} ><b>Login</b></div>
                   <span><b>/</b></span>
-                  <a className="hover:text-black" onClick={() => navigate("/signup")}><b>Register</b></a>
+                  <div className="hover:text-black" onClick={() => navigate("/signup")}><b>Register</b></div>
                 </>
               )}
             </div>

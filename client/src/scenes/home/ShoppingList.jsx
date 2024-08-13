@@ -25,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setItems } from "../../state/cart";
 import Item from "../../components/Item";
 import constants from "../../constants.json";
-import { Box, CircularProgress, Alert, Typography, Button } from "@mui/material";
+import { Box, CircularProgress, Alert } from "@mui/material";
 
 const containerStyle = {
   display: "grid",

@@ -9,7 +9,6 @@ import { addToLikes, removeFromLikes } from "../state/likes";
 const Item = ({ item }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [count, setCount] = useState(1);
   const [isHovered, setIsHovered] = useState(false);
   const cartItems = useSelector((state) => state.cart.cart);
   const likedItems = useSelector((state) => state.likes.likedItems);
@@ -47,6 +46,7 @@ const Item = ({ item }) => {
     if (existingItem) {
       dispatch(increaseCount({ id: item.id }));
     } else {
+      count = 1
       dispatch(addToCart({ item: { ...item, count } }));
     }
   };
@@ -145,7 +145,7 @@ const Item = ({ item }) => {
             </div>
           )}
 
-          {!isHovered && !onSale && (product_types == "newArrivals") && (
+          {!isHovered && !onSale && (product_types === "newArrivals") && (
                       <div className="absolute inset-0 flex mt-6 mr-10 justify-end">
                         <div className="w-12 h-12 bg-green-500 rounded-full opacity-90 flex items-center justify-center">
                           <div className="text-white text-xs font-bold">

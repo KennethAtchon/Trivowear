@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FiX } from "react-icons/fi";
 import { removeFromLikes, setIsLikeMenuOpen } from "../../state/likes"; // Import setIsLikeMenuOpen
-import { useNavigate } from "react-router-dom";
 import constants from "../../constants.json";
 
 const LikeMenu = () => {

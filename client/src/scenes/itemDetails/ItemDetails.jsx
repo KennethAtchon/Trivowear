@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector  } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { MdAdd, MdRemove } from "react-icons/md";
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { addToCart, increaseCount } from "../../state/cart";
@@ -154,7 +154,7 @@ const ItemDetails = () => {
     
     console.log('Fetching item and items for itemId:', itemId);
     getItem();
-  }, [itemId, getItem]);
+  }, [itemId]);
 
   useEffect(() => {
     if (isClicked) {
