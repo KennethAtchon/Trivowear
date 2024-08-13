@@ -177,7 +177,8 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
 
 
   return (
-    <div id="divider" className='h-auto py-20 flex flex-row'>
+
+    <div id="divider" className='h-auto py-20 flex flex-col md:flex-row'>
 
       {isLoading && (
         <div 
@@ -198,16 +199,18 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
         </div>
       )}
 
-
-      <div id="container" className='flex-1 bg-white mr-20'>
+      
+      <div id="container" className='mr-6 lg:mr-20 max-w-[550px]'>
         
       {!auth.isAuth && (
+        
           <Formik
             initialValues={{ firstName: '', lastName: '', phone: '', email: '', password: '' }}
             validationSchema={validationSchema}
             onSubmit={handleSignUp}
           >
             {({ errors, touched, status }) => (
+              // w-[500px]
               <Form id="contactform" className='p-2 border border-black px-4 pb-10 rounded-lg mb-10'>
                 <div id="title" className='text-[20px] font-bold mt-4 mb-6' style={{ fontFamily: 'Poppins, sans-serif'}}>Contact Information
                 </div>
@@ -294,6 +297,7 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
               </Form>
             )}
           </Formik>
+          
         )}
 
         <div id="shipping" className='p-2 border border-black px-4 pb-10 rounded-lg'>
@@ -322,7 +326,7 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
         </div>  
       </div>
 
-      <div id="ordersummary" className='w-[415px] '>
+      <div id="ordersummary" className='w-[415px] ml-14 mt-10 md:ml-0 md:mt-0'>
         <div className='rounded-lg p-4 border-black border'>
           <div className='text-[20px] mb-2' style={{ fontFamily: 'Poppins, sans-serif'}}>Order Summary</div>
 

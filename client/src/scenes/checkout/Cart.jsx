@@ -66,8 +66,10 @@ const Cart = ({ handleNextStep }) => {
   return (
     <div className=" w-full h-full flex flex-col">
 
-      <div id="cartitems" className="flex flex-row justify-between my-12 h-[485px]">
-        <div id="products" className=" w-[645px] ">
+      {/* 485px */}
+      <div id="cartitems" className="flex flex-col md:flex-row justify-between my-12 h-auto gap-x-16">
+        {/* w-[645px] */}
+        <div id="products" className=" md:w-auto ">
            <div className='flex flex-row justify-between pb-5 border-b border-[#6C7275]'>
             <div>Product</div>   
 

@@ -9,18 +9,18 @@ import popper from '../../assets/party-popper.svg'
 **format : checkout/success/:orderId**
 */
 
-const Confirmation = ({ orderId }) => {
+const Confirmation = () => {
   return (
-    <div className='h-[800px] px-40 py-16'>
-      <div className='h-full w-full border border-black rounded-lg shadow-lg flex flex-col items-center'>
+    <div className='h-[500px] px-0 md:px-40 py-16'>
+      <div className='h-full max-w-[90%] md:w-full border border-black rounded-lg shadow-lg flex flex-col items-center'>
         <div className='flex flex-col w-[550px] items-center pt-10'>
-          <div className='text-[#6C7275] text-[28px] font-bold flex flex-row'>Thank you! {orderId}
+          <div className='text-[#6C7275] text-[28px] font-bold flex flex-row'>Thank you!
             <img src={popper} alt="popper" className='ml-2 mt-1 h-8 w-8' />
           </div>
           <div className='text-[#23262F] text-[40px] font-bold text-center'>Your order has been received</div>
         </div>
 
-        <div 
+        {/* <div 
           className='mt-5 flex flex-row justify-center gap-x-10 w-[550px]  items-center overflow-x-auto pb-2 pt-4' 
           style={{
             scrollbarWidth: "thin", // Firefox
@@ -57,9 +57,9 @@ const Confirmation = ({ orderId }) => {
           
 
 
-        </div>
+        </div> */}
 
-        <div className='mt-5 flex flex-col justify-evenly w-[550px] h-[150px]  items-center '>
+        {/* <div className='mt-5 flex flex-col justify-evenly w-[550px] h-[150px]  items-center '>
           <div className='flex flex-row justify-between w-[250px]'>
             <div className='text-[#6C7275]'>Order Code: </div>
             <div>#0123_45678</div>
@@ -73,7 +73,7 @@ const Confirmation = ({ orderId }) => {
             <div>$1,345.00</div>
           </div>
           
-        </div>
+        </div> */}
 
         <div className='mt-12 flex flex-col w-[200px] h-[55px] bg-black rounded-2xl items-center justify-center'>
           <div className='text-white'>Shop for More</div>
