@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../state/auth';
@@ -13,7 +13,8 @@ const Account = () => {
   const [orderHistory, setOrderHistory] = useState([]);
   const [username, setUsername] = useState('User');
 
-  const fetchData = async () => {
+
+  const fetchData = useCallback(async () => {
     try {
       const userResponse = await fetch(`${constants.backendUrl}/api/users/me`, {
         method: 'GET',
@@ -25,10 +26,10 @@ const Account = () => {
         throw new Error('Failed to fetch user data');
       }
       const userData = await userResponse.json();
-      console.log(userData)
+      console.log(userData);
       const userEmail = userData.email;
-      setUsername(userData.username)
-
+      setUsername(userData.username);
+  
       const ordersResponse = await fetch(`${constants.backendUrl}/api/orders?filters[email][$eq]=${userEmail}&fields[0]=products&fields[1]=shippingAddress&fields[2]=createdAt`, {
         method: 'GET',
         headers: {
@@ -39,37 +40,38 @@ const Account = () => {
         throw new Error('Failed to fetch orders');
       }
       const ordersData = await ordersResponse.json();
-      
+  
       // Extract and aggregate unique shipping addresses
       const uniqueAddresses = new Set();
       const formattedOrders = ordersData.data.map(order => {
         const { shippingAddress } = order.attributes;
         const formattedAddress = `${shippingAddress.line1}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.postal_code}, ${shippingAddress.country}`;
         uniqueAddresses.add(formattedAddress);
-
+  
         return {
           id: order.id,
           products: order.attributes.products.map(product => `Product ID: ${product.id}, Count: ${product.count}`).join('; '),
           date: new Date(order.attributes.createdAt).toLocaleDateString(),
         };
       });
-
+  
       setShippingAddresses([...uniqueAddresses]);
       setOrderHistory(formattedOrders);
-
+  
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  };
-
+  }, [token]); // Include dependencies
+  
   useEffect(() => {
     if (!isAuth) {
       navigate('/signin');
       return;
     }
-
+  
     fetchData();
-  }, [isAuth, navigate, token]);
+  }, [isAuth, navigate, fetchData]);
+  
 
   const handleLogout = () => {
     dispatch(logout());

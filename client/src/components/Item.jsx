@@ -46,7 +46,7 @@ const Item = ({ item }) => {
     if (existingItem) {
       dispatch(increaseCount({ id: item.id }));
     } else {
-      count = 1
+      const count = 1
       dispatch(addToCart({ item: { ...item, count } }));
     }
   };
