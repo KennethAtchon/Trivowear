@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector  } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { MdAdd, MdRemove } from "react-icons/md";
@@ -13,7 +13,7 @@ import { MdFavorite } from "react-icons/md";
 
 const ItemDetails = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const { itemId } = useParams();
   const [count, setCount] = useState(1);
   const [item, setItem] = useState(null);

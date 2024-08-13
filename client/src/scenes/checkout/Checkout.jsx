@@ -6,7 +6,7 @@ import {  Button, TextField, Alert, CircularProgress } from '@mui/material';
 import { AddressElement, Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from "@stripe/stripe-js";
 import { FiPlus, FiMinus } from "react-icons/fi";
-import { RiCouponLine } from "react-icons/ri";
+//import { RiCouponLine } from "react-icons/ri";
 import constants from "../../constants.json";
 import { decreaseCount, increaseCount,  } from "../../state/cart";
 import * as Yup from 'yup';

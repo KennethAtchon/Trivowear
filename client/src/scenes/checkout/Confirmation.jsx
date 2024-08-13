@@ -1,15 +1,28 @@
 // Confirmation.js
-import React from 'react';
+import React, {useEffect} from 'react';
 import popper from '../../assets/party-popper.svg'
+
+import { useDispatch } from 'react-redux';
+import { clearCart } from '../../state/cart'; 
+
 
 /*
 ** This does not need anymore information from the cart state**
 ** This will clear the cart state from localstorage, and what we currently have**
-** should probably pull data here from the database, using a unique id**
-**format : checkout/success/:orderId**
 */
 
 const Confirmation = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Clear the cart in Redux state
+    dispatch(clearCart());
+
+    // Clear the cart data from local storage
+    localStorage.removeItem('cart');
+  }, [dispatch]);
+
+  
   return (
     <div className='h-[500px] px-0 md:px-40 py-16'>
       <div className='h-full max-w-[90%] md:w-full border border-black rounded-lg shadow-lg flex flex-col items-center'>

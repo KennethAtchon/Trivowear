@@ -36,6 +36,7 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
                     }else{ 
                         shippingPrice = parseFloat(shippingValue.replace('$', '')) * 100;
                     }
+                    shippingPrice = 0;
 
                     return {
                         price_data: {

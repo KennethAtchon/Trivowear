@@ -1,4 +1,3 @@
-// cart.js
 import { createSlice } from '@reduxjs/toolkit';
 
 // Cart slice
@@ -38,8 +37,15 @@ const cartSlice = createSlice({
       state.selectedShipping = action.payload.selectedShipping;
       state.selectedShippingPrice = action.payload.selectedShippingPrice;
     },
+    clearCart: (state) => {
+      state.cart = [];
+      state.selectedShipping = '';
+      state.selectedShippingPrice = 0;
+      // Optionally clear items too if needed
+      state.items = [];
+    },
   },
 });
 
-export const { setItems, addToCart, removeFromCart, increaseCount, decreaseCount, setIsCartOpen, updateShippingInCart } = cartSlice.actions;
+export const { setItems, addToCart, removeFromCart, increaseCount, decreaseCount, setIsCartOpen, updateShippingInCart, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

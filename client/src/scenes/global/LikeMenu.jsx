@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import constants from "../../constants.json";
 
 const LikeMenu = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const likedItems = useSelector((state) => state.likes.likedItems);
   const isLikeMenuOpen = useSelector((state) => state.likes.isLikeMenuOpen);
