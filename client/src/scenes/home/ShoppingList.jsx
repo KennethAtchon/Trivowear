@@ -1,24 +1,3 @@
-// import React from "react";
-
-
-
-// const itemStyle = {
-//   width: "290px",
-//   height: "450px",
-//   backgroundColor: "white",
-//   boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-// };
-
-// const ShoppingList = ({ filters }) => {
-//   return (
-//     <div style={containerStyle} className="bg-red-500">
-//     </div>
-//   );
-// };
-
-// export default ShoppingList;
-
-
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,7 +28,7 @@ const ShoppingList = ({ filters }) => {
     try {
 
     const response = await fetch(
-      `${constants.backendUrl}/api/items?populate=images${filters}&fields[0]=name&fields[1]=price&fields[2]=shortDescription&fields[3]=onSale&fields[4]=discount&fields[5]=product_types&fields[6]=shippingDetails&pagination[pageSize]=${displayCount}`,
+      `${constants.backendUrl}/api/items?populate=images${filters}&fields[0]=name&fields[1]=price&fields[2]=shortDescription&fields[3]=onSale&fields[4]=discount&fields[5]=product_types&fields[6]=shippingDetails&fields[7]=optionsProduct&pagination[pageSize]=${displayCount}`,
       { method: "GET" }
     );
 

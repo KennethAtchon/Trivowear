@@ -8,7 +8,7 @@ const LikeMenu = () => {
   const dispatch = useDispatch();
   const likedItems = useSelector((state) => state.likes.likedItems);
   const isLikeMenuOpen = useSelector((state) => state.likes.isLikeMenuOpen);
-  // console.log(likedItems)
+  // console.log(likedItems) 
 
   return (
     <div className={`fixed inset-0 z-50 flex justify-end ${isLikeMenuOpen ? "block" : "hidden"}`}>

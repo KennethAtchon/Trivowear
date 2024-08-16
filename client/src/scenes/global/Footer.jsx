@@ -1,11 +1,8 @@
 import React from "react";
-import broovielogo from "../../assets/broovielogonew.png";
 import { useNavigate } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa6";
-import { FaYoutube } from "react-icons/fa";
-import { FaFacebookF } from "react-icons/fa";
-import { FaTwitter } from "react-icons/fa";
-import { FaTiktok } from "react-icons/fa";
+import { FaYoutube, FaFacebookF, FaTwitter, FaTiktok, FaRegCopyright } from "react-icons/fa";
+
 
 function Footer() {
   const navigate = useNavigate();
@@ -34,8 +31,9 @@ function Footer() {
           <div className="h-auto w-auto  text-base">
             <div className="text-lg"><b>Information</b></div>
             <div className="mt-2 flex flex-col gap-y-1 text-[#0A142F] ">
-              <p onClick={() => navigate('/faq')} className="cursor-pointer">FAQ</p>
-              <p onClick={() => navigate('/contact')} className="cursor-pointer">Support</p>
+              <p onClick={() => navigate('/policies/shipping')} className="cursor-pointer">Shipping Policy</p>
+              <p onClick={() => navigate('/policies/refund')} className="cursor-pointer">Refund Policy</p>
+              <p onClick={() => navigate('/policies/faq')} className="cursor-pointer">FAQ</p>
             </div>
           </div>
 
@@ -78,20 +76,19 @@ function Footer() {
         <div className="h-auto  w-full border-[#0A142F] border-t flex flex-row justify-between flex-wrap">
 
           <div className=" h-auto mt-[25px] w-auto ">
-            <div id="image" className=" h-[50px] w-[120px]">
-              <img
-                src={broovielogo} // Replace with the actual path to your logo image
-                alt="Broovie Logo"
-                onClick={() => navigate("/")}
-                className=" cursor-pointer"
-              />
-          </div>
+          <footer className="h-[50px] flex items-center justify-center">
+            <div className="flex items-center space-x-2">
+              <FaRegCopyright />
+              <p className="font-bold">Broovie Store</p>
+              <p>{new Date().getFullYear()}</p>
+            </div>
+          </footer>
 
           </div>
           <div className="h-auto w-auto mt-[40px] flex flex-row text-[#0A142F] gap-x-10 text-lg">
-            <p><b>Terms</b></p>
-            <p><b>Privacy</b></p>
-            <p><b>Cookies</b></p>
+            <p onClick={() => navigate('/policies/terms')} className="cursor-pointer"><b>Terms</b></p>
+            <p onClick={() => navigate('/policies/privacy')} className="cursor-pointer"><b>Privacy</b></p>
+            {/* <p><b>Cookies</b></p> */}
           </div>
           <div className=" h-auto w-auto mt-[40px] flex flex-row gap-x-3.5">
             <div className="h-9 w-9 border border-[#000000] rounded-full pl-2.5 pt-2.5">

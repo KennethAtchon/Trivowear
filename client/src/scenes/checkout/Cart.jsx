@@ -6,6 +6,7 @@ import Radio from '@mui/material/Radio';
 import { RiCouponLine } from "react-icons/ri";
 import { decreaseCount, increaseCount, removeFromCart, updateShippingInCart  } from "../../state/cart";
 import constants from "../../constants.json";
+import {useNavigate } from "react-router-dom";
 /*
 Coupons: Work later
 (Later: lock in the coupons)
@@ -14,11 +15,13 @@ Coupons: Work later
 
 const Cart = ({ handleNextStep }) => {
   const cart = useSelector((state) => state.cart.cart);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedShipping, setSelectedShipping] = useState('');
   const [selectedShippingPrice, setSelectedShippingPrice] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
+
 
   // Calculate subtotal and set the default shipping option
   useEffect(() => {
@@ -46,8 +49,10 @@ const Cart = ({ handleNextStep }) => {
   }, [selectedShipping, subtotal, cart]);
 
   const handleSubmit = () => {
+    if(cart.length > 0){
     dispatch(updateShippingInCart({ selectedShipping, selectedShippingPrice }));
-    handleNextStep();
+    handleNextStep();      
+    }
   };
 
   useEffect(() => {
@@ -61,7 +66,27 @@ const Cart = ({ handleNextStep }) => {
     setSelectedShipping(event.target.value);
   };  
   const shippingOptions = cart.length > 0 ? Object.entries(cart[0].attributes.shippingDetails.shippingDetails) : [];
-  console.log(cart[0].attributes.shippingDetails.shippingDetails['freeShipping'].shippingCost)
+
+  const handleRemoveFromCart = (item) => {
+    console.log("item id: ", item.id)
+    console.log("selected: ", JSON.stringify(item.attributes.selectedProduct))
+
+    if(cart.length > 1){
+      dispatch(removeFromCart({ 
+      id: item.id, 
+      selected: JSON.stringify(item.attributes.selectedProduct) 
+      }));
+    }else {
+      dispatch(removeFromCart({ 
+        id: item.id, 
+        selected: JSON.stringify(item.attributes.selectedProduct) 
+      }));
+      navigate('/');
+    }
+
+
+  };
+  
 
   return (
     <div className=" w-full h-full flex flex-col">
@@ -116,16 +141,21 @@ const Cart = ({ handleNextStep }) => {
                         )}
                       </div>
                       <div className="flex flex-row text-[#6C7275]">
-                        <FiX className="mt-[3px] text-[20px] cursor-pointer" onClick={() => dispatch(removeFromCart({ id: item.id }))} />
+                        <FiX className="mt-[3px] text-[20px] cursor-pointer" 
+                        onClick={() => handleRemoveFromCart(item)} />
                         Remove
                       </div>
                     </div>
                   </div>
                   <div id="quantity-price-subtotal" className="flex flex-row justify-between w-[325px] items-center">
                     <div className="flex items-center border border-[#6C7275] p-1 rounded-lg">
-                      <FiMinus className="cursor-pointer" onClick={() => dispatch(decreaseCount({ id: item.id }))} />
+                      <FiMinus className="cursor-pointer" onClick={() => dispatch(decreaseCount({ id: item.id, 
+                    selected: JSON.stringify(item.attributes.selectedProduct)
+                  }))} />
                       <span className="mx-3">{item.count}</span>
-                      <FiPlus className="cursor-pointer" onClick={() => dispatch(increaseCount({ id: item.id }))} />
+                      <FiPlus className="cursor-pointer" onClick={() => dispatch(increaseCount({ id: item.id, 
+                    selected: JSON.stringify(item.attributes.selectedProduct)
+                  }))} />
                     </div>
                     <div className="pr-4">
                       ${(price).toFixed(2)}

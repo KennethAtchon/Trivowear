@@ -14,6 +14,7 @@ const Item = ({ item }) => {
   const likedItems = useSelector((state) => state.likes.likedItems);
   const [isClicked, setIsClicked] = useState(false);
   const [isScaled, setIsScaled] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(0);
 
   const { price, name, images, shortDescription, onSale, discount, product_types } = item.attributes;
 
@@ -39,15 +40,60 @@ const Item = ({ item }) => {
   };
 
   const handleAddToCart = () => {
-    const existingItem =
-      cartItems.length !== 0 &&
-      cartItems.some((cartItem) => cartItem.id === item.id);
+    let selectedProductDetails = null;
+  
+    // Check if the product has options
+    if (item.attributes.optionsProduct) {
+      const options = item.attributes.optionsProduct.optionsProduct;
+      const optionKeys = Object.keys(options);
 
+      console.log(optionKeys.length)
+  
+      // Case 1: Product with 1 option
+      if (optionKeys.length === 1) {
+        const selectedOptionKey = optionKeys[0];
+        selectedProductDetails = {
+          [selectedOptionKey]: options[selectedOptionKey][selectedOption],
+        };
+      }
+      // Case 2: Product with 2+ options
+      else if (optionKeys.length > 1 ) {
+        const selectedOptionKey = optionKeys.find(
+          (key) => options[key][selectedOption] !== undefined
+        );
+        
+        if (selectedOptionKey) {
+          selectedProductDetails = {
+            [selectedOptionKey]: options[selectedOptionKey][selectedOption],
+          };
+        }
+      }
+    }
+  
+    // Create a new item object with selectedProductDetails
+    const updatedItem = {
+      ...item,
+      attributes: {
+        ...item.attributes,
+        selectedProduct: selectedProductDetails,
+      },
+    };
+
+    console.log(item.id, updatedItem.attributes.selectedProduct)
+  
+    // Check if item already exists in cart
+    const existingItem = cartItems.some((cartItem) => 
+      cartItem.id === item.id && 
+      (selectedProductDetails === null || JSON.stringify(cartItem.attributes.selectedProduct) === JSON.stringify(updatedItem.attributes.selectedProduct))
+    );
+
+  
     if (existingItem) {
-      dispatch(increaseCount({ id: item.id }));
+      dispatch(increaseCount({ id: item.id, selected: JSON.stringify(updatedItem.attributes.selectedProduct) }));
     } else {
-      const count = 1
-      dispatch(addToCart({ item: { ...item, count } }));
+      // Item doesn't exist, add it to the cart
+      const count = 1;
+      dispatch(addToCart({ item: { ...updatedItem, count } }));
     }
   };
 

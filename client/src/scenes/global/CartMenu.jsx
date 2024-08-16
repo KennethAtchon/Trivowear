@@ -11,7 +11,7 @@ const CartMenu = () => {
   const cart = useSelector((state) => state.cart.cart);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
-  // console.log(cart)
+  console.log(cart)
 
   const totalPrice = cart.reduce((total, item) => {
     return total + item.count * item.attributes.price;
@@ -21,6 +21,17 @@ const CartMenu = () => {
     dispatch(setIsCartOpen({})); // Close the cart
     navigate('/checkout'); // Navigate to the checkout page
   };
+
+  const handleRemoveFromCart = (item) => {
+    console.log("item id: ", item.id)
+    console.log("selected: ", JSON.stringify(item.attributes.selectedProduct))
+    dispatch(removeFromCart({ 
+      id: item.id, 
+      selected: JSON.stringify(item.attributes.selectedProduct) 
+    }));
+
+
+  }
 
   return (
     <div className={`fixed inset-0 z-50 flex justify-end ${isCartOpen ? "block" : "hidden"}`}>
@@ -63,9 +74,13 @@ const CartMenu = () => {
                 <div className="flex items-center ">
 
                   <div className="flex items-center border border-[#6C7275] p-1 rounded-lg">
-                  <FiMinus className="cursor-pointer" onClick={() => dispatch(decreaseCount({ id: item.id }))} />
+                  <FiMinus className="cursor-pointer" onClick={() => dispatch(decreaseCount({ id: item.id, 
+                    selected: JSON.stringify(item.attributes.selectedProduct)
+                  }))} />
                   <span className="mx-4">{item.count}</span>
-                  <FiPlus className="cursor-pointer" onClick={() => dispatch(increaseCount({ id: item.id }))} />                    
+                  <FiPlus className="cursor-pointer" onClick={() => dispatch(increaseCount({ id: item.id, 
+                    selected: JSON.stringify(item.attributes.selectedProduct)
+                  }))} />                    
                   </div>
 
                 </div>
@@ -76,7 +91,7 @@ const CartMenu = () => {
               </div>
               <div className="flex flex-col items-end  pl-3">
                 <span className="mb-2">${(item.count * item.attributes.price).toFixed(2)}</span>
-                <FiX className="cursor-pointer text-lg" onClick={() => dispatch(removeFromCart({ id: item.id }))} />
+                <FiX className="cursor-pointer text-lg" onClick={() => handleRemoveFromCart(item)} />
               </div>
             </div>
           ))}

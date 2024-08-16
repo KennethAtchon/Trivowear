@@ -362,9 +362,13 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
                     </div>
 
                     <div className="flex items-center border border-[#6C7275] p-1 rounded-lg w-20">
-                    <FiMinus className="cursor-pointer" onClick={() => dispatch(decreaseCount({ id: item.id }))} />
+                    <FiMinus className="cursor-pointer" onClick={() => dispatch(decreaseCount({ id: item.id, 
+                    selected: JSON.stringify(item.attributes.selectedProduct)
+                  }))} />
                     <span className="mx-3">{item.count}</span>
-                    <FiPlus className="cursor-pointer" onClick={() => dispatch(increaseCount({ id: item.id }))} />                
+                    <FiPlus className="cursor-pointer" onClick={() => dispatch(increaseCount({ id: item.id, 
+                    selected: JSON.stringify(item.attributes.selectedProduct)
+                  }))} />                
                     </div>
                   </div>              
                 </div>

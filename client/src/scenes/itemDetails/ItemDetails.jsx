@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector  } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { MdAdd, MdRemove } from "react-icons/md";
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import { addToCart, increaseCount } from "../../state/cart";
+import { addToCart, increaseCountByNumber } from "../../state/cart";
 import Item from "../../components/Item";
 import constants from "../../constants.json";
 import { GrNext } from "react-icons/gr";
@@ -12,6 +12,7 @@ import { MdFavorite } from "react-icons/md";
 
 
 const ItemDetails = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   //const navigate = useNavigate();
   const { itemId } = useParams();
@@ -52,6 +53,14 @@ const ItemDetails = () => {
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
   };
+  
+  const handleCheckout = () => {
+    if( cartItems && cartItems.length > 0 && !cartItems.some(cartitem => cartitem.id === item.id) ) {
+    handleAddToCart();     
+    }
+
+    navigate('/checkout');
+  }
 
   const handleAddToCart = () => {
     let selectedProductDetails = null;
@@ -89,15 +98,18 @@ const ItemDetails = () => {
         selectedProduct: selectedProductDetails,
       },
     };
+
+    console.log(item.id, updatedItem.attributes.selectedProduct)
   
     // Check if item already exists in cart
     const existingItem = cartItems.some((cartItem) => 
       cartItem.id === item.id && 
-      (selectedProductDetails === null || cartItem.attributes.selectedProduct === updatedItem.attributes.selectedProduct)
+      (selectedProductDetails === null || JSON.stringify(cartItem.attributes.selectedProduct) === JSON.stringify(updatedItem.attributes.selectedProduct))
     );
+
   
     if (existingItem) {
-      dispatch(increaseCount({ id: item.id }));
+      dispatch(increaseCountByNumber({ id: item.id, selected: JSON.stringify(updatedItem.attributes.selectedProduct), countcart: count }));
     } else {
       // Item doesn't exist, add it to the cart
       dispatch(addToCart({ item: { ...updatedItem, count } }));
@@ -178,19 +190,19 @@ const ItemDetails = () => {
           separator={<GrNext className="text-[8px] ml-1 mr-1" />}
           aria-label="breadcrumb"
         >
-          <div className="text-[14px]">Home</div>
-          <div className="text-[14px]">Shop</div>
-          <div className="text-[14px] capitalize">{item && item.attributes.category}</div>
+          <div className="text-[14px] cursor-pointer hover:text-[#B88E2F]" onClick={() => navigate(`/`)}>Home</div>
+          <div className="text-[14px] cursor-pointer hover:text-[#B88E2F]" onClick={() => navigate(`/shop`)}>Shop</div>
+          <div className="text-[14px] capitalize cursor-pointer hover:text-[#B88E2F]" onClick={() => navigate(`/shop/${item && item.attributes.category.toLowerCase()}`)}>{item && item.attributes.category}</div>
           <div className="text-[14px]">Product</div>
           
         </Breadcrumbs>
       </div>
 
-      <div className="h-full flex flex-col md:flex-row mt-2">
+      <div className="h-full flex flex-col md:flex-row justify-center mt-2">
 
         <div className=" flex flex-col">
 
-        <div className=" md:w-[550px] h-[730px] relative border rounded-lg">
+        <div className=" md:w-[550px] h-[730px] relative p-1 border rounded-md border-black">
         {item && <img
               alt={item.name}
               className="w-full h-full object-fit"
@@ -218,10 +230,10 @@ const ItemDetails = () => {
 
           <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-wrap justify-between items-center">
 
-            <div className="flex items-center justify-center bg-white border w-8 h-8 rounded-full shadow-md ml-4 opacity-75 cursor-pointer" onClick={handlePreviousImage}>
+            <div className="flex items-center justify-center bg-white border w-8 h-8 rounded-full shadow-md ml-4 opacity-75 cursor-pointer hover:opacity-100" onClick={handlePreviousImage}>
                 <FaArrowLeft className="text-gray-500" />
             </div>
-            <div className="flex items-center justify-center border bg-white w-8 h-8 rounded-full shadow-md mr-4 opacity-75 cursor-pointer" onClick={handleNextImage}>
+            <div className="flex items-center justify-center border bg-white w-8 h-8 rounded-full shadow-md mr-4 opacity-75 cursor-pointer hover:opacity-100" onClick={handleNextImage}>
                 <FaArrowRight className="text-gray-500" />
             </div>
 
@@ -328,13 +340,13 @@ const ItemDetails = () => {
 
             </div>
 
-            <div id="wishlist" className="h-[55px] w-[360px] border border-[#141718] rounded-lg flex justify-center items-center">
+            <div id="wishlist" className={`h-[55px] w-[360px] border border-[#141718] rounded-lg flex justify-center items-center ${isClicked ? 'bg-red-300 ' : ''}` }>
             <button 
                   className="text-[#141718] text-[18px] flex flex-row" 
                   onClick={handleClick}
                 >
                   <MdFavorite 
-                    className={`mr-2 mt-1 transition-transform duration-300 ${isScaled ? 'transform scale-125' : ''} ${isClicked ? 'text-red-500' : ''}`} 
+                    className={`mr-2 mt-1 transition-transform duration-300 ${isScaled ? 'transform scale-125' : ''} ${isClicked ? 'text-red-500 ' : ''}`} 
                   /> 
                   Wishlist
                 </button>
@@ -345,6 +357,9 @@ const ItemDetails = () => {
           <div id="cart" >
             <div className="mt-6 bg-black h-[55px] w-[550px] flex justify-center items-center rounded-lg text-white text-[18px] font-bold cursor-pointer" style={{ fontFamily: 'Inter, sans-serif'}} onClick={handleAddToCart}>
               Add to Cart
+            </div>
+            <div className="mt-6 bg-[#38C172] h-[55px] w-[550px] flex justify-center items-center rounded-lg text-white text-[18px] font-bold cursor-pointer" onClick={handleCheckout}>
+              Checkout
             </div>
           </div>
 

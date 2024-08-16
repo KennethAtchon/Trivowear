@@ -12,20 +12,47 @@ const cartSlice = createSlice({
       state.cart = [...state.cart, action.payload.item];
     },
     removeFromCart: (state, action) => {
-      state.cart = state.cart.filter((item) => item.id !== action.payload.id);
+      state.cart = state.cart.filter((cartItem) => {
+        const { id: actionItemId, selected: actionSelectedProduct } = action.payload;
+        const { id: cartItemId, attributes: { selectedProduct } } = cartItem;
+
+        console.log(actionItemId, cartItemId)
+        console.log(actionSelectedProduct, JSON.stringify(selectedProduct))
+
+        return (cartItemId !== actionItemId || JSON.stringify(selectedProduct) !== actionSelectedProduct);
+      })
     },
     increaseCount: (state, action) => {
       state.cart = state.cart.map((item) => {
-        if (item.id === action.payload.id) {
-          item.count++;
+        if (item.id === action.payload.id && 
+          JSON.stringify(item.attributes.selectedProduct) === 
+          action.payload.selected) {
+
+            item.count++
+
+        }
+        return item;
+      });
+    },
+    increaseCountByNumber: (state, action) => {
+      console.log(action.payload.countcart)
+      state.cart = state.cart.map((item) => {
+        if (item.id === action.payload.id && 
+          JSON.stringify(item.attributes.selectedProduct) === 
+          action.payload.selected) {
+
+            item.count = item.count +  action.payload.countcart
+
         }
         return item;
       });
     },
     decreaseCount: (state, action) => {
       state.cart = state.cart.map((item) => {
-        if (item.id === action.payload.id && item.count > 1) {
-          item.count--;
+        if (item.id === action.payload.id && 
+          JSON.stringify(item.attributes.selectedProduct) === 
+          action.payload.selected && item.count > 1) {
+            item.count--
         }
         return item;
       });
@@ -47,5 +74,5 @@ const cartSlice = createSlice({
   },
 });
 
-export const { setItems, addToCart, removeFromCart, increaseCount, decreaseCount, setIsCartOpen, updateShippingInCart, clearCart } = cartSlice.actions;
+export const { setItems, addToCart, removeFromCart, increaseCount, increaseCountByNumber, decreaseCount, setIsCartOpen, updateShippingInCart, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -8,6 +8,14 @@ import Checkbox from '@mui/material/Checkbox';
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { useParams, useNavigate } from 'react-router-dom';
 
+const categories = [
+  {key: 'appliances', value: 'Appliances'},
+  {key: 'fitness', value: 'Fitness'},
+  {key: 'kitchen', value: 'Kitchen'},
+  {key: 'care', value: 'Home Care'},
+];
+
+
 const SortDropdown = ({ setSorter }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Sort By');
@@ -34,6 +42,7 @@ const SortDropdown = ({ setSorter }) => {
     setSorter(sortString);
     setIsOpen(false);
   };
+
 
   return (
     <div className="">
@@ -151,8 +160,8 @@ const Shop = ({ searchQuery = '' }) => {
           separator={<GrNext fontSize="small" />}
           aria-label="breadcrumb"
         >
-          <div>Home</div>
-          <div>Shop</div>
+          <div className="text-[16px] cursor-pointer hover:text-[#B88E2F]" onClick={() => navigate(`/`)}>Home</div>
+          <div className="text-[16px] cursor-pointer hover:text-[#B88E2F]" onClick={() => navigate(`/shop`)}>Shop</div>
           {category && 
             <div>{category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}</div>
           }
@@ -177,10 +186,9 @@ const Shop = ({ searchQuery = '' }) => {
           <div className='mt-6'>
             <div id="title" className="text-[14px]">CATEGORIES</div>
             <div id="container" className="text-[#807E7E] text-[14px] mt-2  flex flex-col gap-1">
-              <div onClick={() => handleCategoryClick('appliances')} className="cursor-pointer">Appliances</div>
-              <div onClick={() => handleCategoryClick('fitness')} className="cursor-pointer">Fitness</div>
-              <div onClick={() => handleCategoryClick('kitchen')} className="cursor-pointer">Kitchen</div>
-              <div onClick={() => handleCategoryClick('care')} className="cursor-pointer">Home Care</div>
+              {categories.map(category => (
+                <div key={category.key} onClick={() => handleCategoryClick(category.key)} className="cursor-pointer">{category.value}</div>
+              ))}
             </div>
           </div>
 
