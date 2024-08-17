@@ -13,6 +13,13 @@ const containerStyle = {
   gap: "20px",
 };
 
+/**
+ * A functional component that renders a shopping list based on the provided filters.
+ * It fetches items from the backend API, handles loading and error states, and allows the user to show more items.
+ *
+ * @param {object} filters - An object containing filters to apply to the shopping list
+ * @return {JSX.Element} The rendered shopping list component
+ */
 const ShoppingList = ({ filters }) => {
   const dispatch = useDispatch();
   const items = useSelector((state) => state.cart.items);
@@ -22,6 +29,11 @@ const ShoppingList = ({ filters }) => {
   const [totalCount, setTotalCount] = useState(0);
 
 
+  /**
+   * Fetches items from the backend API based on the provided filters and updates the state.
+   *
+   * @return {Promise<void>} Resolves when the items are fetched and the state is updated.
+   */
   async function getItems() {
 
     console.log(filters)
@@ -64,6 +76,11 @@ const ShoppingList = ({ filters }) => {
     );
   }
 
+  /**
+   * Increases the display count by 8, allowing the user to see more items.
+   *
+   * @return {void} This function does not return anything.
+   */
   const handleShowMore = () => {
     setDisplayCount(displayCount + 8);
   };

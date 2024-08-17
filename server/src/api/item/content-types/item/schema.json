@@ -92,6 +92,12 @@
     },
     "measurements": {
       "type": "string"
+    },
+    "cart": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cart.cart",
+      "inversedBy": "items"
     }
   }
 }

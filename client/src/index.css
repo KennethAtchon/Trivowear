@@ -14,10 +14,34 @@
 
 
 /* Firefox */
-* {
-  scrollbar-width: none; /* Hide scrollbar */
-  -ms-overflow-style: none; /* Hide scrollbar */
+#root {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+
+.verticalscroll::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.verticalscroll::-webkit-scrollbar-track {
+  background: hsl(0, 0%, 52%);
+  border-radius: 100vw;
+}
+
+.verticalscroll::-webkit-scrollbar-thumb {
+  background: hsl(0, 0%, 0%);
+  border-radius: 100vw;
+}
+
+.verticalscroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(0, 0%, 27%);
+}
+
 
 * {
     font-family: "Noto Sans", "Crimson Text", serif;

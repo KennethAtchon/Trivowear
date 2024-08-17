@@ -28,6 +28,15 @@ const initialValues = {
   </div>
   */
 
+/**
+ * A functional component that handles the checkout process for an e-commerce application.
+ * It manages the state of the form values, cart, and shipping information, and provides functionality for handling payments and viewing the cart.
+ *
+ * @param {object} props - The component props.
+ * @param {function} props.handleNextStep - A function to handle the next step in the checkout process.
+ * @param {function} props.handlePrevStep - A function to handle the previous step in the checkout process.
+ * @return {JSX.Element} The JSX element representing the checkout component.
+ */
 const Checkout = ({ handleNextStep, handlePrevStep }) => {
   const [formValues, setFormValues] = useState(initialValues);
   const cart = useSelector((state) => state.cart.cart);
@@ -300,7 +309,7 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
           
         )}
 
-        <div id="shipping" className='p-2 border border-black px-4 pb-10 rounded-lg'>
+        <div id="shipping" className='w-[450px] md:w-[500px] p-2 border border-black px-4 pb-10 rounded-lg'>
           <div id="title" className='text-[20px] font-bold mt-4 mb-6' style={{ fontFamily: 'Poppins, sans-serif'}}>Shipping Address
           </div>
 
@@ -326,14 +335,11 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
         </div>  
       </div>
 
-      <div id="ordersummary" className='w-[415px] ml-14 mt-10 md:ml-0 md:mt-0'>
+      <div id="ordersummary" className='w-[415px] ml-8 mt-10 md:ml-0 md:mt-0'>
         <div className='rounded-lg p-4 border-black border'>
           <div className='text-[20px] mb-2' style={{ fontFamily: 'Poppins, sans-serif'}}>Order Summary</div>
 
-          <div id="itemscontainer" className='h-[400px] flex flex-col justify-start gap-y-2 overflow-y-auto' style={{
-              scrollbarWidth: "thin", // Firefox
-              msOverflowStyle: "auto", // IE/Edge
-            }}>
+          <div id="itemscontainer" className='h-[400px] flex flex-col justify-start gap-y-2 overflow-y-auto verticalscroll pr-2'>
             {cart.map((item) => (
               <div key={item.id} id="item" className='flex flex-row justify-between border-b pb-3'>
                 <div className='h-24 w-80 flex flex-row'>

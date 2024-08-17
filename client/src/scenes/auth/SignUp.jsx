@@ -13,6 +13,11 @@ const validationSchema = Yup.object({
   password: Yup.string().required('Password is required'),
 });
 
+/**
+ * Handles the sign up process for a new user.
+ *
+ * @return {JSX.Element} The sign up form component.
+ */
 const SignUp = () => {
   const navigate = useNavigate(); // Initialize useNavigate
   const dispatch = useDispatch(); // Initialize useDispatch

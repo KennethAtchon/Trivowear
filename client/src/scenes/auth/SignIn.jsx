@@ -12,6 +12,11 @@ const validationSchema = Yup.object({
   password: Yup.string().required('Password is required'),
 });
 
+/**
+ * Handles user sign-in functionality, including form submission, error handling, and redirecting to the home page upon successful sign-in.
+ *
+ * @return {JSX.Element} The sign-in form component
+ */
 const SignIn = () => {
   const navigate = useNavigate(); // Initialize useNavigate
   const dispatch = useDispatch(); // Initialize useDispatch

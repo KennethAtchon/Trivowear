@@ -6,6 +6,11 @@ import Checkout from './Checkout';
 import Confirmation from './Confirmation';
 import './MainCheckout.css'; // Import the CSS file
 
+/**
+ * MainCheckout component: handles the checkout process with multiple steps.
+ *
+ * @return {JSX.Element} The JSX element representing the MainCheckout component.
+ */
 const MainCheckout = () => {
     const location = useLocation();
 

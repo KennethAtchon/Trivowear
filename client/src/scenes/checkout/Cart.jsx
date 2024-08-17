@@ -13,6 +13,13 @@ Coupons: Work later
 
 */
 
+/**
+ * Renders the Cart component.
+ *
+ * @param {Object} props - The properties passed to the component.
+ * @param {function} props.handleNextStep - The function to handle the next step.
+ * @return {JSX.Element} The rendered Cart component.
+ */
 const Cart = ({ handleNextStep }) => {
   const cart = useSelector((state) => state.cart.cart);
   const navigate = useNavigate();
@@ -89,10 +96,10 @@ const Cart = ({ handleNextStep }) => {
   
 
   return (
-    <div className=" w-full h-full flex flex-col">
+    <div className=" w-full h-full flex flex-col ">
 
       {/* 485px */}
-      <div id="cartitems" className="flex flex-col md:flex-row justify-between my-12 h-auto gap-x-16">
+      <div id="cartitems" className="flex flex-col md:flex-row items-center md:justify-between my-12 h-auto gap-x-16">
         {/* w-[645px] */}
         <div id="products" className=" md:w-auto ">
            <div className='flex flex-row justify-between pb-5 border-b border-[#6C7275]'>
@@ -105,11 +112,7 @@ const Cart = ({ handleNextStep }) => {
             </div>
            </div>
 
-           <div id="itemcontainer" className='overflow-y-auto h-[450px]'
-            style={{
-              scrollbarWidth: "thin", // Firefox
-              msOverflowStyle: "auto", // IE/Edge
-            }}>
+           <div id="itemcontainer" className='overflow-y-auto h-[450px] pr-2 verticalscroll'>
             {cart && cart.map((item) => {
               const price = item.attributes.onSale ? item.attributes.discount : item.attributes.price;
               const itemSubtotal = item.count * price;
@@ -170,10 +173,10 @@ const Cart = ({ handleNextStep }) => {
            
         </div>
 
-        <div id="cartsummary" className="w-[415px] rounded-lg p-4 border-black border">
+        <div id="cartsummary" className="w-[415px] mt-10 md:mt-0 rounded-lg p-4 border-black border">
           <div className='text-[20px] mb-2' style={{ fontFamily: 'Poppins, sans-serif'}}>Cart Summary</div>
 
-          <div id="shipping" className="h-[210px] overflow-y-auto" style={{ scrollbarWidth: 'thin', msOverflowStyle: 'auto' }}>
+          <div id="shipping" className="h-[210px] overflow-y-auto verticalscroll" >
             {shippingOptions.map(([key, details], index) => (
               <div key={index} id="shippingoption" className="flex flex-row justify-between rounded-md border border-black p-2 mb-3">
                 <div className="flex flex-row items-center">
@@ -219,8 +222,8 @@ const Cart = ({ handleNextStep }) => {
 
       </div>
 
-      <div id="tools" className='flex-1 w-full  flex flex-row justify-between mt-2'>
-        <div id="coupon" className='w-[425px] '>
+      <div id="tools" className=' w-full  flex flex-row justify-center md:justify-start mt-2'>
+        <div id="coupon" className='w-auto '>
           <div className="font-bold text-[20px]">Have a coupon?</div>
           <div className="font-semibold text-[16px] text-[#6C7275]">Add your code for an instant cart discount</div>
           <div className="mt-4 flex flex-row justify-between items-center rounded-md border p-2">

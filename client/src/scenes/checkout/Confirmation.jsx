@@ -11,6 +11,12 @@ import { clearCart } from '../../state/cart';
 ** This will clear the cart state from localstorage, and what we currently have**
 */
 
+/**
+ * A functional component that displays a confirmation message after a successful order.
+ * It clears the cart in Redux state and local storage.
+ * 
+ * @return {JSX.Element} A JSX element containing the confirmation message.
+ */
 const Confirmation = () => {
   const dispatch = useDispatch();
 

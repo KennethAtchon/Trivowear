@@ -55,8 +55,10 @@ const ItemDetails = () => {
   };
   
   const handleCheckout = () => {
-    if( cartItems && cartItems.length > 0 && !cartItems.some(cartitem => cartitem.id === item.id) ) {
-    handleAddToCart();     
+    const existingItem = cartItems.some(cartitem => cartitem.id === item.id);
+
+    if (!existingItem) {
+      handleAddToCart();  
     }
 
     navigate('/checkout');
