@@ -11,6 +11,7 @@ const Card = ({ address, username }) => {
 }
 
 const Address = ({ addresses, username }) => {
+
     return (
         <div>
             <div className='text-xl mb-4'>Address</div>

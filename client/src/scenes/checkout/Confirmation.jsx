@@ -1,7 +1,7 @@
 // Confirmation.js
 import React, {useEffect} from 'react';
 import popper from '../../assets/party-popper.svg'
-
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearCart } from '../../state/cart'; 
 
@@ -18,6 +18,7 @@ import { clearCart } from '../../state/cart';
  * @return {JSX.Element} A JSX element containing the confirmation message.
  */
 const Confirmation = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -94,7 +95,7 @@ const Confirmation = () => {
           
         </div> */}
 
-        <div className='mt-12 flex flex-col w-[200px] h-[55px] bg-black rounded-2xl items-center justify-center'>
+        <div className='mt-12 flex flex-col w-[200px] h-[55px] bg-black rounded-2xl items-center justify-center cursor-pointer' onClick={() => navigate('/')}>
           <div className='text-white'>Shop for More</div>
 
         </div>

@@ -42,7 +42,7 @@ const SignIn = () => {
         setErrors({ submit: data.message[0].messages[0].message });
       }
     } catch (error) {
-      setErrors({ submit: 'An error occurred. Please try again.' });
+      setErrors({ submit: 'Wrong password/username. Please try again.' });
     }
   };
 

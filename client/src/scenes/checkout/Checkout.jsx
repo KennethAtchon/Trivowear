@@ -1,8 +1,13 @@
 
 // Checkout.js
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import {  Button, TextField, Alert, CircularProgress } from '@mui/material';
+import {  Button, TextField, Alert, CircularProgress, Checkbox } from '@mui/material';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 import { AddressElement, Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from "@stripe/stripe-js";
 import { FiPlus, FiMinus } from "react-icons/fi";
@@ -12,6 +17,7 @@ import { decreaseCount, increaseCount,  } from "../../state/cart";
 import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
 import { login } from '../../state/auth'; 
+import { useNavigate } from "react-router-dom";
 
 // Stripe initialization
 const stripePromise = loadStripe("pk_test_51PeOOTHgfcgRayrrGL73KOBp2Ikk3Gu8joXHZbFPEfMNqLXFMuJVSndS7LeWqSf2VavJWwx0E39SEnRoJQjJ8NJO001jHB40lg");
@@ -21,12 +27,6 @@ const initialValues = {
   phone: "",
 };
 
-/*
-{isLoading ? (
-  <div style={{ display: 'flex', justifyContent: 'center', marginTop: '100px' }} className="h-[250px]">
-    <CircularProgress />
-  </div>
-  */
 
 /**
  * A functional component that handles the checkout process for an e-commerce application.
@@ -40,18 +40,29 @@ const initialValues = {
 const Checkout = ({ handleNextStep, handlePrevStep }) => {
   const [formValues, setFormValues] = useState(initialValues);
   const cart = useSelector((state) => state.cart.cart);
-  const auth = useSelector((state) => state.auth);
+  const { isAuth, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const cartShipping = useSelector((state) => state.cart.selectedShipping);
   const cartShippingPrice = useSelector((state) => state.cart.selectedShippingPrice);
   const [addressValues, setaddressValues] = useState(null);
   const [nameValues, setnameValues] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
+  const [isSignedGuest, setIsSignedGuest] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
+  const [shippingAddresses, setShippingAddresses] = useState([]);
+  const navigate = useNavigate();
+  const [selectedAddress, setSelectedAddress] = useState('');
 
   // Calculate subtotal and total prices
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
 
+  const handleAddressChange = (event) => {
+    setSelectedAddress(event.target.value);
+  };
+
+  // Calculate subtotal and total prices
   useEffect(() => {
     if (cart.length > 0) {
       // Calculate subtotal
@@ -67,25 +78,71 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
     }
   }, [cart, cartShippingPrice]);
 
-  useEffect(() => {
-    if (auth.isAuth && auth.email) {
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        email: auth.email,
-      }));
-    }
-  }, [auth.isAuth, auth.email]);
+  const fetchData = useCallback(async () => {
+    try {
+      const userResponse = await fetch(`${constants.backendUrl}/api/users/me`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (!userResponse.ok) {
+        navigate('/');        
+        //throw new Error('Failed to fetch user data');
 
+      }
+      const userData = await userResponse.json();
+      const userEmail = userData.email;
+  
+      const ordersResponse = await fetch(`${constants.backendUrl}/api/orders?filters[email][$eq]=${userEmail}&fields[0]=shippingAddress`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (!ordersResponse.ok) {
+        throw new Error('Failed to fetch orders');
+      }
+      const ordersData = await ordersResponse.json();
+  
+      // Extract and aggregate unique shipping addresses
+      const uniqueAddresses = new Set();
+      ordersData.data.map(order => {
+        const { shippingAddress } = order.attributes;
+        const formattedAddress = `${shippingAddress.line1}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.postal_code}, ${shippingAddress.country}`;
+        uniqueAddresses.add(formattedAddress);
+  
+      });
+  
+      setShippingAddresses([...uniqueAddresses]);
+  
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }, [token]); // Include dependencies
+  
+  useEffect(() => {
+    if (isAuth) {
+    fetchData();
+    }
+
+  }, [isAuth, navigate, fetchData]);
+
+  
   const handleSubmit = () => {
 
-    console.log(addressValues)
-    console.log(nameValues)
+    // console.log(addressValues)
+    // console.log(nameValues)
+    // console.log(formValues)
+    // console.log(isComplete)
 
-    if (!addressValues) return;
+    // if address value is not filled or the event is not complete
+    if (!addressValues || !isComplete) return;
 
-    if(!auth.isAuth) return;
+    if(!isAuth && !isSignedGuest) return;
 
-   //console.log(formValues)
+    console.log("making payment")
+
 
     makePayment(formValues);
 
@@ -130,9 +187,27 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
     password: Yup.string().required('Password is required'),
   });
 
+  const guestvalidationSchema = Yup.object({
+    phone: Yup.string().required('Phone number is required'),
+    email: Yup.string().email('Invalid email format').required('Email is required'),
+  });
+ 
+  const handleGuestSignUp = (values) => {
+    // unpack only email and phone
+    const guestvalues = {email: values.email, phone: values.phone}
+    setFormValues(guestvalues);
+    setIsSignedGuest(true);
+  }
+
 
   const handleSignUp = async (values, { setErrors, setStatus }) => {
-    console.log("values", values);
+    // console.log("values", values);
+
+    if (isGuest) {
+      console.log("Your a guest")
+      handleGuestSignUp(values);
+      return;
+    }
 
     try {
       // Attempt to sign up the user
@@ -209,116 +284,159 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
       )}
 
       
-      <div id="container" className='mr-6 lg:mr-20 max-w-[550px]'>
+      <div id="container" className='ml-2 mr-6 lg:mr-10 w-auto md:w-[550px]'>
         
-      {!auth.isAuth && (
-        
-          <Formik
-            initialValues={{ firstName: '', lastName: '', phone: '', email: '', password: '' }}
-            validationSchema={validationSchema}
-            onSubmit={handleSignUp}
+      <Formik
+          initialValues={{ firstName: '', lastName: '', phone: '', email: '', password: '' }}
+          validationSchema={
+            isGuest ? guestvalidationSchema : validationSchema}
+          onSubmit={handleSignUp}
+        >
+          {({ errors, touched, status }) => (
+            <Form
+              id="contactform"
+              className={`p-2 border border-black px-4 pb-10 rounded-lg mb-10 ${!isAuth ? 'block' : 'hidden'} ${!isSignedGuest ? 'block' : 'hidden'}`}
+            >
+              <div id="title" className='text-[20px] font-bold mt-4 mb-3' style={{ fontFamily: 'Poppins, sans-serif' }}>
+                Contact Information
+              </div>
+              {status?.success && <Alert severity="success">{status.success}</Alert>}
+              {errors.submit && <Alert severity="error">{errors.submit}</Alert>}
+                {!isGuest && (
+              <div className='flex flex-row gap-x-4'>
+
+                <Field name="firstName">
+                  {({ field }) => (
+                    <TextField
+                      {...field}
+                      label="First name"
+                      fullWidth
+                      size="small"
+                      margin="normal"
+                      error={Boolean(touched.firstName && errors.firstName)}
+                      helperText={touched.firstName && errors.firstName}
+                    />
+                  )}
+                </Field>
+                <Field name="lastName">
+                  {({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Last Name"
+                      fullWidth
+                      size="small"
+                      margin="normal"
+                      error={Boolean(touched.lastName && errors.lastName)}
+                      helperText={touched.lastName && errors.lastName}
+                    />
+                  )}
+                </Field>
+              </div>                  
+                )}              
+
+              <Field name="phone">
+                {({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Phone number"
+                    fullWidth
+                    size="small"
+                    margin="normal"
+                    error={Boolean(touched.phone && errors.phone)}
+                    helperText={touched.phone && errors.phone}
+                  />
+                )}
+              </Field>
+              <Field name="email">
+                {({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Your Email"
+                    fullWidth
+                    size="small"
+                    margin="normal"
+                    error={Boolean(touched.email && errors.email)}
+                    helperText={touched.email && errors.email}
+                  />
+                )}
+              </Field>
+
+              {!isGuest && (
+              <Field name="password">
+                {({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Password"
+                    type="password"
+                    fullWidth
+                    size="small"
+                    margin="normal"
+                    error={Boolean(touched.password && errors.password)}
+                    helperText={touched.password && errors.password}
+                  />
+                )}
+              </Field>                
+              )}
+
+              <Checkbox onClick={() => setIsGuest(!isGuest)}  color="default" /> {!isGuest ? 'Login as Guest' : 'Login as User'}
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                style={{ fontFamily: 'Inter, sans-serif', backgroundColor: 'black', color: 'white', marginTop: '6px' }}
+              >
+                {!isGuest ? 'Sign Up/Login In' : 'Continue Without Account'}
+              </Button>
+            </Form>
+          )}
+      </Formik>
+
+        <div id="pastshipping" className={` w-full h-auto mb-6 p-2 border border-black px-4 pb-6 rounded-lg ${isAuth ? 'flex flex-col gap-y-2' : 'hidden'}`}>
+        <div className='w-full text-[20px] font-bold mt-4' style={{ fontFamily: 'Poppins, sans-serif' }}>Pick an Address or create new</div>
+        <FormControl>
+          <FormLabel id="address-radio-buttons-group-label" className='mb-4'>Shipping Addresses</FormLabel>
+          <RadioGroup
+            aria-labelledby="address-radio-buttons-group-label"
+            name="address-radio-buttons-group"
+            value={selectedAddress}
+            onChange={handleAddressChange}
           >
-            {({ errors, touched, status }) => (
-              // w-[500px]
-              <Form id="contactform" className='p-2 border border-black px-4 pb-10 rounded-lg mb-10'>
-                <div id="title" className='text-[20px] font-bold mt-4 mb-6' style={{ fontFamily: 'Poppins, sans-serif'}}>Contact Information
-                </div>
-                {status?.success && <Alert severity="success">{status.success}</Alert>}
-                {errors.submit && <Alert severity="error">{errors.submit}</Alert>}
-                <div className='flex flex-row gap-x-4'>
-                  <Field name="firstName">
-                    {({ field }) => (
-                      <TextField
-                        {...field}
-                        label="First name"
-                        fullWidth
-                        size="small"
-                        margin="normal"
-                        error={Boolean(touched.firstName && errors.firstName)}
-                        helperText={touched.firstName && errors.firstName}
-                      />
-                    )}
-                  </Field>
-                  <Field name="lastName">
-                    {({ field }) => (
-                      <TextField
-                        {...field}
-                        label="Last Name"
-                        fullWidth
-                        size="small"
-                        margin="normal"
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        helperText={touched.lastName && errors.lastName}
-                      />
-                    )}
-                  </Field>
-                </div>
-                <Field name="phone">
-                  {({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Phone number"
-                      fullWidth
-                      size="small"
-                      margin="normal"
-                      error={Boolean(touched.phone && errors.phone)}
-                      helperText={touched.phone && errors.phone}
-                    />
-                  )}
-                </Field>
-                <Field name="email">
-                  {({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Your Email"
-                      fullWidth
-                      size="small"
-                      margin="normal"
-                      error={Boolean(touched.email && errors.email)}
-                      helperText={touched.email && errors.email}
-                    />
-                  )}
-                </Field>
-                <Field name="password">
-                  {({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Password"
-                      type="password"
-                      fullWidth
-                      size="small"
-                      margin="normal"
-                      error={Boolean(touched.password && errors.password)}
-                      helperText={touched.password && errors.password}
-                    />
-                  )}
-                </Field>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  style={{ fontFamily: 'Inter, sans-serif', backgroundColor: 'black', color: 'white', marginTop: '6px'}}
-                >
-                  Submit
-                </Button>
+            {shippingAddresses.map((address, index) => (
+              <FormControlLabel
+                key={index}
+                value={address}
+                control={<Radio />}
+                label={
+                  <div className="bg-white p-2">
+                    <div>{address}</div>
+                  </div>
+                }
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+      </div>
 
-              </Form>
-            )}
-          </Formik>
-          
-        )}
 
-        <div id="shipping" className='w-[450px] md:w-[500px] p-2 border border-black px-4 pb-10 rounded-lg'>
-          <div id="title" className='text-[20px] font-bold mt-4 mb-6' style={{ fontFamily: 'Poppins, sans-serif'}}>Shipping Address
+
+        <div id="shipping" className=' p-2 border border-black px-4 pb-10 rounded-lg'>
+
+          <div id="title" className='w-full text-[20px] font-bold mt-4 mb-6' style={{ fontFamily: 'Poppins, sans-serif'}}>Shipping Address
           </div>
 
           <Elements stripe={stripePromise}>
             <AddressElement
               options={{
                 mode: 'shipping',
+                // autocomplete: {
+                //   mode: "google_maps_api",
+                //   apiKey: "{YOUR_GOOGLE_MAPS_API_KEY}",
+                // },
               }}
               onChange={(event) => {
+                  setIsComplete(event.complete)                
                 if (event.complete) {
                   // Extract potentially complete address
                   setaddressValues(event.value.address)
@@ -328,6 +446,10 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
               }}
             />
           </Elements>
+
+
+
+
         </div>
 
         <div id="placeorder" className='mt-8 flex flex-row justify-center items-center rounded-md bg-black p-2 py-3 cursor-pointer' onClick={handleSubmit}>

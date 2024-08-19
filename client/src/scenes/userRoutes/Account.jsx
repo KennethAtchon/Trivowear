@@ -34,7 +34,7 @@ const Account = () => {
       const userEmail = userData.email;
       setUsername(userData.username);
   
-      const ordersResponse = await fetch(`${constants.backendUrl}/api/orders?filters[email][$eq]=${userEmail}&fields[0]=products&fields[1]=shippingAddress&fields[2]=createdAt`, {
+      const ordersResponse = await fetch(`${constants.backendUrl}/api/orders?filters[email][$eq]=${userEmail}&fields[0]=products&fields[1]=shippingAddress&fields[2]=createdAt&fields[3]=phone`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -46,6 +46,7 @@ const Account = () => {
       const ordersData = await ordersResponse.json();
   
       // Extract and aggregate unique shipping addresses
+      console.log(ordersData)
       const uniqueAddresses = new Set();
       const formattedOrders = ordersData.data.map(order => {
         const { shippingAddress } = order.attributes;
@@ -79,7 +80,7 @@ const Account = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/login');
+    navigate('/');
   };
   const renderComponent = () => {
     switch (currentView) {
