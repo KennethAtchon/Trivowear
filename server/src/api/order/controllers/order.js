@@ -77,13 +77,13 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
                 ],
             });
 
-            await strapi.plugins['email'].services.email.send({
-                to: email,
-                from: 'mailgun@sandboxd398ed80cccf4ecf884880d9e711a3ef.mailgun.org',
-                subject: 'Order Confirmation',
-                text: `Thank you for your order! Your session ID is ${session.id}.`,
-                html: `<p>Thank you for your order! Your session ID is <strong>${session.id}</strong>.</p>`,
-            });
+            // await strapi.plugins['email'].services.email.send({
+            //     to: email,
+            //     from: 'mailgun@sandboxd398ed80cccf4ecf884880d9e711a3ef.mailgun.org',
+            //     subject: 'Order Confirmation',
+            //     text: `Thank you for your order! Your session ID is ${session.id}.`,
+            //     html: `<p>Thank you for your order! Your session ID is <strong>${session.id}</strong>.</p>`,
+            // });
             
 
             await strapi

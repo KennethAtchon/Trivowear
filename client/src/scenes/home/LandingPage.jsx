@@ -35,7 +35,9 @@ const LandingPage = () => {
               Explore our curated selection of premium home products. From powerful vacuum cleaners to the perfect coffee machines, find everything you need to make your home more comfortable and convenient.
               </div>
 
-              <div id="Buynowbutton" className="bg-[#B88E2F] text-white font-bold  text-[18px] rounded cursor-pointer h-[75px] w-[220px] flex justify-center items-center mt-auto" style={{ fontFamily: 'Poppins, sans-serif'}}>
+              <div id="Buynowbutton" className="bg-[#B88E2F] text-white font-bold  text-[18px] rounded cursor-pointer h-[75px] w-[220px] flex justify-center items-center mt-auto" style={{ fontFamily: 'Poppins, sans-serif'}}
+                onClick={() => window.scrollTo({ top: document.getElementById('product-section').offsetTop, behavior: 'smooth' })}
+              >
                 BUY NOW
               </div>
             </div>

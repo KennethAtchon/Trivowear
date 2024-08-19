@@ -2,12 +2,18 @@
 // Checkout.js
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import {  Button, TextField, Alert, CircularProgress, Checkbox } from '@mui/material';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+import {
+  Button,
+  TextField,
+  Alert,
+  CircularProgress,
+  Checkbox,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+} from '@mui/material';
 import { AddressElement, Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from "@stripe/stripe-js";
 import { FiPlus, FiMinus } from "react-icons/fi";
@@ -93,6 +99,7 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
       }
       const userData = await userResponse.json();
       const userEmail = userData.email;
+      setFormValues({ ...formValues, email: userEmail });
   
       const ordersResponse = await fetch(`${constants.backendUrl}/api/orders?filters[email][$eq]=${userEmail}&fields[0]=shippingAddress`, {
         method: 'GET',
@@ -137,12 +144,28 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
     // console.log(isComplete)
 
     // if address value is not filled or the event is not complete
-    if (!addressValues || !isComplete) return;
+    if (!addressValues || !isComplete){
+
+    // if the event is not complete, u can try to see if they picked a shipping address
+    if(selectedAddress){
+      // console.log("You have selected a shipping address but did u use the created feature?", isComplete)
+      // console.log("selected address: ", selectedAddress)
+      // console.log("Since you did not use the created feature, we will set the address values to be your selected value")
+      setaddressValues(selectedAddress);
+
+    }else{
+      console.log("Please select a shipping address")
+      return;      
+    }
+
+
+    } 
+
+
 
     if(!isAuth && !isSignedGuest) return;
 
     console.log("making payment")
-
 
     makePayment(formValues);
 
@@ -150,6 +173,7 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
   };
 
   async function makePayment(values) {
+    console.log(addressValues)
     setIsLoading(true);
     const stripe = await stripePromise;
     const requestBody = {
