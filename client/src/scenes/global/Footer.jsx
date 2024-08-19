@@ -45,7 +45,7 @@ function Footer() {
             </div>
           </div>
 
-          <div id="subscribe" className="h-[260px] w-[340px]">
+          <div id="subscribe" className="relative h-[260px] w-[340px]">
             <div className="w-full h-full bg-[#D0D1D5] px-11 pt-6">
 
               <div className="mb-6">
@@ -69,6 +69,10 @@ function Footer() {
 
 
             </div>
+            <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center rounded-lg">
+            <span className="text-white text-2xl font-bold">Coming Soon</span>
+          </div>
+
           </div>
 
         </div>
