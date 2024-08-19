@@ -1,1 +1,4 @@
-"# Broovie" 
+"# Trivowear"
+
+Server:
+npm run build
