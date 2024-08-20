@@ -4,25 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { addToCart, increaseCount } from "../state/cart";
 import { MdShare, MdFavorite } from "react-icons/md";
 import constants from "../constants.json";
-import { addToLikes, removeFromLikes } from "../state/likes";
 
 const Item = ({ item }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const cartItems = useSelector((state) => state.cart.cart);
-  const likedItems = useSelector((state) => state.likes.likedItems);
   const [isClicked, setIsClicked] = useState(false);
   const [isScaled, setIsScaled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(0);
 
   const { price, name, images, shortDescription, onSale, discount, product_types } = item.attributes;
 
-  const isLiked = likedItems.some((likedItem) => likedItem.id === item.id);
-
-  useEffect(() => {
-    setIsClicked(isLiked);
-  }, [isLiked]);
   
   useEffect(() => {
     if (isClicked) {
@@ -115,18 +108,7 @@ const Item = ({ item }) => {
     };
   };
   
-  // Usage example within your `handleLikeClick` function
-  const handleLikeClick = () => {
-    const parsedItem = parseItem(item);
-    console.log("likes", JSON.stringify(parsedItem));
-    
-    if (isLiked) {
-      dispatch(removeFromLikes({ id: parsedItem.id }));
-    } else {
-      dispatch(addToLikes(parsedItem));
-    }
-    setIsClicked(!isClicked); // Toggle click state
-  };
+
   
 
   return (
@@ -163,16 +145,6 @@ const Item = ({ item }) => {
               <div className="flex space-x-4">
                 <button className="text-white text-lg flex flex-row ">
                   <MdShare className="mr-2 mt-1.5"/> Share
-                </button>
-                <button 
-                  className="text-white text-lg flex flex-row" 
-                  onClick={handleClick}
-                >
-                  <MdFavorite 
-                    className={`mr-2 mt-1.5 transition-transform duration-300 ${isScaled ? 'transform scale-125' : ''} ${isClicked ? 'text-red-500' : ''}`} 
-                    onClick={handleLikeClick}
-                  /> 
-                  Like
                 </button>
               </div>
 

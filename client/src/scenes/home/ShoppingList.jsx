@@ -39,8 +39,7 @@ const ShoppingList = ({ filters }) => {
     console.log(filters)
     try {
 
-    const response = await fetch(
-      `${constants.backendUrl}/api/items?populate=images${filters}&fields[0]=name&fields[1]=price&fields[2]=shortDescription&fields[3]=onSale&fields[4]=discount&fields[5]=product_types&fields[6]=shippingDetails&fields[7]=optionsProduct&pagination[pageSize]=${displayCount}`,
+    const response = await fetch(`${constants.backendUrl}/api/items?populate=images${filters}&fields[0]=name&fields[1]=price&fields[2]=shortDescription&fields[3]=onSale&fields[4]=discount&fields[5]=product_types&fields[6]=shippingDetails&fields[7]=optionsProduct&pagination[pageSize]=${displayCount}`,
       { method: "GET" }
     );
 

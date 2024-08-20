@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ShoppingList from './ShoppingList';
-import shopall from "../../assets/shopallbg.jpg";
 import { GrNext } from "react-icons/gr";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { IoOptionsOutline } from "react-icons/io5";
@@ -147,12 +146,12 @@ const Shop = ({ searchQuery = '' }) => {
       <div 
         id="home-page" 
         className=' bg-[#FAFAFA] relative'
-        style={{ 
-          backgroundImage: `url(${shopall})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '400px' // Adjust as needed
-        }}
+        // style={{ 
+        //   backgroundImage: `url(${shopall})`,
+        //   backgroundSize: 'cover',
+        //   backgroundPosition: 'center',
+        //   height: '400px' // Adjust as needed
+        // }}
       >
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
         <p className="text-4xl font-bold">

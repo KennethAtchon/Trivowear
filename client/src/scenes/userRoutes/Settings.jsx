@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import constants from '../../constants.json';
 import { useSelector } from 'react-redux';
-//8c2f8d25f33f48873be321b6bc24b6900f3652a962d43f8f4bec7da36012a75af4e6d1e9aabca12372336b3412b26ff7365649d840d2389c1c0520670668cb2b353a02a05e58b60fa0e00292f0b8ff1d637c3fb48e580064d4dca7bb0595747cc00baa82c5753d75e1f13f4d6b2bcbfaa3e87738fb6e4ee01b4b9565bf6dd1f0
+
 const Settings = () => {
     const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
