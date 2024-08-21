@@ -5,9 +5,18 @@ import sneakers1 from '../../assets/sneakers1.jpg';
 import soccer from '../../assets/soccer.jpeg';
 import track from '../../assets/track.jpg';
 import basketball from '../../assets/basketball.jpg';
+import sneakers2 from '../../assets/sneakers2.jpg';
+import { MdLocalShipping } from "react-icons/md";
+import { RiCustomerService2Fill } from "react-icons/ri";
+import { FaClockRotateLeft } from "react-icons/fa6";
+import ShoppingList from './ShoppingList';
+import bowling from '../../assets/bowling.jpg';
+
 
 function Home() {
   const navigate = useNavigate();
+  const filters = "";
+  //&filters
   
   const images = [soccer, track, basketball];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -50,23 +59,23 @@ function Home() {
           <div className='absolute top-0 left-0 w-full h-full bg-black opacity-50'></div>
         </div>
 
-        <div id='first-section' className='mx-16 mt-16 auto w-auto flex flex-row justify-between gap-x-2'>
+        <div id='first-section' className='mx-16 mt-16 auto w-auto flex flex-col md:flex-row justify-between gap-x-2 relative z-10'>
 
           <div className='flex-[0_0_50%] max-w-[50%] flex flex-col justify-evenly'>
-            <div className='max-w-fit text-start text-[60px] font-bold reem-kufi-ink leading-[50px] text-white'>
+            <div className='max-w-fit text-start text-[60px] font-bold reem-kufi-ink leading-[55px] text-white'>
               Discover the Latest Sneakers Collection
             </div>
             <div className='mt-6 reem-kufi-ink text-white text-lg'>
               Explore our curated selection of cutting-edge sneakers designed for comfort and fashion. From iconic brands to the latest drops, elevate your sneaker game with exclusive styles available only at our store. Slide through to find your perfect pair and walk in confidence!
             </div>
             <div className='mt-8 flex justify-center'>
-              <div id="button" className='bg-red-500 p-4 px-12 w-auto rounded-xl flex items-center justify-center reem-kufi-ink cursor-pointer' style={{ boxShadow: '0px 4px 8px rgba(255, 0, 0, 0.3)' }}>
+              <div id="button" className='bg-red-500 p-3 px-12 w-auto rounded-xl flex items-center justify-center reem-kufi-ink cursor-pointer text-lg' style={{ boxShadow: '0px 4px 8px rgba(255, 0, 0, 0.3)' }}>
                 Shop Now
               </div>        
             </div>
           </div>
 
-          <div className='flex-[0_0_50%] max-w-[700px] h-[600px] py-6 px-2'>
+          <div className=' max-w-[700px] h-[600px] py-6 px-2'>
 
             <div className='w-full h-full bg-blue-300 rounded-[45px] relative overflow-hidden'>
 
@@ -84,17 +93,7 @@ function Home() {
                     />
                   ))
                 }
-
               </div>
-
-
-
-              {/* <img
-                src={images[currentIndex]}
-                alt="Slide"
-                className='w-full h-full object-cover rounded-[45px]'
-              /> */}
-
 
               <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-wrap justify-between items-center">
                 <div
@@ -134,6 +133,72 @@ function Home() {
           </div>
 
         </div>
+
+
+
+        <div id='imagebannerfiller' className='w-full h-[600px] mt-0 md:mt-0 relative flex justify-center items-end'>
+        <div id="imagebanner" className='w-full h-[600px] absolute z-1 bottom-10 '>
+          <img
+              src={sneakers2}
+              alt="sneakers"
+              className='w-full h-full object-cover'
+              style={{ filter: 'brightness(75%)', transform: ' skewY(-10deg)' }}
+            />
+          </div>
+
+          <div id='benefits' className='p-12 md:p-16 bg-white absolute z-10 flex justify-between gap-x-6' style={{ 
+            filter: 'brightness(90%)',
+            boxShadow: "0 4px 21px rgba(231, 130, 130, 0.75)"
+          }} >
+
+            <div className='flex flex-col gap-4 items-center'>
+              <div> < MdLocalShipping className='h-10 w-10'/> </div>
+              <div className='reem-kufi-ink text-2xl'>Free Shipping</div>
+            </div>
+
+            <div className='flex flex-col gap-4 items-center'>
+              <div> < FaClockRotateLeft className='h-10 w-10' /> </div>
+              <div className='reem-kufi-ink text-2xl' >Easy Returns</div>
+            </div>
+
+            <div className='flex flex-col gap-4 items-center'>
+              <div> < RiCustomerService2Fill  className='h-10 w-10'/> </div>
+              <div className='reem-kufi-ink text-2xl'>Customer Service</div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div id="productsection" className="w-auto h-auto mb-12 mt-36 md:mt-44 lg:mt-52 xl:mt-60 mx-16">
+          < ShoppingList filters={filters} />
+        </div>
+
+        <div className='w-auto h-[820px] mx-16 relative'>
+          <img
+            src={bowling}
+            alt="sneakers"
+            className='w-full h-full object-cover'
+            style={{ filter: 'brightness(40%)'}}
+          />
+          
+          <div className='absolute top-0 left-0 w-full h-full flex flex-col mt-28 items-center text-[#DD3131] gap-40 drop-shadow-[0px_0px_10px_rgba(255,0,0,1)]'>
+
+            <div className='text-[36px] font-bold reem-kufi-ink  '>CATEGORIES</div>
+
+            <div className='text-[28px] flex flex-row justify-between w-full px-8'>
+              <div className='reem-kufi-ink'>MEN'S</div>
+              <div className='reem-kufi-ink'>WOMEN'S</div>
+              <div className='reem-kufi-ink'>BOY'S</div>
+              <div className='reem-kufi-ink'>GIRL'S</div>
+            </div>
+
+
+          </div>
+        </div>
+
+
 
       </div>
     </>

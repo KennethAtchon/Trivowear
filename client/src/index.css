@@ -8,12 +8,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Reem+Kufi+Ink&display=swap');
 /* index.css */
 
+#root{
+  background-color: black;
+
+}
+
 /* Hide scrollbars while allowing scrolling */
-
-
 /* WebKit browsers (Chrome, Safari) */
-
-
 /* Firefox */
 #root {
   scrollbar-width: none;
@@ -23,7 +24,6 @@
 body::-webkit-scrollbar {
   display: none;
 }
-
 
 .verticalscroll::-webkit-scrollbar {
   width: 0.5em;
