@@ -3,7 +3,7 @@ import ShoppingList from './ShoppingList';
 import { GrNext } from "react-icons/gr";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { IoOptionsOutline } from "react-icons/io5";
-import Checkbox from '@mui/material/Checkbox';
+import { Checkbox } from "@mui/material";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ const categories = [
   {key: 'fitness', value: 'Fitness'},
   {key: 'kitchen', value: 'Kitchen'},
   {key: 'care', value: 'Home Care'},
+  
 ];
 
 
@@ -44,16 +45,16 @@ const SortDropdown = ({ setSorter }) => {
 
 
   return (
-    <div className="">
-      <div className="p-2 flex flex-row items-center cursor-pointer" onClick={toggleDropdown}>
+    <div >
+      <div className="p-3 px-5 flex flex-row items-center cursor-pointer" onClick={toggleDropdown}>
         <div>{selectedOption}</div>
         <RiArrowDropDownLine size={28} />
       </div>
       {isOpen && (
-        <div className=" absolute z-50 mt-2 bg-white border rounded-lg shadow-md ">
-          <div className="p-2 hover:bg-gray-200 cursor-pointer pr-4" onClick={() => handleOptionClick('Price: Low to High')}>Price: Low to High</div>
+        <div className=" absolute z-50 mt-2 bg-white border rounded-lg shadow-[0px_0px_10px_rgba(255,255,255,0.8)] ">
+          <div className="p-2 hover:bg-gray-200 cursor-pointer pr-4 rounded-t-lg" onClick={() => handleOptionClick('Price: Low to High')}>Price: Low to High</div>
           <div className="p-2 hover:bg-gray-200 cursor-pointer pr-4" onClick={() => handleOptionClick('Price: High to Low')}>Price: High to Low</div>
-          <div className="p-2 hover:bg-gray-200 cursor-pointer pr-4" onClick={() => handleOptionClick('Newest Arrivals')}>Newsest Arrivals</div>
+          <div className="p-2 hover:bg-gray-200 cursor-pointer pr-4 rounded-b-lg" onClick={() => handleOptionClick('Newest Arrivals')}>Newsest Arrivals</div>
         </div>
       )}
     </div>
@@ -64,6 +65,7 @@ const Shop = ({ searchQuery = '' }) => {
   const { category } = useParams();
   const [filters, setFilters] = useState("");
   const [sorters, setSorter] = useState("");
+  //const [sizefilter, setsizefilter] = useState("");
   const [prices, setPrices] = useState({
     allPrice: false,
     priceRanges: {
@@ -75,8 +77,33 @@ const Shop = ({ searchQuery = '' }) => {
     }
   });
   const navigate = useNavigate();
+  //const [selectedSize, setSelectedSize] = useState("");
+  // const sizes = [
+  //   'XX-Small',
+  //   'X-Small',
+  //   'Small',
+  //   'Medium',
+  //   'Large',
+  //   'X-Large',
+  //   'XX-Large',
+  //   '3X-Large',
+  //   '4X-Large',
+  //   'All Sizes',
+  // ];
 
   console.log(sorters)
+
+  // const handleSizeFilterChange = ( size) => {
+
+  //   if (size === "All Sizes") {
+  //     setSelectedSize("");
+  //   } else {
+  //     setSelectedSize(size);
+  //   }
+  //   console.log(size)
+  //   setsizefilter(`&filters[size][$eq]=${size}`);
+
+  // };
 
 
   const handlePriceFilterChange = (event) => {
@@ -142,58 +169,52 @@ const Shop = ({ searchQuery = '' }) => {
 
 
   return (
-    <div className="mx-0 md:mx-28">
-      <div 
-        id="home-page" 
-        className=' bg-[#FAFAFA] relative'
-        // style={{ 
-        //   backgroundImage: `url(${shopall})`,
-        //   backgroundSize: 'cover',
-        //   backgroundPosition: 'center',
-        //   height: '400px' // Adjust as needed
-        // }}
-      >
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
+    <div className="mx-0 md:mx-28 mt-40 pt-6">
+      <div id="home-page">  
         <p className="text-4xl font-bold">
-        <Breadcrumbs
-          separator={<GrNext fontSize="small" />}
-          aria-label="breadcrumb"
-        >
-          <div className="text-[16px] cursor-pointer hover:text-[#B88E2F]" onClick={() => navigate(`/`)}>Home</div>
-          <div className="text-[16px] cursor-pointer hover:text-[#B88E2F]" onClick={() => navigate(`/shop`)}>Shop</div>
-          {category && 
-            <div>{category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}</div>
-          }
-          
-        </Breadcrumbs>
-
-
+          <Breadcrumbs
+            separator={<GrNext fontSize="small" />}
+            aria-label="breadcrumb"
+            sx={{ color: "white" }}
+          >
+            <div className="text-[16px] cursor-pointer hover:text-red-500" onClick={() => navigate(`/`)}>Home</div>
+            <div className="text-[16px] cursor-pointer hover:text-red-500" onClick={() => navigate(`/shop`)}>Shop</div>
+            {category && 
+              <div>{category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}</div>
+            }
+          </Breadcrumbs>
         </p>
-          <h1 className="text-4xl font-bold text-[#000000] mt-10 pb-2">Shop Page</h1>
-          <p className="mt-4 text-lg text-[#121212]">Let’s design the place you always imagined.</p>
-        </div>
+
+        <h1 className="text-4xl font-bold text-white mt-8 pb-2 w-full flex justify-center">
+          {category ? category.charAt(0).toUpperCase() + category.slice(1).toLowerCase() : "Shop All"}
+        </h1>
+
+
+      
       </div>
 
-      <div className='flex flex-row pt-16 '>
+      <div className='flex flex-row pt-16 gap-4'>
 
-        <div className=' w-[200px] text-[20px] pl-2'>
-          <div className='flex flex-row mt-2'>
+        <div className=' w-[200px] text-[20px] pl-2 bg-white rounded-xl text-black'>
+          <div className='flex flex-row mt-2 border-b border-black  mr-3 pb-4'>
           <IoOptionsOutline className='mt-1 mr-2' />
           <div>Filter</div>
           </div>
 
-          <div className='mt-6'>
-            <div id="title" className="text-[14px]">CATEGORIES</div>
-            <div id="container" className="text-[#807E7E] text-[14px] mt-2  flex flex-col gap-1">
+          <div className='mt-4 '>
+            <div id="title" className="text-[14px]  reem-kufi-ink" style={{ fontWeight: 'bold' }}>CATEGORIES</div>
+            <div id="container" className=" text-[14px] mt-2  flex flex-col gap-1 border-b border-black mr-3 pb-4">
               {categories.map(category => (
-                <div key={category.key} onClick={() => handleCategoryClick(category.key)} className="cursor-pointer">{category.value}</div>
+                <div key={category.key} onClick={() => handleCategoryClick(category.key)} className="cursor-pointer reem-kufi-ink hover:text-red-500">{category.value}</div>
               ))}
             </div>
           </div>
 
-          <div className='mt-6'>
-            <div id="title" className="text-[14px]">PRICE</div>
-            <div id="container" className="text-[#807E7E] text-[14px] mt-2 flex flex-col gap-1 mr-3">
+          <div className='mt-4'>
+            <div id="title" className="text-[14px] reem-kufi-ink" style={{ fontWeight: 'bold' }}>PRICE</div>
+            
+            <div id="container" className=" text-[14px] mt-2 flex flex-col gap-1 mr-3  pb-4">
+
               <div className="flex justify-between items-center">
                 <label htmlFor="all-price">All Price</label>
                 <Checkbox id="all-price" checked={prices.allPrice} color="default" onChange={handlePriceFilterChange} sx={{ width: 24, height: 24 }} />
@@ -218,23 +239,37 @@ const Shop = ({ searchQuery = '' }) => {
                 <label htmlFor="price-400-plus">$400.00+</label>
                 <Checkbox id="price-400-plus" checked={prices.priceRanges['400-plus']} color="default" onChange={handlePriceFilterChange} sx={{ width: 24, height: 24 }}/>
               </div>
+              
             </div>
           </div>
+
+          {/* <div className='mt-4 mb-10'>
+            <div id="title" className="text-[14px] font-bold  reem-kufi-ink" style={{ fontWeight: 'bold' }}>SIZE</div>
+            <div id="container" className="flex flex-wrap gap-2 mt-2">
+              {sizes.map((size) => (
+                <button
+                  key={size}
+                  className={`text-sm p-1 px-2 rounded-full reem-kufi-ink ${
+                    selectedSize === size ? 'bg-black text-white' : 'bg-gray-200 text-black'
+                  }`}
+                  onClick={() => handleSizeFilterChange(size)}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div> */}
+          
 
         </div>
 
 
         <div className='flex-1 flex flex-col'>
-          <div className='flex justify-between mb-6 mx-6'>
-            <div className=' p-2'>
-            {category ? (
-              <h2>{category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}</h2>
-            ) : (
-              <h2>Shop All</h2>
-            )}
-            </div>
-              <div className=' p-2 flex flex-row'>
-              <SortDropdown setSorter={setSorter} />
+          <div className='flex justify-end'>
+              <div className='p-2'>
+                <div className='bg-white rounded-lg shadow-[0px_0px_10px_rgba(255,255,255,0.8)]'>
+              <SortDropdown setSorter={setSorter} />                  
+                </div>
               </div>
           </div>
 

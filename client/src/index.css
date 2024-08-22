@@ -10,37 +10,52 @@
 
 #root{
   background-color: black;
+}
 
+html {
+  background-color: black;
 }
 
 /* Hide scrollbars while allowing scrolling */
 /* WebKit browsers (Chrome, Safari) */
 /* Firefox */
-#root {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+
+html::-webkit-scrollbar {
+  width: 0.75em;
 }
 
-body::-webkit-scrollbar {
-  display: none;
+html::-webkit-scrollbar-track {
+  background: hsl(0, 0%, 0%);
+  border-radius: 100vw;
 }
+
+html::-webkit-scrollbar-thumb {
+  background: hsl(0, 100%, 50%);
+  border-radius: 100vw;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: hsl(0, 100%, 30%);
+}
+
+
 
 .verticalscroll::-webkit-scrollbar {
   width: 0.5em;
 }
 
 .verticalscroll::-webkit-scrollbar-track {
-  background: hsl(0, 0%, 52%);
-  border-radius: 100vw;
-}
-
-.verticalscroll::-webkit-scrollbar-thumb {
   background: hsl(0, 0%, 0%);
   border-radius: 100vw;
 }
 
+.verticalscroll::-webkit-scrollbar-thumb {
+  background: hsl(0, 100%, 50%);
+  border-radius: 100vw;
+}
+
 .verticalscroll::-webkit-scrollbar-thumb:hover {
-  background: hsl(0, 0%, 27%);
+  background: hsl(0, 100%, 30%);
 }
 
 

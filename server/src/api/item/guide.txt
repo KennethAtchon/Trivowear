@@ -7,21 +7,17 @@ preciseDescription
 optionsProduct
 {
   "optionsProduct": {
-    "color": ["red", "blue", "orange"],
-    "texture": ["cotton", "polyester", "silk"],
-    "size": ["small", "medium", "large", "extra-large"],
-    "sleeve_length": ["short", "long", "three-quarter"],
-    "pattern": ["solid", "striped", "plaid"]
+    "color": ["red", "blue", "orange"]
   }
 }
 {
   "shippingDetails": {
     "freeShipping": {
-      "shippingCost": "free",
+      "shippingCost": 0,
       "timeFrameDays": 15
     },
     "expressShipping": {
-      "shippingCost": "$10.00",
+      "shippingCost": 10.00,
       "timeFrameDays": 3
     }
   }

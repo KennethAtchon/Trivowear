@@ -3,7 +3,8 @@ import { Container, Typography, Box } from '@mui/material';
 
 const About = () => {
   return (
-    <Container maxWidth="md" sx={{ mt: 8 }}>
+    <Container maxWidth="md" sx={{ mt: 18 }}>
+      <Box color={'white'}>
       <Typography variant="h3" component="h1" gutterBottom align="center">
         About Us
       </Typography>
@@ -12,8 +13,9 @@ const About = () => {
         that exceed our customers' expectations. Our team is dedicated to continuous improvement and
         innovation, and we strive to be leaders in our industry.
       </Typography>
+      </Box>
 
-      <Box sx={{ mt: 4 }}>
+      <Box sx={{ mt: 4 }} color={'white'}>
         <Typography variant="h4" component="h2" gutterBottom>
           Our Mission
         </Typography>

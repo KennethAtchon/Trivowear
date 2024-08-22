@@ -4,7 +4,7 @@ import { Container, Typography, Box, Card, Link } from '@mui/material';
 const PrivacyPolicy = () => {
   return (
     <Container maxWidth="md">
-      <Box mt={4} mb={4}>
+      <Box mt={4} mb={4} color={'white'}>
         <Typography variant="h4" gutterBottom>
           Privacy Policy
         </Typography>

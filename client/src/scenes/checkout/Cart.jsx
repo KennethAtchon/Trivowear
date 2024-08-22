@@ -3,6 +3,7 @@ import React , {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { FiX, FiPlus, FiMinus } from "react-icons/fi";
 import Radio from '@mui/material/Radio';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { RiCouponLine } from "react-icons/ri";
 import { decreaseCount, increaseCount, removeFromCart, updateShippingInCart  } from "../../state/cart";
 import constants from "../../constants.json";
@@ -12,6 +13,15 @@ Coupons: Work later
 (Later: lock in the coupons)
 
 */
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      paper: '#424242',
+    },
+  },
+});
 
 /**
  * Renders the Cart component.
@@ -49,7 +59,7 @@ const Cart = ({ handleNextStep }) => {
   // Update the total when the selected shipping option changes
   useEffect(() => {
     if (cart && selectedShipping) {
-      const selectedShippingCost = parseFloat(cart[0].attributes.shippingDetails.shippingDetails[selectedShipping].shippingCost.replace('$', '')) || 0;
+      const selectedShippingCost = parseFloat(cart[0].attributes.shippingDetails.shippingDetails[selectedShipping].shippingCost);
       setSelectedShippingPrice(selectedShippingCost);
       setTotal(subtotal + selectedShippingCost);
     }
@@ -96,13 +106,14 @@ const Cart = ({ handleNextStep }) => {
   
 
   return (
+    < ThemeProvider theme={darkTheme}>
     <div className=" w-full h-full flex flex-col ">
 
       {/* 485px */}
       <div id="cartitems" className="flex flex-col md:flex-row items-center md:justify-between my-12 h-auto gap-x-16">
         {/* w-[645px] */}
         <div id="products" className=" md:w-auto ">
-           <div className='flex flex-row justify-between pb-5 border-b border-[#6C7275]'>
+           <div className='flex flex-row justify-between pb-5 border-b '>
             <div>Product</div>   
 
             <div className='flex flex-row justify-between w-[325px]'>
@@ -132,7 +143,7 @@ const Cart = ({ handleNextStep }) => {
                       <div className="text-[14px] font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>
                         {item.attributes.name}
                       </div>
-                      <div id="options" className="text-[12px] text-[#6C7275]">
+                      <div id="options" className="text-[12px] ">
                         {item.attributes.selectedProduct && (
                           <>
                             {Object.entries(item.attributes.selectedProduct).map(([key, value], index) => (
@@ -143,7 +154,7 @@ const Cart = ({ handleNextStep }) => {
                           </>
                         )}
                       </div>
-                      <div className="flex flex-row text-[#6C7275]">
+                      <div className="flex flex-row ">
                         <FiX className="mt-[3px] text-[20px] cursor-pointer" 
                         onClick={() => handleRemoveFromCart(item)} />
                         Remove
@@ -173,12 +184,12 @@ const Cart = ({ handleNextStep }) => {
            
         </div>
 
-        <div id="cartsummary" className="w-[415px] mt-10 md:mt-0 rounded-lg p-4 border-black border">
+        <div id="cartsummary" className="w-[415px] mt-10 md:mt-0 rounded-lg p-4 border-white border">
           <div className='text-[20px] mb-2' style={{ fontFamily: 'Poppins, sans-serif'}}>Cart Summary</div>
 
           <div id="shipping" className="h-[210px] overflow-y-auto verticalscroll" >
             {shippingOptions.map(([key, details], index) => (
-              <div key={index} id="shippingoption" className="flex flex-row justify-between rounded-md border border-black p-2 mb-3">
+              <div key={index} id="shippingoption" className="flex flex-row justify-between rounded-md border border-white p-2 mb-3">
                 <div className="flex flex-row items-center">
                   <Radio
                     checked={selectedShipping === key}
@@ -191,7 +202,7 @@ const Cart = ({ handleNextStep }) => {
                   <div>{key.split("Shipping")[0].replace(/^./, key[0].toUpperCase()) + " Shipping"} ({details.timeFrameDays-2}-{details.timeFrameDays+2})</div>
                 </div>
                 <div className="flex flex-row items-center mr-2">
-                  {details.shippingCost === 'free' ? '$0.00' : details.shippingCost}
+                  ${details.shippingCost}
                 </div>
               </div>
             ))}
@@ -210,13 +221,10 @@ const Cart = ({ handleNextStep }) => {
           <div className='font-bold mt-1' style={{ fontFamily: 'Inter, sans-serif'}}>${total.toFixed(2)}</div>
           </div>
 
-          <div id='checkout' className='mt-8 flex flex-row justify-center items-center rounded-md bg-black p-2 py-3 cursor-pointer' onClick={handleSubmit}>
-                <div className='text-white' style={{ fontFamily: 'Inter, sans-serif'}}>
+          <div id='checkout' className='mt-8 flex flex-row justify-center items-center rounded-md bg-white p-2 py-3 cursor-pointer' onClick={handleSubmit}>
+                <div className='text-black' style={{ fontFamily: 'Inter, sans-serif'}}>
                   Checkout</div>
           </div>
-
-
-
 
         </div>
 
@@ -228,14 +236,14 @@ const Cart = ({ handleNextStep }) => {
           <div className="font-semibold text-[16px] text-[#6C7275]">Add your code for an instant cart discount</div>
           <div className="mt-4 flex flex-row justify-between items-center rounded-md border p-2">
         <div className="flex flex-row items-center">
-          <RiCouponLine className="ml-1 mr-2 text-xl text-[#6C7275]" />
+          <RiCouponLine className="ml-1 mr-2 text-xl" />
           <input 
             type="text" 
             placeholder="Enter coupon code" 
-            className="outline-none text-[#6C7275] bg-transparent" 
+            className="outline-none bg-transparent" 
           />
         </div>
-        <button className="mr-2 font-semibold">Apply</button>
+        <button className="mr-2 font-semibold hover:text-red-500">Apply</button>
       </div>
 
 
@@ -245,6 +253,7 @@ const Cart = ({ handleNextStep }) => {
       </div>
 
     </div>
+    </ ThemeProvider>
   );
 };
 

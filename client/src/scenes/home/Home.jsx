@@ -11,11 +11,11 @@ import { RiCustomerService2Fill } from "react-icons/ri";
 import { FaClockRotateLeft } from "react-icons/fa6";
 import ShoppingList from './ShoppingList';
 import bowling from '../../assets/bowling.jpg';
-
+import ReactStars from "react-rating-stars-component";
 
 function Home() {
   const navigate = useNavigate();
-  const filters = "";
+  const filters = '&filters[Distinct][$eq]=LandingPage1';
   //&filters
   
   const images = [soccer, track, basketball];
@@ -184,19 +184,48 @@ function Home() {
           />
           
           <div className='absolute top-0 left-0 w-full h-full flex flex-col mt-28 items-center text-[#DD3131] gap-40 drop-shadow-[0px_0px_10px_rgba(255,0,0,1)]'>
-
-            <div className='text-[36px] font-bold reem-kufi-ink  '>CATEGORIES</div>
-
-            <div className='text-[28px] flex flex-row justify-between w-full px-8'>
+            <div className='text-[36px] font-bold reem-kufi-ink  '>CATEGORIES</div> 
+            <div className='text-[28px] flex flex-col md:flex-row items-center justify-between w-full px-0 gap-y-4 md:px-8'>
               <div className='reem-kufi-ink'>MEN'S</div>
               <div className='reem-kufi-ink'>WOMEN'S</div>
               <div className='reem-kufi-ink'>BOY'S</div>
               <div className='reem-kufi-ink'>GIRL'S</div>
             </div>
-
-
           </div>
+        </div> 
+
+        <div id='testimonials' className='w-auto h-auto mx-16 my-16 flex flex-row flex-wrap gap-8 relative justify-evenly'>
+          <div className='w-[350px] h-[250px] bg-white flex flex-col justify-evenly items-center text-center rounded-2xl' style={{ filter: 'brightness(90%)'}}>
+            <div>
+              < ReactStars count={5} size={24} value={5} isHalf={true} edit={false} />
+            </div>
+            <div className='reem-kufi-ink'> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nisi tempora quae nemo, porro unde quas iure doloremque inventore, fugiat esse sequi ab voluptatum. Dicta optio architecto animi velit provident cumque.</div>
+            <div className='reem-kufi-ink text-xl' style={{ fontWeight: 'bold' }}> Jana D.</div>
+            <div className='reem-kufi-ink text-green-500'>Verified Buyer</div>
+          </div>
+
+          <div className='w-[350px] h-[250px] bg-white flex flex-col justify-evenly items-center text-center rounded-2xl' style={{ filter: 'brightness(90%)'}}>
+            <div>
+              < ReactStars count={5} size={24} value={5} isHalf={true} edit={false} />
+            </div>
+            <div className='reem-kufi-ink'> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nisi tempora quae nemo, porro unde quas iure doloremque inventore, fugiat esse sequi ab voluptatum. Dicta optio architecto animi velit provident cumque.</div>
+            <div className='reem-kufi-ink text-xl' style={{ fontWeight: 'bold' }}> Jana D.</div>
+            <div className='reem-kufi-ink text-green-500'>Verified Buyer</div>
+          </div>
+
+          <div className='w-[350px] h-[250px] bg-white flex flex-col justify-evenly items-center text-center rounded-2xl' style={{ filter: 'brightness(90%)'}}>
+            <div>
+              < ReactStars count={5} size={24} value={5} isHalf={true} edit={false} />
+            </div>
+            <div className='reem-kufi-ink'> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nisi tempora quae nemo, porro unde quas iure doloremque inventore, fugiat esse sequi ab voluptatum. Dicta optio architecto animi velit provident cumque.</div>
+            <div className='reem-kufi-ink text-xl' style={{ fontWeight: 'bold' }}> Jana D.</div>
+            <div className='reem-kufi-ink text-green-500'>Verified Buyer</div>
+          </div>
+
+
         </div>
+
+
 
 
 

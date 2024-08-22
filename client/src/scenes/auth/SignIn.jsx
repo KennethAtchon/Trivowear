@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Button, TextField, Typography, Alert, Link } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
@@ -11,6 +12,13 @@ const validationSchema = Yup.object({
   identifier: Yup.string().required('Email or Username is required'),
   password: Yup.string().required('Password is required'),
 });
+
+  // Create a dark theme
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+    },
+  });
 
 /**
  * Handles user sign-in functionality, including form submission, error handling, and redirecting to the home page upon successful sign-in.
@@ -47,17 +55,18 @@ const SignIn = () => {
   };
 
   return (
+    < ThemeProvider theme={darkTheme}>
     <Box
       display="flex"
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      height="57vh"
+      height="65vh"
       mx="auto"
       p={3}
       maxWidth={400}
     >
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom color={'white'}>
         Sign In
       </Typography>
       <Formik
@@ -112,6 +121,7 @@ const SignIn = () => {
         )}
       </Formik>
     </Box>
+    </ThemeProvider>
   );
 };
 

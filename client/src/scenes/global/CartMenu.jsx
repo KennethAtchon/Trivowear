@@ -11,10 +11,12 @@ const CartMenu = () => {
   const cart = useSelector((state) => state.cart.cart);
   const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
-  console.log(cart)
+  console.log(cart);
 
+  // Calculate total price considering if an item is on sale
   const totalPrice = cart.reduce((total, item) => {
-    return total + item.count * item.attributes.price;
+    const price = item.attributes.onSale ? item.attributes.discount : item.attributes.price;
+    return total + item.count * price;
   }, 0).toFixed(2);
 
   const handleCheckout = () => {
@@ -23,79 +25,75 @@ const CartMenu = () => {
   };
 
   const handleRemoveFromCart = (item) => {
-    console.log("item id: ", item.id)
-    console.log("selected: ", JSON.stringify(item.attributes.selectedProduct))
+    console.log("item id: ", item.id);
+    console.log("selected: ", JSON.stringify(item.attributes.selectedProduct));
     dispatch(removeFromCart({ 
       id: item.id, 
       selected: JSON.stringify(item.attributes.selectedProduct) 
     }));
-
-
-  }
+  };
 
   return (
     <div className={`fixed inset-0 z-50 flex justify-end ${isCartOpen ? "block" : "hidden"}`}>
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => dispatch(setIsCartOpen({}))}></div>
-      <div className="relative bg-white w-96 h-full shadow-lg">
+      <div className="relative bg-black text-white w-96 h-full shadow-lg border-l">
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-lg font-semibold">Cart</h2>
           <FiX className="cursor-pointer" onClick={() => dispatch(setIsCartOpen({}))} />
         </div>
-        <div className="p-4">
+        <div className="p-4 overflow-y-auto max-h-[90vh] verticalscroll">
+          {cart.map((item) => {
+            const price = item.attributes.onSale ? item.attributes.discount : item.attributes.price;
 
-          {cart.map((item) => (
-            <div key={item.id} className="flex justify-between mb-4">
-              <div className="flex flex-row">
-
-                <div className=" w-[120px] h-[96px] ">        
-                  {item && <img
-                  alt={item.name}
-                  className="w-full h-full object-fit"
-                  src={`${constants.backendUrl}${item.attributes.images.data[0].attributes.url}`}
-                
-                />}
-                </div>
-
-                <div className="ml-3 w-full">
-                <h3 className="font-semibold text-[14px] mb-2">{item.attributes.name} </h3>
-
-                <div id="options" className="text-[12px] mb-2">
-                  {item.attributes.selectedProduct && (
-                    <>
-                      {Object.entries(item.attributes.selectedProduct).map(([key, value], index) => (
-                        <div key={index}>
-                          {key}: {value}
-                        </div>
-                      ))}
-                    </>
-                  )}
-                </div>
-
-                <div className="flex items-center ">
-
-                  <div className="flex items-center border border-[#6C7275] p-1 rounded-lg">
-                  <FiMinus className="cursor-pointer" onClick={() => dispatch(decreaseCount({ id: item.id, 
-                    selected: JSON.stringify(item.attributes.selectedProduct)
-                  }))} />
-                  <span className="mx-4">{item.count}</span>
-                  <FiPlus className="cursor-pointer" onClick={() => dispatch(increaseCount({ id: item.id, 
-                    selected: JSON.stringify(item.attributes.selectedProduct)
-                  }))} />                    
+            return (
+              <div key={item.id} className="flex justify-between mb-4">
+                <div className="flex flex-row">
+                  <div className="w-[120px] h-[96px]">
+                    {item && (
+                      <img
+                        alt={item.name}
+                        className="w-full h-full object-stretch rounded-xl"
+                        src={`${constants.backendUrl}${item.attributes.images.data[0].attributes.url}`}
+                      />
+                    )}
                   </div>
 
+                  <div className="ml-3 w-full">
+                    <h3 className="font-semibold text-[14px] mb-2">{item.attributes.name}</h3>
+                    <div id="options" className="text-[12px] mb-2">
+                      {item.attributes.selectedProduct && (
+                        <>
+                          {Object.entries(item.attributes.selectedProduct).map(([key, value], index) => (
+                            <div key={index}>
+                              {key}: {value}
+                            </div>
+                          ))}
+                        </>
+                      )}
+                    </div>
+
+                    <div className="flex items-center">
+                      <div className="flex items-center border border-[#6C7275] p-1 rounded-lg">
+                        <FiMinus
+                          className="cursor-pointer"
+                          onClick={() => dispatch(decreaseCount({ id: item.id, selected: JSON.stringify(item.attributes.selectedProduct) }))}
+                        />
+                        <span className="mx-4">{item.count}</span>
+                        <FiPlus
+                          className="cursor-pointer"
+                          onClick={() => dispatch(increaseCount({ id: item.id, selected: JSON.stringify(item.attributes.selectedProduct) }))}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                <div className="flex flex-col items-end pl-3">
+                  <span className="mb-2">${(item.count * price).toFixed(2)}</span>
+                  <FiX className="cursor-pointer text-lg" onClick={() => handleRemoveFromCart(item)} />
                 </div>
-
-
-
               </div>
-              <div className="flex flex-col items-end  pl-3">
-                <span className="mb-2">${(item.count * item.attributes.price).toFixed(2)}</span>
-                <FiX className="cursor-pointer text-lg" onClick={() => handleRemoveFromCart(item)} />
-              </div>
-            </div>
-          ))}
-
+            );
+          })}
 
           <div className="mt-4 border-t pt-4">
             <div className="flex justify-between">

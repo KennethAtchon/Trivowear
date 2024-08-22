@@ -29,14 +29,8 @@ module.exports = createCoreController('api::order.order', ({ strapi }) => ({
                     const item = await strapi.service("api::item.item").findOne(product.id);
                     console.log('Fetched item:', item);
                     console.log(cartShipping)
-
-                    // var shippingValue = item.shippingDetails.shippingDetails[cartShipping].shippingCost;
-                    // if(shippingValue == "free"){
-                    //     shippingPrice = 0;
-                    // }else{ 
-                    //     shippingPrice = parseFloat(shippingValue.replace('$', '')) * 100;
-                    // }
-                    shippingPrice = 0;
+                    
+                    shippingPrice = item.shippingDetails.shippingDetails[cartShipping].shippingCost;
 
                     return {
                         price_data: {

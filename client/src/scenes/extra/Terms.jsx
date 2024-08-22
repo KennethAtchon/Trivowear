@@ -1,10 +1,11 @@
 import React from 'react';
 import { Container, Typography, Box, Link } from '@mui/material';
 
+
 const Terms = () => {
   return (
     <Container maxWidth="md">
-      <Box mt={4} mb={4}>
+      <Box mt={16} mb={4} color={'white'}>
         <Typography variant="h2" gutterBottom>
           Terms and Conditions
         </Typography>

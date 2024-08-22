@@ -60,6 +60,8 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
   const navigate = useNavigate();
   const [selectedAddress, setSelectedAddress] = useState('');
 
+  console.log("cart: ", cart);
+
   // Calculate subtotal and total prices
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
@@ -179,9 +181,10 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
     const requestBody = {
       email: values.email,
       phone: values.phone,
-      products: cart.map(({ id, count }) => ({
+      products: cart.map(({ id, count, attributes }) => ({
         id,
         count,
+        selectedProduct: JSON.stringify(attributes.selectedProduct),
       })),
       shippingAddress: addressValues,
       cartShipping: cartShipping
@@ -286,7 +289,7 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
 
   return (
 
-    <div id="divider" className='h-auto py-20 flex flex-col md:flex-row'>
+    <div id="divider" className='h-auto py-20 flex flex-col md:flex-row bg-green-700'>
 
       {isLoading && (
         <div 

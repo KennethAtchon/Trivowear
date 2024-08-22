@@ -8,7 +8,6 @@ import Item from "../../components/Item";
 import constants from "../../constants.json";
 import { GrNext } from "react-icons/gr";
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { MdFavorite } from "react-icons/md";
 
 
 const ItemDetails = () => {
@@ -22,13 +21,16 @@ const ItemDetails = () => {
   const [showMore, setShowMore] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const cartItems = useSelector((state) => state.cart.cart);
-  const [isClicked, setIsClicked] = useState(false);
-  const [isScaled, setIsScaled] = useState(false);
   const [selectedOption, setSelectedOption] = useState(0);
   
-  const handleClick = () => {
-    setIsClicked(!isClicked);
+  const handleDecrease = (event) => {
+    setCount((prevCount) => Math.max(prevCount - 1, 1));
   };
+
+  const handleIncrease = (event) => {
+    setCount((prevCount) => prevCount + 1);
+  };
+
 
   const toggleShowMore = () => {
     setShowMore(!showMore);
@@ -64,6 +66,18 @@ const ItemDetails = () => {
     navigate('/checkout');
   }
 
+
+  /**
+   * Adds an item to the cart, handling cases where the product has options.
+   * 
+   * If the product has options, it checks if the product has 1 or 2+ options and
+   * selects the corresponding option based on the selectedOption state.
+   * It then creates a new item object with the selected product details and
+   * checks if the item already exists in the cart. If it does, it increases the
+   * count of the existing item. If not, it adds the new item to the cart.
+   * 
+   * @return {void}
+   */
   const handleAddToCart = () => {
     let selectedProductDetails = null;
   
@@ -170,31 +184,21 @@ const ItemDetails = () => {
     getItem();
   }, [itemId]);
 
-  useEffect(() => {
-    if (isClicked) {
-      setIsScaled(true);
-      const timer = setTimeout(() => {
-        setIsScaled(false);
-      }, 300);
-
-      return () => clearTimeout(timer);
-    }
-  }, [isClicked]);
-
 
 
 
   return (
     // add smaller screen functionality at px-10 level
-    <div className="w-full h-auto px-10 md:px-10 xl:px-28 mb-20">
-      <div className="h-[55px] w-full flex items-center">
+    <div className="w-full h-auto mt-28 text-white px-10 md:px-10 xl:px-28 mb-20">
+      <div className="h-[55px] w-full flex items-center ">
       <Breadcrumbs
           separator={<GrNext className="text-[8px] ml-1 mr-1" />}
           aria-label="breadcrumb"
+          color="inherit"
         >
-          <div className="text-[14px] cursor-pointer hover:text-[#B88E2F]" onClick={() => navigate(`/`)}>Home</div>
-          <div className="text-[14px] cursor-pointer hover:text-[#B88E2F]" onClick={() => navigate(`/shop`)}>Shop</div>
-          <div className="text-[14px] capitalize cursor-pointer hover:text-[#B88E2F]" onClick={() => navigate(`/shop/${item && item.attributes.category.toLowerCase()}`)}>{item && item.attributes.category}</div>
+          <div className="text-[14px] cursor-pointer hover:text-red-500" onClick={() => navigate(`/`)}>Home</div>
+          <div className="text-[14px] cursor-pointer hover:text-red-500" onClick={() => navigate(`/shop`)}>Shop</div>
+          <div className="text-[14px] capitalize cursor-pointer hover:text-red-500" onClick={() => navigate(`/shop/${item && item.attributes.category.toLowerCase()}`)}>{item && item.attributes.category}</div>
           <div className="text-[14px]">Product</div>
           
         </Breadcrumbs>
@@ -204,10 +208,10 @@ const ItemDetails = () => {
 
         <div className=" flex flex-col">
 
-        <div className=" md:w-[550px] h-[730px] relative p-1 border rounded-md border-black">
+        <div className=" md:w-[550px] h-[730px] relative  border rounded-lg border-white">
         {item && <img
               alt={item.name}
-              className="w-full h-full object-fit"
+              className="w-full h-full object-fit bg-white rounded-lg p-1"
               src={`${constants.backendUrl}${item.attributes.images.data[currentImageIndex].attributes.url}`}
             
             />}
@@ -260,9 +264,9 @@ const ItemDetails = () => {
 
         </div>
 
-        <div className=" pl-20">
+        <div className=" md:pl-20">
 
-          <div className=" h-auto pb-6 w-[500px] border-b border-[#E8ECEF]">
+          <div className=" h-auto pb-6 w-auto md:w-[500px] border-b border-[#E8ECEF]">
             <div className="text-[40px] font-bold mt-10 mb-2" style={{ fontFamily: 'Poppins, sans-serif'}}>{item && item.attributes.name}</div>
             <div style={{ fontFamily: 'Inter, sans-serif'}} className="text-[
 #6C7275]">{item && item.attributes.longDescription[0].children[0].text}</div>
@@ -273,7 +277,7 @@ const ItemDetails = () => {
                   <div id="discount" className="mr-2 font-bold text-[28px]" style={{ fontFamily: 'Poppins, sans-serif' }}>
                     ${item.attributes.discount}
                   </div>
-                  <div id="price" className="text-[20px] text-[#6C7275] mt-1 ml-3 line-through" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  <div id="price" className="text-[20px] text-red-500 mt-1 ml-3 line-through" style={{ fontFamily: 'Poppins, sans-serif' }}>
                     ${item.attributes.price}
                   </div>
                 </>
@@ -287,9 +291,9 @@ const ItemDetails = () => {
           </div>
 
           <div id="measurements" className="mt-4 h-[60px] w-[150px] mb-6">
-            <div className="font-semibold text-[16px] leading-[26px] text-[#6C7275] mb-1" style={{ fontFamily: 'Inter, sans-serif'}}>Measurements</div>
+            <div className="font-semibold text-[16px] leading-[26px] mb-1" style={{ fontFamily: 'Inter, sans-serif'}}>Measurements</div>
 
-            <div className="font-normal text-[20px] leading-[32px] text-[#000000]" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <div className="font-normal text-[20px] leading-[32px] " style={{ fontFamily: 'Inter, sans-serif' }}>
             {item && item.attributes.measurements}
             </div>
 
@@ -300,20 +304,21 @@ const ItemDetails = () => {
             Object.keys(item.attributes.optionsProduct.optionsProduct).map((key) => (
               <div key={key}>
                 <div className="flex flex-row">
-                  <div className="font-semibold text-[16px] leading-[26px] text-[#6C7275]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <div className="font-semibold text-[16px] leading-[26px] " style={{ fontFamily: 'Inter, sans-serif' }}>
                     Choose {key}
                   </div>
-                  <GrNext className="mt-1.5 ml-2 h-3 w-3 text-[#6C7275]"/>
+                  <GrNext className="mt-1.5 ml-2 h-3 w-3 "/>
                 </div>
 
   
-                <div className="font-normal text-[20px] leading-[32px] text-[#000000]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <div className="font-normal text-[20px] leading-[32px] " style={{ fontFamily: 'Inter, sans-serif' }}>
                   {item.attributes.optionsProduct.optionsProduct[key][selectedOption]}
                 </div>
       
 
                 <div id="images" className="flex flex-row gap-x-4 my-2 flex-wrap mb-6">
                   {item.attributes.optionsProduct.optionsProduct[key].map((option, index) => (
+                
                     <div
                       key={index}
                       className={`h-16 w-16 my-2 cursor-pointer ${selectedOption === index ? 'border-2 border-black' : ''}`}
@@ -334,33 +339,19 @@ const ItemDetails = () => {
         </div>
 
 
-          <div id="Add" className="flex flex-row">
-            <div id="counter" className="h-[55px] w-[130px] mr-14 bg-[#F5F5F5] rounded-lg flex flex-row items-center">
-              <MdRemove className="flex-1 cursor-pointer" onClick={() => setCount(Math.max(count - 1, 1))}/>   
-              <div className="flex-1 text-center">{count}</div>           
-              <MdAdd  className="flex-1 cursor-pointer" onClick={() => setCount(count + 1)}/>
-
-            </div>
-
-            <div id="wishlist" className={`h-[55px] w-[360px] border border-[#141718] rounded-lg flex justify-center items-center ${isClicked ? 'bg-red-300 ' : ''}` }>
-            <button 
-                  className="text-[#141718] text-[18px] flex flex-row" 
-                  onClick={handleClick}
-                >
-                  <MdFavorite 
-                    className={`mr-2 mt-1 transition-transform duration-300 ${isScaled ? 'transform scale-125' : ''} ${isClicked ? 'text-red-500 ' : ''}`} 
-                  /> 
-                  Wishlist
-                </button>
-            </div>
-
+        <div id="Add" className="flex flex-row">
+          <div id="counter" className="h-[55px] w-[130px] mr-14 border border-white rounded-lg flex flex-row items-center">
+            <MdRemove className="flex-1 cursor-pointer" onMouseDown={(e) => e.preventDefault()} onClick={handleDecrease} />
+            <div className="flex-1 text-center">{count}</div>
+            <MdAdd className="flex-1 cursor-pointer" onMouseDown={(e) => e.preventDefault()} onClick={handleIncrease} />
           </div>
+        </div>
 
           <div id="cart" >
-            <div className="mt-6 bg-black h-[55px] w-[550px] flex justify-center items-center rounded-lg text-white text-[18px] font-bold cursor-pointer" style={{ fontFamily: 'Inter, sans-serif'}} onClick={handleAddToCart}>
+            <div className="mt-6 bg-white h-[55px] w-auto md:w-[550px] flex justify-center items-center rounded-lg text-black text-[18px] font-bold cursor-pointer" style={{ fontFamily: 'Inter, sans-serif'}} onMouseDown={(e) => e.preventDefault()} onClick={handleAddToCart}>
               Add to Cart
             </div>
-            <div className="mt-6 bg-[#38C172] h-[55px] w-[550px] flex justify-center items-center rounded-lg text-white text-[18px] font-bold cursor-pointer" onClick={handleCheckout}>
+            <div className="mt-6 bg-[#38C172] h-[55px] w-auto md:w-[550px] flex justify-center items-center rounded-lg text-white text-[18px] font-bold cursor-pointer" onMouseDown={(e) => e.preventDefault()} onClick={handleCheckout}>
               Checkout
             </div>
           </div>
@@ -371,13 +362,13 @@ const ItemDetails = () => {
                 <div>
                   {Object.entries(item?.attributes?.preciseDescription).slice(0, 4).map(([key, value]) => (
                     <div key={key} className="h-5 flex flex-row text-xs items-center">
-                      <div className="text-[#6C7275] w-[190px]" style={{ fontFamily: 'Inter, sans-serif'}}>{key}</div>
+                      <div className=" w-[190px]" style={{ fontFamily: 'Inter, sans-serif'}}>{key}</div>
                       <div style={{ fontFamily: 'Inter, sans-serif'}}>{Array.isArray(value) ? value.join(', ') : value}</div>
                     </div>
                   ))}
                   {showMore && Object.entries(item?.attributes?.preciseDescription).slice(4).map(([key, value]) => (
                     <div key={key} className="h-5 flex flex-row text-xs items-center">
-                      <div className="text-[#6C7275] w-[190px]" style={{ fontFamily: 'Inter, sans-serif'}}>{key}</div>
+                      <div className=" w-[190px]" style={{ fontFamily: 'Inter, sans-serif'}}>{key}</div>
                       <div style={{ fontFamily: 'Inter, sans-serif'}}>{Array.isArray(value) ? value.join(', ') : value}</div>
                     </div>
                   ))}

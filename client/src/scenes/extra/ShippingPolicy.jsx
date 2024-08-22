@@ -4,7 +4,7 @@ import { Container, Typography, Box } from '@mui/material';
 const ShippingPolicy = () => {
   return (
     <Container maxWidth="md">
-      <Box mt={4} mb={4}>
+      <Box mt={4} mb={4} color={'white'}>
         <Typography variant="h4" gutterBottom>
           Shipping Policy
         </Typography>

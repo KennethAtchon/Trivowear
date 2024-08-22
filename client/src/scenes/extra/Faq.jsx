@@ -1,7 +1,9 @@
 import React from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Container, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
+// Sample FAQ data
 const faqData = [
   {
     question: "What is your return policy?",
@@ -45,27 +47,39 @@ const faqData = [
   }
 ];
 
+// Create a dark theme
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      paper: '#424242',
+    },
+  },
+});
+
 const FAQ = () => {
   return (
-    <Container maxWidth="md" sx={{ mt: 8, mb:8 }}>
-      <Typography variant="h3" component="h1" gutterBottom align="center">
-        Frequently Asked Questions
-      </Typography>
-      {faqData.map((faq, index) => (
-        <Accordion key={index} sx={{ mb: 2 }}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls={`panel${index}-content`}
-            id={`panel${index}-header`}
-          >
-            <Typography variant="h6">{faq.question}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>{faq.answer}</Typography>
-          </AccordionDetails>
-        </Accordion>
-      ))}
-    </Container>
+    <ThemeProvider theme={darkTheme}>
+      <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
+        <Typography variant="h3" component="h1" gutterBottom align="center">
+          Frequently Asked Questions
+        </Typography>
+        {faqData.map((faq, index) => (
+          <Accordion key={index} sx={{ mb: 2 }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={`panel${index}-content`}
+              id={`panel${index}-header`}
+            >
+              <Typography variant="h6">{faq.question}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>{faq.answer}</Typography>
+            </AccordionDetails>
+          </Accordion>
+        ))}
+      </Container>
+    </ThemeProvider>
   );
 };
 
