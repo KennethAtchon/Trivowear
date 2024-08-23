@@ -39,11 +39,11 @@ const Orders = ({ orders }) => {
     }, [orders]);
 
     return (
-        <div className='w-[400px] md:w-auto md:min-w-[500px] h-full'>
+        <div className='w-[400px] md:w-auto md:min-w-[500px] h-full text-white'>
             <div className='text-xl mb-4'>Orders History</div>
             <table className="w-full border-collapse">
                 <thead>
-                    <tr className="bg-gray-100">
+                    <tr className="">
                         <th className="border p-2 text-left">ID</th>
                         <th className="border p-2 text-left">Date</th>
                         <th className="border p-2 text-left">Products</th>

@@ -24,6 +24,7 @@ import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
 import { login } from '../../state/auth'; 
 import { useNavigate } from "react-router-dom";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // Stripe initialization
 const stripePromise = loadStripe("pk_test_51PeOOTHgfcgRayrrGL73KOBp2Ikk3Gu8joXHZbFPEfMNqLXFMuJVSndS7LeWqSf2VavJWwx0E39SEnRoJQjJ8NJO001jHB40lg");
@@ -33,6 +34,28 @@ const initialValues = {
   phone: "",
 };
 
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      paper: '#424242',
+    },
+  },
+});
+
+const options1 = {
+  mode: 'shipping',
+  // autocomplete: {
+  //   mode: "google_maps_api",
+  //   apiKey: "{YOUR_GOOGLE_MAPS_API_KEY}",
+  // },
+}
+
+const options2 = {
+  appearance: {
+    theme: 'night'
+  }
+}
 
 /**
  * A functional component that handles the checkout process for an e-commerce application.
@@ -288,8 +311,8 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
 
 
   return (
-
-    <div id="divider" className='h-auto py-20 flex flex-col md:flex-row bg-green-700'>
+    < ThemeProvider theme={darkTheme}>
+    <div id="divider" className='h-auto py-20 flex flex-col md:flex-row '>
 
       {isLoading && (
         <div 
@@ -322,7 +345,7 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
           {({ errors, touched, status }) => (
             <Form
               id="contactform"
-              className={`p-2 border border-black px-4 pb-10 rounded-lg mb-10 ${!isAuth ? 'block' : 'hidden'} ${!isSignedGuest ? 'block' : 'hidden'}`}
+              className={`p-2 border border-white px-4 pb-10 rounded-lg mb-10 ${!isAuth ? 'block' : 'hidden'} ${!isSignedGuest ? 'block' : 'hidden'}`}
             >
               <div id="title" className='text-[20px] font-bold mt-4 mb-3' style={{ fontFamily: 'Poppins, sans-serif' }}>
                 Contact Information
@@ -412,7 +435,7 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
                 fullWidth
                 variant="contained"
                 color="primary"
-                style={{ fontFamily: 'Inter, sans-serif', backgroundColor: 'black', color: 'white', marginTop: '6px' }}
+                style={{ fontFamily: 'Inter, sans-serif', backgroundColor: 'white', color: 'black', marginTop: '6px' }}
               >
                 {!isGuest ? 'Sign Up/Login In' : 'Continue Without Account'}
               </Button>
@@ -420,7 +443,7 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
           )}
       </Formik>
 
-        <div id="pastshipping" className={` w-full h-auto mb-6 p-2 border border-black px-4 pb-6 rounded-lg ${isAuth ? 'flex flex-col gap-y-2' : 'hidden'}`}>
+        <div id="pastshipping" className={` w-full h-auto mb-6 p-2 border border-white text-white px-4 pb-6 rounded-lg ${isAuth ? 'flex flex-col gap-y-2' : 'hidden'}`}>
         <div className='w-full text-[20px] font-bold mt-4' style={{ fontFamily: 'Poppins, sans-serif' }}>Pick an Address or create new</div>
         <FormControl>
           <FormLabel id="address-radio-buttons-group-label" className='mb-4'>Shipping Addresses</FormLabel>
@@ -448,20 +471,16 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
 
 
 
-        <div id="shipping" className=' p-2 border border-black px-4 pb-10 rounded-lg'>
+        <div id="shipping" className=' p-2 border border-white px-4 pb-10 rounded-lg'>
 
           <div id="title" className='w-full text-[20px] font-bold mt-4 mb-6' style={{ fontFamily: 'Poppins, sans-serif'}}>Shipping Address
           </div>
 
-          <Elements stripe={stripePromise}>
+          <Elements stripe={stripePromise} options={options2}>
             <AddressElement
-              options={{
-                mode: 'shipping',
-                // autocomplete: {
-                //   mode: "google_maps_api",
-                //   apiKey: "{YOUR_GOOGLE_MAPS_API_KEY}",
-                // },
-              }}
+              options={
+                options1
+              }
               onChange={(event) => {
                   setIsComplete(event.complete)                
                 if (event.complete) {
@@ -479,13 +498,13 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
 
         </div>
 
-        <div id="placeorder" className='mt-8 flex flex-row justify-center items-center rounded-md bg-black p-2 py-3 cursor-pointer' onClick={handleSubmit}>
-          <div className='text-white' style={{ fontFamily: 'Inter, sans-serif'}}>Place Order</div>
+        <div id="placeorder" className='mt-8 flex flex-row justify-center items-center rounded-md bg-white p-2 py-3 cursor-pointer' onClick={handleSubmit}>
+          <div className='text-black' style={{ fontFamily: 'Inter, sans-serif'}}>Place Order</div>
         </div>  
       </div>
 
       <div id="ordersummary" className='w-[415px] ml-8 mt-10 md:ml-0 md:mt-0'>
-        <div className='rounded-lg p-4 border-black border'>
+        <div className='rounded-lg p-4 border-white border'>
           <div className='text-[20px] mb-2' style={{ fontFamily: 'Poppins, sans-serif'}}>Order Summary</div>
 
           <div id="itemscontainer" className='h-[400px] flex flex-col justify-start gap-y-2 overflow-y-auto verticalscroll pr-2'>
@@ -566,12 +585,13 @@ const Checkout = ({ handleNextStep, handlePrevStep }) => {
             <div className='font-bold mt-1' style={{ fontFamily: 'Inter, sans-serif'}}>${total.toFixed(2)}</div>
           </div>
 
-          <div id='checkout' className='mt-8 flex flex-row justify-center items-center rounded-md bg-black p-2 py-3 cursor-pointer' onClick={handleViewCart}>
-            <div className='text-white' style={{ fontFamily: 'Inter, sans-serif'}}>View Cart</div>
+          <div id='checkout' className='mt-8 flex flex-row justify-center items-center rounded-md bg-white p-2 py-3 cursor-pointer' onClick={handleViewCart}>
+            <div className='text-black' style={{ fontFamily: 'Inter, sans-serif'}}>View Cart</div>
           </div>
         </div>
       </div>
     </div>
+    </ ThemeProvider >
   );
 };
 

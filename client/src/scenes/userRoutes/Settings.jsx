@@ -42,11 +42,11 @@ const Settings = () => {
 
     return (
         <div className='w-[350px] md:w-auto flex items-center justify-center'>
-            <div className="w-full max-w-md bg-white ">
+            <div className="w-full max-w-md text-white">
                 <h2 className="text-2xl font-bold mb-6">Settings</h2>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="displayName">
+                    <label className="block  text-sm font-bold mb-2" htmlFor="displayName">
                         Display Name
                     </label>
                     <input
@@ -60,7 +60,7 @@ const Settings = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                    <label className="block  text-sm font-bold mb-2" htmlFor="email">
                         Email
                     </label>
                     <input
@@ -74,7 +74,7 @@ const Settings = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="oldPassword">
+                    <label className="block text-sm font-bold mb-2" htmlFor="oldPassword">
                         Old Password
                     </label>
                     <input
@@ -88,7 +88,7 @@ const Settings = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="newPassword">
+                    <label className="block  text-sm font-bold mb-2" htmlFor="newPassword">
                         New Password
                     </label>
                     <input
@@ -102,7 +102,7 @@ const Settings = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="repeatNewPassword">
+                    <label className="block text-sm font-bold mb-2" htmlFor="repeatNewPassword">
                         Repeat New Password
                     </label>
                     <input

@@ -32,12 +32,12 @@ const Confirmation = () => {
   
   return (
     <div className='h-[500px] px-0 md:px-40 py-16'>
-      <div className='h-full max-w-[90%] md:w-full border border-black rounded-lg shadow-lg flex flex-col items-center'>
+      <div className='h-full max-w-[90%] md:w-full border border-white rounded-lg shadow-lg flex flex-col items-center text-white'>
         <div className='flex flex-col w-[550px] items-center pt-10'>
-          <div className='text-[#6C7275] text-[28px] font-bold flex flex-row'>Thank you!
+          <div className=' text-[28px] font-bold flex flex-row'>Thank you!
             <img src={popper} alt="popper" className='ml-2 mt-1 h-8 w-8' />
           </div>
-          <div className='text-[#23262F] text-[40px] font-bold text-center'>Your order has been received</div>
+          <div className=' text-[40px] font-bold text-center'>Your order has been received</div>
         </div>
 
         {/* <div 
@@ -95,8 +95,8 @@ const Confirmation = () => {
           
         </div> */}
 
-        <div className='mt-12 flex flex-col w-[200px] h-[55px] bg-black rounded-2xl items-center justify-center cursor-pointer' onClick={() => navigate('/')}>
-          <div className='text-white'>Shop for More</div>
+        <div className='mt-12 flex flex-col w-[200px] h-[55px] bg-white rounded-2xl items-center justify-center cursor-pointer' onClick={() => navigate('/')}>
+          <div className='text-black'>Shop for More</div>
 
         </div>
 

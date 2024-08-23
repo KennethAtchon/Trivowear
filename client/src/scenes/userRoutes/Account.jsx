@@ -96,8 +96,8 @@ const Account = () => {
   };
 
   return (
-    <div className='h-auto my-10 px-4'>
-      <div className='text-4xl font-bold text-center pt-4 mb-8'>
+    <div className='h-auto my-10 px-4 mt-28'>
+      <div className='text-4xl font-bold text-center pt-4 mb-8 text-white'>
         My Account
       </div>
       <div className='h-full pt-8 flex flex-col items-center md:items-start md:flex-row md:justify-center gap-12 mb-20'>

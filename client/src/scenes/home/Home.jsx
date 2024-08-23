@@ -69,7 +69,7 @@ function Home() {
               Explore our curated selection of cutting-edge sneakers designed for comfort and fashion. From iconic brands to the latest drops, elevate your sneaker game with exclusive styles available only at our store. Slide through to find your perfect pair and walk in confidence!
             </div>
             <div className='mt-8 flex justify-center'>
-              <div id="button" className='bg-red-500 p-3 px-12 w-auto rounded-xl flex items-center justify-center reem-kufi-ink cursor-pointer text-lg' style={{ boxShadow: '0px 4px 8px rgba(255, 0, 0, 0.3)' }}>
+              <div id="button" className='bg-red-500 p-3 px-12 w-auto rounded-xl flex items-center justify-center reem-kufi-ink cursor-pointer text-lg' style={{ boxShadow: '0px 4px 8px rgba(255, 0, 0, 0.3)' }} onClick={() => navigate('/shop')} >
                 Shop Now
               </div>        
             </div>
